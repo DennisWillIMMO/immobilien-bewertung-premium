@@ -3,219 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exklusive Immobilienanalyse | Wilhelm Immobilien</title>
+    <title>Immobilienanalyse | Wilhelm Immobilien</title>
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     
     <script type="text/javascript">
        (function(){ emailjs.init("_xVMakll6CBznjSHE"); })();
     </script>
 
     <style>
-        :root { 
-            --w-navy: #003366; 
-            --w-gold: #b39a6a;
-            --w-text: #1e293b;
-            --w-border: #e2e8f0;
-            --w-bg: #f8fafc;
-        }
-        
+        :root { --navy: #003366; --border: #e2e8f0; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: var(--w-bg); color: var(--w-text); line-height: 1.5; }
+        body { font-family: 'Inter', sans-serif; background: #f8fafc; color: #1e293b; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
         
-        .main-container { 
-            display: flex; width: 100%; max-width: 1100px; min-height: 700px; 
-            background: white; margin: 5vh auto; box-shadow: 0 40px 100px rgba(0,0,0,0.08); 
-            border-radius: 12px; overflow: hidden; border: 1px solid white;
-        }
+        .container { width: 100%; max-width: 900px; background: white; border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.1); overflow: hidden; display: flex; min-height: 600px; }
+        .form-side { flex: 1; padding: 60px; display: flex; flex-direction: column; justify-content: center; }
+        .img-side { width: 35%; background: url('https://sw-immobilien.de/wp-content/uploads/2026/01/dennis-will-immobilien.jpg') center/cover no-repeat; }
 
-        /* Layout-Spalten */
-        .content-col { flex: 1; display: flex; flex-direction: column; position: relative; }
-        .img-col { 
-            width: 35%; background: url('https://sw-immobilien.de/wp-content/uploads/2026/01/dennis-will-immobilien.jpg') center/cover no-repeat;
-            position: relative; display: block; 
-        }
-        .img-overlay { position: absolute; bottom: 0; padding: 40px; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; width: 100%; }
-
-        /* Header & Progress */
-        .header { padding: 25px 40px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; background: #fafafa; }
-        .progress-container { width: 100%; height: 4px; background: #f1f5f9; }
-        .progress-bar { height: 100%; background: var(--w-navy); transition: width 0.7s ease; width: 0%; }
-
-        /* Steps */
-        .step-area { padding: 50px 80px; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
         .step { display: none; }
-        .step.active { display: block; animation: fadeIn 0.5s ease; }
+        .step.active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Typography */
-        h1, h2, h3 { font-family: 'Playfair Display', serif; color: var(--w-navy); margin-bottom: 20px; }
-        .sub-text { font-size: 15px; color: #64748b; margin-bottom: 30px; }
+        h1, h2 { font-family: 'Playfair Display', serif; color: var(--navy); margin-bottom: 20px; }
+        .btn-main { background: var(--navy); color: white; border: none; padding: 18px; width: 100%; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; margin-top: 20px; }
+        .btn-main:hover { background: #002244; }
 
-        /* Cards & Buttons */
-        .grid-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 25px; }
-        .premium-card { 
-            border: 1px solid var(--w-border); border-radius: 16px; padding: 25px; text-align: center; 
-            cursor: pointer; transition: 0.3s; position: relative;
-        }
-        .premium-card:hover, .premium-card.selected { border-color: var(--w-navy); background: #f0f4f8; transform: translateY(-2px); }
-        .premium-card i { color: var(--w-navy); font-size: 24px; margin-bottom: 12px; display: block; }
-        .premium-card span { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .card { border: 1px solid var(--border); padding: 25px; border-radius: 12px; text-align: center; cursor: pointer; transition: 0.3s; }
+        .card:hover { border-color: var(--navy); background: #f0f4f8; }
+        .card i { display: block; font-size: 24px; color: var(--navy); margin-bottom: 10px; }
 
-        .btn-main { 
-            background: var(--w-navy); color: white; border: none; padding: 18px; width: 100%; 
-            border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s;
-        }
-        .btn-main:hover { background: #002244; box-shadow: 0 10px 25px rgba(0,51,102,0.15); }
-        .btn-back { background: none; border: none; color: #cbd5e1; font-size: 11px; font-weight: 700; cursor: pointer; margin-top: 20px; width: 100%; text-transform: uppercase; }
-
-        /* Inputs */
-        .val-display { font-size: 48px; font-family: 'Playfair Display'; color: var(--w-navy); text-align: center; margin-bottom: 20px; }
-        input[type="range"] { width: 100%; height: 4px; -webkit-appearance: none; background: #e2e8f0; outline: none; }
-        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; background: var(--w-navy); border-radius: 50%; cursor: pointer; border: 3px solid white; }
-        input[type="number"], input[type="text"], input[type="email"] { width: 100%; padding: 15px; border: 1px solid var(--w-border); border-radius: 12px; outline: none; font-family: inherit; }
-
-        /* Badges */
-        .badge { position: absolute; top: 10px; right: 10px; background: var(--w-navy); color: white; border-radius: 20px; padding: 2px 8px; font-size: 10px; }
-
-        @media (max-width: 850px) {
-            .main-container { flex-direction: column; height: auto; margin: 0; border-radius: 0; }
-            .img-col { display: none; }
-            .step-area { padding: 40px 20px; }
-        }
+        input { width: 100%; padding: 15px; border: 1px solid var(--border); border-radius: 8px; margin-top: 10px; outline: none; }
+        .val-display { font-size: 42px; font-family: 'Playfair Display'; color: var(--navy); text-align: center; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
-<div class="main-container">
-    <div class="content-col">
-        <div class="header">
-            <span style="font-size: 10px; font-weight: 800; color: #cbd5e1; letter-spacing: 2px; text-transform: uppercase;">Vermögensanalyse</span>
-            <span id="step-info" style="font-size: 10px; font-weight: 800; color: var(--w-navy); text-transform: uppercase;">Intro</span>
+<div class="container">
+    <div class="form-side">
+        <div class="step active" id="s-intro">
+            <h1>Immobilien-Strategie</h1>
+            <p>Erhalten Sie eine fundierte Analyse Ihres Immobilienwertes – diskret und präzise.</p>
+            <button onclick="goStep(1)" class="btn-main">Analyse starten</button>
         </div>
-        <div class="progress-container"><div class="progress-bar" id="pb"></div></div>
 
-        <div class="step-area">
-            <div class="step active" id="s-intro">
-                <h1>Ihre Immobilien-Strategie.</h1>
-                <p class="sub-text">Erhalten Sie eine fundierte Analyse Ihres Immobilienwertes – diskret, präzise und auf Basis aktueller Marktdaten aus der Region Hanau & Gelnhausen.</p>
-                <div style="background: #f8fafc; padding: 30px; border-radius: 20px; border: 2px solid var(--w-navy); margin-bottom: 25px; text-align: center;">
-                    <h3 style="font-size: 18px; margin-bottom: 10px;">Strategiegespräch reservieren</h3>
-                    <p style="font-size: 12px; color: #64748b; margin-bottom: 20px;">Persönliche Beratung für Ihre Vermögenswerte.</p>
-                    <button onclick="window.open('https://calendly.com/wilhelm')" class="btn-main">Termin wählen</button>
-                </div>
-                <button onclick="startTool()" style="background:none; border:none; color: #94a3b8; font-size: 11px; font-weight: 700; width: 100%; cursor: pointer; text-transform: uppercase;">Direkt zur Online-Analyse <i class="fas fa-chevron-right" style="margin-left: 5px;"></i></button>
+        <div class="step" id="s1">
+            <h2>Was bewerten wir?</h2>
+            <div class="grid">
+                <div onclick="saveNext(1, 'type', 'Haus')" class="card"><i class="fas fa-home"></i>Haus</div>
+                <div onclick="saveNext(1, 'type', 'Wohnung')" class="card"><i class="fas fa-building"></i>Wohnung</div>
             </div>
+        </div>
 
-            <div class="step" id="s1">
-                <h2>Was bewerten wir?</h2>
-                <div class="grid-cards">
-                    <div onclick="saveNext(1, 'type', 'Haus')" class="premium-card"><i class="fas fa-home"></i><span>Haus</span></div>
-                    <div onclick="saveNext(1, 'type', 'Wohnung')" class="premium-card"><i class="fas fa-building"></i><span>Wohnung</span></div>
-                    <div onclick="saveNext(1, 'type', 'Grundstück')" class="premium-card"><i class="fas fa-map"></i><span>Grundstück</span></div>
-                </div>
-                <button class="btn-back" onclick="goStep('intro')">Zurück</button>
+        <div class="step" id="s2">
+            <h2>Objektart</h2>
+            <div class="grid">
+                <div onclick="saveNext(2, 'subtype', 'Einfamilienhaus')" class="card">EFH</div>
+                <div onclick="saveNext(2, 'subtype', 'Bungalow')" class="card">Bungalow</div>
+                <div onclick="saveNext(2, 'subtype', 'Villa')" class="card">Villa</div>
+                <div onclick="saveNext(2, 'subtype', 'Mehrfamilienhaus')" class="card">MFH</div>
             </div>
+        </div>
 
-            <div class="step" id="s3">
-                <h2>Wohnfläche</h2>
-                <div class="val-display"><span id="txt-sqm">120</span> m²</div>
-                <input type="range" min="30" max="500" value="120" oninput="syncVal('sqm', this.value)" style="margin-bottom: 40px;">
-                <button onclick="goStep(4)" class="btn-main">Weiter</button>
-                <button class="btn-back" onclick="goStep(1)">Zurück</button>
-            </div>
+        <div class="step" id="s3">
+            <h2>Wohnfläche</h2>
+            <div class="val-display"><span id="txt-sqm">120</span> m²</div>
+            <input type="range" min="30" max="500" value="120" oninput="syncVal('sqm', this.value)">
+            <button onclick="goStep(4)" class="btn-main">Weiter</button>
+        </div>
 
-            <div class="step" id="s6">
-                <h2>Zustand</h2>
-                <div class="grid-cards">
-                    <div onclick="saveNext(6, 'renov', 'Gepflegt')" class="premium-card"><span>Gepflegt</span></div>
-                    <div onclick="saveNext(6, 'renov', 'Modernisiert')" class="premium-card"><span>Modernisiert</span></div>
-                    <div onclick="saveNext(6, 'renov', 'Kernsanierung')" class="premium-card"><span>Kernsanierung</span></div>
-                </div>
-                <button class="btn-back" onclick="goStep(4)">Zurück</button>
-            </div>
+        <div class="step" id="s4">
+            <h2>Standort</h2>
+            <input type="text" id="address" placeholder="Straße, Nr, PLZ, Ort">
+            <button onclick="calculate()" class="btn-main">Wert berechnen</button>
+        </div>
 
-            <div class="step" id="s9">
-                <h2>Lage & Marktumfeld</h2>
-                <p class="sub-text">Zur Einbeziehung regionaler Bodenrichtwerte benötigen wir die Adresse.</p>
-                <input type="text" id="address" placeholder="Straße, Nr, PLZ, Ort" style="margin-bottom: 25px;">
-                <button onclick="finishStep9()" class="btn-main">Wert jetzt berechnen</button>
-                <button class="btn-back" onclick="goStep(8)">Zurück</button>
+        <div class="step" id="s-res">
+            <h2>Ihr Marktwert</h2>
+            <div style="background: #f0f4f8; padding: 40px; border-radius: 12px; text-align: center;">
+                <div id="final-price" style="font-size: 38px; font-weight: bold; color: var(--navy);">0 €</div>
             </div>
+            <button onclick="goStep(5)" class="btn-main">Analyse-Bericht anfordern</button>
+        </div>
 
-            <div class="step" id="s-report">
-                <h2>Ihr Marktwert</h2>
-                <div style="background: var(--w-navy); color: white; padding: 40px; border-radius: 20px; text-align: center; margin-bottom: 30px;">
-                    <div style="font-size: 10px; text-transform: uppercase; opacity: 0.6; letter-spacing: 2px;">Voraussichtlicher Wert</div>
-                    <div id="res-val-main" style="font-size: 42px; font-family: 'Playfair Display'; font-weight: 700; margin-top: 10px;">0 €</div>
-                </div>
-                <button onclick="goStep(10)" class="btn-main">Analyse-Bericht anfordern</button>
-            </div>
-
-            <div class="step" id="s10">
-                <h2>Bericht senden</h2>
-                <input type="text" id="u_name" placeholder="Ihr Name" style="margin-bottom: 10px;">
-                <input type="email" id="u_email" placeholder="E-Mail Adresse" style="margin-bottom: 20px;">
-                <button onclick="sendFinal()" class="btn-main">Bericht jetzt senden</button>
-            </div>
+        <div class="step" id="s5">
+            <h2>Bericht senden</h2>
+            <input type="text" id="u_name" placeholder="Ihr Name">
+            <input type="email" id="u_email" placeholder="E-Mail Adresse">
+            <button onclick="sendFinal()" class="btn-main">Jetzt senden</button>
         </div>
     </div>
-
-    <div class="img-col" id="sidebar-img">
-        <div class="img-overlay">
-            <h4 style="font-family: 'Playfair Display'; font-size: 20px;">Dennis Will</h4>
-            <p style="font-size: 10px; text-transform: uppercase; opacity: 0.7; letter-spacing: 1px;">Experte für Premium-Immobilien</p>
-        </div>
-    </div>
+    <div class="img-side"></div>
 </div>
 
 <script>
-    const SB_URL = 'https://utyacdaldwdnollxhyjg.supabase.co'; 
+    const SB_URL = 'https://utyacdaldwdnollxhyjg.supabase.co';
     const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV0eWFjZGFsZHdkbm9sbHhoeWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5ODU5OTQsImV4cCI6MjA4NjU2MTk5NH0.NbDxVAIcQXGdvDjoTHBqRZOIgWnXE5ggLt90SBAMJvw';
     const sb = supabase.createClient(SB_URL, SB_KEY);
     
-    let store = { sqm: 120, extras: {}, extraTotal: 0 };
-
-    function startTool() {
-        document.getElementById('sidebar-img').style.display = 'none';
-        goStep(1);
-    }
+    let store = { sqm: 120 };
 
     function goStep(n) {
         document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
         const target = (typeof n === 'string') ? document.getElementById('s-'+n) : document.getElementById('s'+n);
-        if(target) {
-            target.classList.add('active');
-            document.getElementById('pb').style.width = (isNaN(n) ? 100 : n * 10) + '%';
-            document.getElementById('step-info').innerText = isNaN(n) ? n : "Schritt " + n;
-        }
+        if(target) target.classList.add('active');
     }
 
-    function saveNext(s, k, v) { store[k] = v; goStep(s + 1); }
-    function syncVal(id, v) { store[id] = parseInt(v); document.getElementById('txt-'+id).innerText = v; }
+    function saveNext(s, k, v) { 
+        store[k] = v; 
+        goStep(s + 1); 
+    }
 
-    function format(v) { return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(v); }
+    function syncVal(id, v) { 
+        store[id] = parseInt(v); 
+        document.getElementById('txt-' + id).innerText = v; 
+    }
 
-    async function finishStep9() {
-        const val = store.sqm * 3450;
-        document.getElementById('res-val-main').innerText = format(val);
-        goStep('report');
-        try {
-            await sb.from('leads').insert([{ address: document.getElementById('address').value, estimated_value: format(val), details: store, name: "Teil-Lead (Schritt 9)" }]);
-        } catch(e) {}
+    function calculate() {
+        const base = store.type === 'Haus' ? 3800 : 3400;
+        const val = store.sqm * base;
+        document.getElementById('final-price').innerText = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(val);
+        goStep('res');
     }
 
     async function sendFinal() {
-        const val = document.getElementById('res-val-main').innerText;
+        const name = document.getElementById('u_name').value;
+        const email = document.getElementById('u_email').value;
+        const val = document.getElementById('final-price').innerText;
+        
         try {
-            await sb.from('leads').insert([{ name: document.getElementById('u_name').value, email: document.getElementById('u_email').value, estimated_value: val, details: store }]);
-            await emailjs.send("service_9wal0zr", "template_bwjdkei", { from_name: document.getElementById('u_name').value, user_email: document.getElementById('u_email').value, estimated_value: val });
+            await sb.from('leads').insert([{ name, email, estimated_value: val, details: store, address: document.getElementById('address').value }]);
+            await emailjs.send("service_9wal0zr", "template_bwjdkei", { from_name: name, user_email: email, estimated_value: val });
             alert("Vielen Dank. Der Bericht wird erstellt.");
             location.reload();
-        } catch(e) { alert("Übermittlung fehlgeschlagen."); }
+        } catch(e) { alert("Übertragung fehlgeschlagen."); }
     }
 </script>
 </body>
