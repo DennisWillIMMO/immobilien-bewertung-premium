@@ -6,47 +6,36 @@
     <title>Premium Immobilienbewertung | Wilhelm Immobilien</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        :root { --blue: #003366; --gold: #b39a6a; --coral: #FF7F50; --bg: #f8fafc; }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'DM Sans', sans-serif; background: #e2e8f0; padding: 1rem; color: #1e293b; }
-        .app-card { max-width: 700px; margin: 40px auto; background: white; border-radius: 35px; shadow: 0 40px 100px rgba(0,0,0,0.1); overflow: hidden; border: 1px solid white; }
-        .header-ui { padding: 20px 40px; background: #fafbfc; border-bottom: 1px solid #edf2f7; display: flex; justify-content: space-between; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; }
-        .bar-container { height: 3px; background: #f1f5f9; width: 100%; }
-        .bar-fill { height: 100%; background: var(--blue); transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1); width: 10%; }
-        .step { display: none; padding: 60px; animation: slideUp 0.5s ease; }
-        .step.active { display: block; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        h3 { font-size: 28px; font-weight: 700; text-align: center; margin-bottom: 40px; color: var(--blue); letter-spacing: -0.5px; }
-        .grid-ui { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .card-btn { border: 1px solid #e2e8f0; border-radius: 20px; padding: 30px; cursor: pointer; transition: 0.3s; text-align: center; background: white; }
-        .card-btn:hover { border-color: var(--gold); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        .card-btn i { font-size: 32px; color: var(--blue); margin-bottom: 15px; display: block; }
-        .card-btn span { font-weight: 700; font-size: 14px; }
-        .input-premium { width: 100%; padding: 18px; border: 1px solid #e2e8f0; border-radius: 15px; font-size: 18px; margin-bottom: 20px; outline: none; transition: 0.3s; font-weight: 500; }
-        .input-premium:focus { border-color: var(--blue); box-shadow: 0 0 0 4px rgba(0,51,102,0.05); }
-        .btn-main { width: 100%; padding: 22px; background: var(--blue); color: white; border: none; border-radius: 18px; font-weight: 800; text-transform: uppercase; cursor: pointer; transition: 0.3s; font-size: 14px; letter-spacing: 1px; }
-        .btn-main:hover { background: #002244; transform: translateY(-2px); }
-        .map-frame { height: 250px; border-radius: 20px; overflow: hidden; border: 1px solid #e2e8f0; margin: 20px 0; }
-        /* Premium Result */
-        .premium-res { background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%); padding: 50px; border-radius: 30px; text-align: center; border: 1px solid #edf2f7; }
-        .price-display { font-size: 48px; font-weight: 900; color: var(--blue); margin: 30px 0; letter-spacing: -2px; }
-    </style>
 </head>
 <body>
 
     <div class="app-card">
-        <div class="header-ui"><span>Premium Bewertung</span><span id="step-txt">Schritt 1 von 10</span></div>
-        <div class="bar-container"><div id="bar" class="bar-fill"></div></div>
+        <div class="header-ui">
+            <span>Wertermittlung</span>
+            <span id="step-txt">Schritt 1 von 10</span>
+        </div>
+        <div class="bar-container">
+            <div id="bar" class="bar-fill"></div>
+        </div>
         
         <div id="steps-container">
             <div class="step active" id="s1">
                 <h3>Was möchten Sie bewerten?</h3>
                 <div class="grid-ui">
-                    <div class="card-btn" onclick="nav(2, 'Haus')"><i class="fas fa-home"></i><span>Haus</span></div>
-                    <div class="card-btn" onclick="nav(2, 'Wohnung')"><i class="fas fa-building"></i><span>Wohnung</span></div>
-                    <div class="card-btn" onclick="nav(2, 'Grundstück')"><i class="fas fa-map-marked-alt"></i><span>Grundstück</span></div>
+                    <div class="card-btn" onclick="nav(2, 'type', 'Haus')">
+                        <i class="fas fa-home"></i>
+                        <span>Haus</span>
+                    </div>
+                    <div class="card-btn" onclick="nav(2, 'type', 'Wohnung')">
+                        <i class="fas fa-building"></i>
+                        <span>Wohnung</span>
+                    </div>
+                    <div class="card-btn" onclick="nav(2, 'type', 'Grundstück')">
+                        <i class="fas fa-map-marked-alt"></i>
+                        <span>Grundstück</span>
+                    </div>
                 </div>
             </div>
 
@@ -54,27 +43,40 @@
                 <h3>Wohnfläche in m²</h3>
                 <input type="number" id="sqm" class="input-premium" placeholder="z.B. 140" min="10">
                 <button class="btn-main" onclick="nav(3)">Weiter</button>
+                <button class="btn-back" onclick="nav(1)">Zurück</button>
+            </div>
+
+            <div class="step" id="s3">
+                <h3>Zustand der Immobilie</h3>
+                <div class="grid-ui">
+                    <div class="card-btn" onclick="nav(9, 'condition', 'Neuwertig')"><span>Neuwertig</span></div>
+                    <div class="card-btn" onclick="nav(9, 'condition', 'Renoviert')"><span>Renoviert</span></div>
+                    <div class="card-btn" onclick="nav(9, 'condition', 'Sanierungsbedürftig')"><span>Sanierungsbedürftig</span></div>
+                </div>
+                <button class="btn-back" onclick="nav(2)">Zurück</button>
             </div>
 
             <div class="step" id="s9">
                 <h3>Objekt-Lage</h3>
                 <input type="text" id="address" class="input-premium" placeholder="Straße, PLZ, Ort" onblur="updateMap()">
-                <div class="map-frame">
+                <div class="map-frame" style="height: 250px; border-radius: 20px; overflow: hidden; margin-bottom: 20px; border: 1px solid #e2e8f0;">
                     <iframe id="map" width="100%" height="100%" frameborder="0" src="https://www.openstreetmap.org/export/embed.html?bbox=8.0,50.0,9.0,51.0&layer=mapnik"></iframe>
                 </div>
-                <button class="btn-main" onclick="nav(10)">Daten senden & Weiter</button>
+                <button class="btn-main" onclick="nav(10)">Adresse bestätigen</button>
+                <button class="btn-back" onclick="nav(3)">Zurück</button>
             </div>
 
             <div class="step" id="s10">
                 <h3>Kontaktdaten</h3>
                 <input type="text" id="u_name" class="input-premium" placeholder="Vollständiger Name">
                 <input type="email" id="u_email" class="input-premium" placeholder="E-Mail Adresse">
-                <button class="btn-main" style="background: var(--coral);" onclick="sendToSupabase()">Bewertung abschließen</button>
+                <button class="btn-main" id="submit-btn" style="background: var(--coral);" onclick="sendToSupabase()">Bewertung abschließen</button>
+                <button class="btn-back" onclick="nav(9)">Zurück</button>
             </div>
 
             <div class="step" id="s-final">
                 <div class="premium-res">
-                    <div style="font-size: 10px; font-weight: 800; color: var(--gold); letter-spacing: 3px; margin-bottom: 20px;">ANALYSE BEREIT</div>
+                    <div style="font-size: 10px; font-weight: 800; color: #b39a6a; letter-spacing: 3px; margin-bottom: 20px;">ANALYSE BEREIT</div>
                     <div class="price-display" id="res-price">--- €</div>
                     <button class="btn-main" onclick="window.open('https://calendly.com/wilhelm', '_blank')">Strategiegespräch buchen</button>
                     <button onclick="location.reload()" style="margin-top: 30px; background: none; border: none; color: #cbd5e1; font-size: 10px; font-weight: 800; text-transform: uppercase; cursor: pointer; letter-spacing: 1px;">Bewertung neustarten</button>
@@ -84,54 +86,82 @@
     </div>
 
     <script>
-        // HIER DEINE SUPABASE DATEN EINTRAGEN
-        const SB_URL = 'https://DEINE_URL.supabase.co'; 
-        const SB_KEY = 'DEIN_ANON_KEY';
-        const sb = supabase.createClient(SB_URL, SB_KEY);
+        // SUPABASE KONFIGURATION
+        const SUPABASE_URL = 'https://utyacdaldwdnollxhyjg.supabase.co'; 
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV0eWFjZGFsZHdkbm9sbHhoeWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5ODU5OTQsImV4cCI6MjA4NjU2MTk5NH0.NbDxVAIcQXGdvDjoTHBqRZOIgWnXE5ggLt90SBAMJvw';
+        
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         let dataStore = {};
 
-        function nav(n, val) {
-            if(val) dataStore.type = val;
+        // NAVIGATION
+        function nav(n, key, val) {
+            if(key && val) dataStore[key] = val;
+            
             document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
             const target = document.getElementById(n === 'final' ? 's-final' : 's' + n);
+            
             if(target) {
                 target.classList.add('active');
-                document.getElementById('bar').style.width = (n * 10) + '%';
-                document.getElementById('step-txt').innerText = `Schritt ${n} von 10`;
+                document.getElementById('bar').style.width = (n === 'final' ? 100 : n * 10) + '%';
+                document.getElementById('step-txt').innerText = `Schritt ${n === 'final' ? 10 : n} von 10`;
+                window.scrollTo(0, 0);
             }
         }
 
+        // KARTEN UPDATE
         async function updateMap() {
             const adr = document.getElementById('address').value;
             if(adr.length < 5) return;
-            const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(adr)}&limit=1`);
-            const json = await res.json();
-            if(json.length > 0) {
-                const { lat, lon } = json[0];
-                const off = 0.002;
-                document.getElementById('map').src = `https://www.openstreetmap.org/export/embed.html?bbox=${parseFloat(lon)-off}%2C${parseFloat(lat)-off}%2C${parseFloat(lon)+off}%2C${parseFloat(lat)+off}&layer=mapnik&marker=${lat}%2C${lon}`;
-            }
+            try {
+                const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(adr)}&limit=1`);
+                const json = await res.json();
+                if(json.length > 0) {
+                    const { lat, lon } = json[0];
+                    const off = 0.002;
+                    document.getElementById('map').src = `https://www.openstreetmap.org/export/embed.html?bbox=${parseFloat(lon)-off}%2C${parseFloat(lat)-off}%2C${parseFloat(lon)+off}%2C${parseFloat(lat)+off}&layer=mapnik&marker=${lat}%2C${lon}`;
+                }
+            } catch(e) { console.error("Kartenfehler", e); }
         }
 
+        // DATEN AN SUPABASE SENDEN
         async function sendToSupabase() {
+            const btn = document.getElementById('submit-btn');
             const sqm = document.getElementById('sqm').value;
             const name = document.getElementById('u_name').value;
             const email = document.getElementById('u_email').value;
-            const adr = document.getElementById('address').value;
-            
-            const estValue = sqm * 4150; // Beispiel-Logik
-            
+            const address = document.getElementById('address').value;
+
+            if(!name || !email) return alert("Bitte Name und E-Mail angeben.");
+
+            btn.innerText = "Wird verarbeitet...";
+            btn.disabled = true;
+
+            const estValue = sqm * 4150; // Beispielhafte Wertermittlung
+
             const { error } = await sb.from('leads').insert([
-                { name, email, address: adr, sqm: parseFloat(sqm), estimated_value: estValue.toString() }
+                { 
+                    name: name, 
+                    email: email, 
+                    address: address, 
+                    sqm: parseFloat(sqm),
+                    estimated_value: estValue.toString()
+                }
             ]);
 
             if(!error) {
                 document.getElementById('res-price').innerText = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(estValue);
                 nav('final');
             } else {
-                alert("Fehler beim Speichern. Bitte prüfen Sie Ihre Supabase-Verbindung.");
+                alert("Fehler beim Speichern. Bitte prüfe die Supabase Tabellen-Struktur.");
+                btn.innerText = "Bewertung abschließen";
+                btn.disabled = false;
             }
+        }
+
+        // SERVICE WORKER
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
         }
     </script>
 </body>
