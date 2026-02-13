@@ -26,11 +26,20 @@
         .step.active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* Intro Styling - Wiederhergestellt nach Screenshot */
+        .intro-label { color: var(--light-teal); font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 20px; display: block; }
         .intro-title { font-size: 48px; line-height: 1.1; font-weight: 700; color: #333; margin-bottom: 30px; }
-        .intro-title span { color: var(--light-teal); }
-        .btn-red { background: var(--accent); color: white; border: none; padding: 20px 40px; border-radius: 4px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 14px; transition: 0.3s; display: block; width: fit-content; text-decoration: none; text-align: center; }
+        .intro-p { font-size: 18px; color: #666; line-height: 1.6; margin-bottom: 40px; }
+        .btn-red { background: var(--accent); color: white; border: none; padding: 20px 40px; border-radius: 4px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 14px; transition: 0.3s; display: inline-block; text-decoration: none; }
 
-        h2 { color: var(--navy); margin-bottom: 30px; font-weight: 600; text-align: center; }
+        /* Rechner-Design (wie im Screenshot) */
+        .calc-box { background: #f8fbff; border: 1px solid #d0e1f3; border-radius: 12px; padding: 25px; margin-top: 20px; font-size: 14px; }
+        .calc-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
+        .calc-row:last-child { border-bottom: none; font-weight: bold; font-size: 18px; color: var(--navy); padding-top: 15px; }
+        .calc-header { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #888; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+
+        /* Form Elements */
+        h2 { color: var(--navy); margin-bottom: 30px; font-weight: 600; }
         .grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-bottom: 30px; }
         .card { border: 1px solid var(--border); padding: 25px; border-radius: 8px; text-align: center; cursor: pointer; transition: 0.2s; }
         .card:hover { border-color: var(--navy); background: #f0f7ff; }
@@ -40,12 +49,8 @@
         input[type="range"] { width: 100%; height: 6px; background: #e2e8f0; -webkit-appearance: none; outline: none; margin-bottom: 25px; border-radius: 3px; }
         input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: var(--navy); border-radius: 50%; cursor: pointer; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
 
-        .qty-controls { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 10px; }
-        .btn-qty { width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--navy); background: white; color: var(--navy); cursor: pointer; }
-        .qty-badge { background: var(--navy); color: white; border-radius: 50%; width: 22px; height: 22px; font-size: 11px; line-height: 22px; text-align: center; }
-
         .btn-main { background: var(--navy); color: white; border: none; padding: 18px; width: 100%; border-radius: 4px; font-weight: 600; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
-        .btn-back { background: none; border: none; color: #999; cursor: pointer; width: 100%; margin-top: 15px; font-size: 12px; }
+        input[type="text"], input[type="email"] { width: 100%; padding: 15px; border: 1px solid var(--border); border-radius: 4px; margin-bottom: 15px; outline: none; }
     </style>
 </head>
 <body>
@@ -54,9 +59,11 @@
     <div class="form-side">
         <div id="tool">
             <div class="step active" id="s-intro">
-                <h1 class="intro-title">Ihre Immobilie ist kein <span>Algorithmus.</span></h1>
-                <p style="margin-bottom:30px;">Verzichten Sie auf automatisierte Schätzwerte. Wir bewerten persönlich.</p>
-                <button onclick="startTool()" class="btn-main">BEWERTUNG STARTEN</button>
+                <span class="intro-label">Manufaktur statt Massenabfertigung</span>
+                <h1 class="intro-title">Ihre Immobilie ist kein <span>Algorithmus.</span><br>Sie ist ein Vermögenswert.</h1>
+                <p class="intro-p">Verzichten Sie auf automatisierte Schätzwerte. Wir bewerten Ihre Immobilie nicht maschinell, sondern persönlich, fundiert und mit dem strategischen Blick für die Pfalz.</p>
+                <button onclick="startTool()" class="btn-red">EXPERTEN-ANALYSE ANFORDERN</button>
+                <p style="margin-top: 15px; font-size: 12px; color: #aaa;"><i class="fas fa-check"></i> Unverbindlich & Diskret</p>
             </div>
 
             <div class="step" id="s1">
@@ -71,8 +78,8 @@
                 <h2>Objektart</h2>
                 <div class="grid-cards">
                     <div onclick="saveNext(2, 'subtype', 'Einfamilienhaus')" class="card"><i class="fas fa-house-user"></i><span>Einfamilienhaus</span></div>
-                    <div onclick="saveNext(2, 'subtype', 'Reihenhaus')" class="card"><i class="fas fa-bars-staggered"></i><span>Reihenhaus</span></div>
                     <div onclick="saveNext(2, 'subtype', 'Bungalow')" class="card"><i class="fas fa-layer-group"></i><span>Bungalow</span></div>
+                    <div onclick="saveNext(2, 'subtype', 'Stadtvilla')" class="card"><i class="fas fa-hotel"></i><span>Stadtvilla</span></div>
                 </div>
             </div>
 
@@ -100,60 +107,43 @@
             <div class="step" id="s6">
                 <h2>Zustand</h2>
                 <div class="grid-cards">
-                    <div onclick="saveNext(6, 'renov', 'Gepflegt')" class="card"><i class="fas fa-star"></i><span>Gepflegt</span></div>
-                    <div onclick="saveNext(6, 'renov', 'Renovierungsbedürftig')" class="card"><i class="fas fa-tools"></i><span>Renovierungsbedürftig</span></div>
+                    <div onclick="saveNext(6, 'renov', 'Gepflegt')" class="card"><i class="fas fa-check-circle"></i><span>Gepflegt</span></div>
                     <div onclick="saveNext(6, 'renov', 'Kernsanierung')" class="card"><i class="fas fa-hammer"></i><span>Kernsanierung</span></div>
                 </div>
             </div>
 
-            <div class="step" id="s8">
-                <h2>Besonderheiten</h2>
-                <div class="grid-cards">
-                    <div class="card">
-                        <i class="fas fa-car"></i><span>Garage</span>
-                        <div class="qty-controls">
-                            <button onclick="adjX('Garage', -1, 15000)" class="btn-qty">-</button>
-                            <span class="qty-badge" id="qty-Garage">0</span>
-                            <button onclick="adjX('Garage', 1, 15000)" class="btn-qty">+</button>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <i class="fas fa-swimming-pool"></i><span>Pool</span>
-                        <div class="qty-controls">
-                            <button onclick="adjX('Pool', -1, 25000)" class="btn-qty">-</button>
-                            <span class="qty-badge" id="qty-Pool">0</span>
-                            <button onclick="adjX('Pool', 1, 25000)" class="btn-qty">+</button>
-                        </div>
-                    </div>
-                </div>
-                <button onclick="goStep(9)" class="btn-main">Lage präzisieren</button>
-            </div>
-
             <div class="step" id="s9">
                 <h2>Standort</h2>
-                <input type="text" id="address-in" placeholder="Straße, Hausnummer, PLZ, Ort" style="width:100%; padding:15px; border:1px solid #ddd; border-radius:4px; margin-bottom:15px;">
+                <p style="font-size: 14px; color: #666; margin-bottom: 20px;">Ihre Adresse für Bodenrichtwerte & Marktdaten.</p>
+                <input type="text" id="address-in" placeholder="Straße, Hausnummer, PLZ, Ort">
                 <button onclick="finishStep9()" class="btn-main">Wert berechnen</button>
             </div>
 
             <div class="step" id="s-report">
-                <h2>Ihr Online-Schätzwert</h2>
-                <div style="background: var(--navy); color: white; padding: 40px; border-radius: 8px; text-align: center; margin-bottom: 20px;">
-                    <h2 id="res-total" style="color: white; font-size: 42px;">0 €</h2>
+                <h2>Ihre Analyse</h2>
+                <div class="calc-box">
+                    <div class="calc-header"><i class="fas fa-calculator"></i> SACHWERT NACH NHK 2010</div>
+                    <div class="calc-row"><span>Wohnfläche -> BGF (x1.3)</span><span id="res-bgf">-</span></div>
+                    <div class="calc-row"><span>NHK 2010 (Stufe 2)</span><span>625 EUR/m²</span></div>
+                    <div class="calc-row"><span>NHK 2025 (x1.58)</span><span>1007 EUR/m²</span></div>
+                    <div class="calc-row"><span>Herstellungskosten</span><span id="res-hk">-</span></div>
+                    <div class="calc-row"><span>Bodenwert (<span id="res-land">-</span> m² x 200 EUR)</span><span id="res-bw">-</span></div>
+                    <div class="calc-row"><span>Sachwert</span><span id="res-total">-</span></div>
                 </div>
-                <button onclick="goStep(10)" class="btn-main">Bericht anfordern</button>
+                <button onclick="goStep(10)" class="btn-main">Detail-Bericht & Strategie anfordern</button>
             </div>
 
             <div class="step" id="s10">
                 <h2>Kontaktdaten</h2>
-                <input type="text" id="u_fname" placeholder="Vorname" style="width:100%; padding:12px; margin-bottom:10px;">
-                <input type="text" id="u_lname" placeholder="Nachname" style="width:100%; padding:12px; margin-bottom:10px;">
-                <input type="email" id="u_email" placeholder="E-Mail" style="width:100%; padding:12px; margin-bottom:10px;">
-                <button onclick="sendFinal()" class="btn-main">Analyse abschließen</button>
+                <input type="text" id="u_fname" placeholder="Vorname">
+                <input type="text" id="u_lname" placeholder="Nachname">
+                <input type="email" id="u_email" placeholder="E-Mail Adresse">
+                <button onclick="sendFinal()" class="btn-main">Bericht senden & Termin wählen</button>
             </div>
 
             <div class="step" id="s-final">
-                <h2 style="text-align: center;">Fast fertig!</h2>
-                <div class="calendly-inline-widget" data-url="https://calendly.com/d-will-sw-immobilien/strategische-ersteinschatzung-verkauf" style="min-width:320px;height:600px;"></div>
+                <h2 style="text-align: center;">Analyse abgeschlossen.</h2>
+                <div class="calendly-inline-widget" data-url="https://calendly.com/d-will-sw-immobilien/strategische-ersteinschatzung-verkauf" style="min-width:320px;height:700px;"></div>
             </div>
         </div>
     </div>
@@ -173,6 +163,7 @@
         document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
         const target = isNaN(n) ? document.getElementById('s-'+n) : document.getElementById('s'+n);
         if(target) target.classList.add('active');
+        window.scrollTo(0,0);
     }
 
     function syncVal(id, v) { 
@@ -182,30 +173,60 @@
 
     function saveNext(current, k, v) { 
         store[k] = v; 
-        let next = current + 1;
-        // Spezielle Logik: Nach Schritt 2 (Objektart) kommt 3 (Wohnfläche), nach 6 (Zustand) kommt 8 (Extras)
-        if (current === 6) next = 8;
+        let next = (current === 6) ? 9 : current + 1;
         goStep(next); 
-    }
-
-    function adjX(name, delta, price) {
-        store.extras[name] = Math.max(0, (store.extras[name] || 0) + delta);
-        store.extraTotal += (delta * price);
-        if (store.extraTotal < 0) store.extraTotal = 0;
-        document.getElementById('qty-' + name).innerText = store.extras[name];
     }
 
     function format(v) { return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(v); }
 
+    // Berechnung & Erster E-Mail Versand (Lead-Phase 1)
     async function finishStep9() {
-        const val = (store.sqm * 3200) + (store.land * 250) + store.extraTotal;
-        document.getElementById('res-total').innerText = format(val);
+        const addr = document.getElementById('address-in').value;
+        store.address = addr;
+
+        // Rechner-Logik (vereinfacht für Darstellung)
+        const bgf = store.sqm * 1.3;
+        const hk = bgf * 1007;
+        const bw = store.land * 200;
+        const total = (hk * 0.66) + bw;
+
+        document.getElementById('res-bgf').innerText = `${store.sqm} m² -> ${bgf.toFixed(0)} m²`;
+        document.getElementById('res-hk').innerText = format(hk);
+        document.getElementById('res-land').innerText = store.land;
+        document.getElementById('res-bw').innerText = format(bw);
+        document.getElementById('res-total').innerText = format(total);
+
         goStep('report');
+
+        // E-Mail 1: Adress-Lead
+        try {
+            await emailjs.send("service_9wal0zr", "template_bwjdkei", {
+                from_name: "ADRESS-LEAD",
+                address: addr,
+                estimated_value: format(total),
+                message: `Nutzer hat Adresse eingegeben: ${addr}. Daten: ${store.sqm}qm, Bj ${store.year}`
+            });
+        } catch(e) { console.log("Mail 1 Error", e); }
     }
 
+    // Zweiter E-Mail Versand (Lead-Phase 2)
     async function sendFinal() {
-        goStep('final');
-        // Hier EmailJS Integration wie gehabt
+        const fname = document.getElementById('u_fname').value;
+        const lname = document.getElementById('u_lname').value;
+        const email = document.getElementById('u_email').value;
+
+        try {
+            await emailjs.send("service_9wal0zr", "template_bwjdkei", {
+                from_name: `${fname} ${lname}`,
+                to_email: email,
+                address: store.address,
+                estimated_value: document.getElementById('res-total').innerText,
+                message: `Vollständiger Lead erhalten. E-Mail: ${email}`
+            });
+            goStep('final');
+        } catch(e) { 
+            alert("Versand fehlgeschlagen. Bitte prüfen Sie Ihre Verbindung."); 
+        }
     }
 </script>
 <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
