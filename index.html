@@ -14,7 +14,6 @@
     
     <script type="text/javascript">
        (function(){
-          // Initialisierung mit Ihrem Public Key
           emailjs.init("_xVMakll6CBznjSHE");
        })();
     </script>
@@ -32,8 +31,6 @@
         input[type="range"] { -webkit-appearance: none; width: 100%; height: 6px; background: #e2e8f0; border-radius: 3px; outline: none; }
         input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; background: var(--w-blue); border-radius: 50%; cursor: pointer; border: 4px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
         .valuation-detail { background: #f8fafc; border-radius: 0.75rem; padding: 1rem; margin-top: 0.75rem; border-left: 4px solid var(--w-blue); font-size: 0.75rem; }
-        .valuation-detail td { padding: 4px 0; color: #64748b; }
-        .valuation-detail td:last-child { text-align: right; font-weight: 600; color: #1e293b; }
     </style>
 </head>
 <body class="p-4 md:p-12 flex items-center justify-center">
@@ -55,126 +52,50 @@
                         <h2 class="text-4xl font-bold mb-6">Wie möchten Sie starten?</h2>
                         <div class="bg-blue-50 p-8 rounded-[2rem] border-2 border-w-blue mb-8 cursor-pointer hover:scale-[1.02] transition" onclick="window.open('https://calendly.com/wilhelm')">
                             <h4 class="font-bold text-w-blue text-xl mb-2 text-center">Strategiegespräch reservieren</h4>
-                            <p class="text-sm text-gray-500 mb-6">Persönliche Expertenberatung vor Ort oder per Video.</p>
                             <button class="btn-premium">Termin wählen</button>
                         </div>
                         <button onclick="goStep(1)" class="text-xs font-bold uppercase text-gray-400 tracking-widest hover:text-w-blue">Direkt zur Online-Bewertung</button>
                     </div>
                 </div>
 
-                <div class="step" id="s1">
-                    <h3 class="text-2xl font-bold text-center mb-10">Was bewerten wir?</h3>
-                    <div class="grid grid-cols-3 gap-4">
-                        <div onclick="saveNext(1, 'type', 'Haus')" class="card-sel"><i class="fas fa-home mb-3 text-2xl"></i><span>Haus</span></div>
-                        <div onclick="saveNext(1, 'type', 'Wohnung')" class="card-sel"><i class="fas fa-building mb-3 text-2xl"></i><span>Wohnung</span></div>
-                        <div onclick="saveNext(1, 'type', 'Grundstück')" class="card-sel"><i class="fas fa-map mb-3 text-2xl"></i><span>Grundstück</span></div>
-                    </div>
-                </div>
-
-                <div class="step" id="s2">
-                    <h3 class="text-2xl font-bold text-center mb-10">Objektart</h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div onclick="saveNext(2, 'subtype', 'Einfamilienhaus')" class="card-sel">Einfamilienhaus</div>
-                        <div onclick="saveNext(2, 'subtype', 'Doppelhaushälfte')" class="card-sel">Doppelhaushälfte</div>
-                        <div onclick="saveNext(2, 'subtype', 'Reihenhaus')" class="card-sel">Reihenhaus</div>
-                        <div onclick="saveNext(2, 'subtype', 'Mehrfamilienhaus')" class="card-sel">Mehrfamilienhaus</div>
-                    </div>
-                    <button onclick="goStep(1)" class="mt-8 text-xs text-gray-300 w-full uppercase font-bold text-center">Zurück</button>
-                </div>
-
-                <div class="step" id="s3">
-                    <h3 class="text-2xl font-bold text-center mb-10">Wohnfläche</h3>
-                    <div class="text-center mb-8"><span class="text-6xl font-bold text-w-blue" id="txt-sqm">120</span> m²</div>
-                    <input type="range" min="30" max="500" value="120" oninput="syncVal('sqm', this.value)">
-                    <button onclick="goStep(4)" class="btn-premium mt-12">Weiter</button>
-                    <button onclick="goStep(2)" class="mt-4 text-xs text-gray-300 w-full uppercase font-bold text-center">Zurück</button>
-                </div>
-
-                <div class="step" id="s4">
-                    <h3 class="text-2xl font-bold text-center mb-10">Grundstücksgröße</h3>
-                    <div class="text-center mb-8"><span class="text-6xl font-bold text-w-blue" id="txt-land">500</span> m²</div>
-                    <input type="range" min="0" max="5000" value="500" oninput="syncVal('land', this.value)">
-                    <button onclick="goStep(5)" class="btn-premium mt-12">Weiter</button>
-                    <button onclick="goStep(3)" class="mt-4 text-xs text-gray-300 w-full uppercase font-bold text-center">Zurück</button>
-                </div>
-
-                <div class="step" id="s5">
-                    <h3 class="text-2xl font-bold text-center mb-10">Baujahr</h3>
-                    <div class="text-center mb-8"><span class="text-6xl font-bold text-w-blue" id="txt-year">1995</span></div>
-                    <input type="range" min="1900" max="2026" value="1995" oninput="syncVal('year', this.value)">
-                    <button onclick="goStep(6)" class="btn-premium mt-12">Weiter</button>
-                    <button onclick="goStep(4)" class="mt-4 text-xs text-gray-300 w-full uppercase font-bold text-center">Zurück</button>
-                </div>
-
-                <div class="step" id="s6">
-                    <h3 class="text-2xl font-bold text-center mb-10">Zustand der Immobilie</h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div onclick="saveNext(6, 'renov', 'Renovierungsbedürftig')" class="card-sel">Renovierungsbedürftig</div>
-                        <div onclick="saveNext(6, 'renov', 'Durchschnitt')" class="card-sel">Durchschnitt</div>
-                        <div onclick="saveNext(6, 'renov', 'Modernisiert')" class="card-sel">Modernisiert</div>
-                        <div onclick="saveNext(6, 'renov', 'Kernsaniert')" class="card-sel">Kernsaniert</div>
-                    </div>
-                    <button onclick="goStep(5)" class="mt-8 text-xs text-gray-300 w-full uppercase font-bold text-center">Zurück</button>
-                </div>
-
-                <div class="step" id="s7">
-                    <h3 class="text-2xl font-bold text-center mb-10">Ausstattungsqualität</h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div onclick="saveNext(7, 'style', 'Einfach')" class="card-sel">Einfach (S2)</div>
-                        <div onclick="saveNext(7, 'style', 'Mittel')" class="card-sel">Mittel (S3)</div>
-                        <div onclick="saveNext(7, 'style', 'Gehoben')" class="card-sel">Gehoben (S4)</div>
-                        <div onclick="saveNext(7, 'style', 'Luxus')" class="card-sel">Luxus (S5)</div>
-                    </div>
-                    <button onclick="goStep(6)" class="mt-8 text-xs text-gray-300 w-full uppercase font-bold text-center">Zurück</button>
-                </div>
-
-                <div class="step" id="s8">
-                    <h3 class="text-2xl font-bold text-center mb-10">Besonderheiten</h3>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div onclick="toggleX(this, 'Garage', 15000)" class="card-sel py-6">Garage</div>
-                        <div onclick="toggleX(this, 'Carport', 8000)" class="card-sel py-6">Carport</div>
-                        <div onclick="toggleX(this, 'Pool', 25000)" class="card-sel py-6">Pool</div>
-                        <div onclick="toggleX(this, 'Sauna', 10000)" class="card-sel py-6">Sauna</div>
-                    </div>
-                    <button onclick="goStep(9)" class="btn-premium mt-10">Weiter zur Lage</button>
-                    <button onclick="goStep(7)" class="mt-4 text-xs text-gray-300 w-full uppercase font-bold text-center">Zurück</button>
-                </div>
+                <div class="step" id="s1"><h3 class="text-2xl font-bold text-center mb-10">Was bewerten wir?</h3><div class="grid grid-cols-3 gap-4"><div onclick="saveNext(1, 'type', 'Haus')" class="card-sel"><i class="fas fa-home mb-3 text-2xl"></i><span>Haus</span></div><div onclick="saveNext(1, 'type', 'Wohnung')" class="card-sel"><i class="fas fa-building mb-3 text-2xl"></i><span>Wohnung</span></div><div onclick="saveNext(1, 'type', 'Grundstück')" class="card-sel"><i class="fas fa-map mb-3 text-2xl"></i><span>Grundstück</span></div></div></div>
+                <div class="step" id="s2"><h3 class="text-2xl font-bold text-center mb-10">Objektart</h3><div class="grid grid-cols-2 gap-4"><div onclick="saveNext(2, 'subtype', 'Einfamilienhaus')" class="card-sel">Einfamilienhaus</div><div onclick="saveNext(2, 'subtype', 'Doppelhaushälfte')" class="card-sel">Doppelhaushälfte</div><div onclick="saveNext(2, 'subtype', 'Reihenhaus')" class="card-sel">Reihenhaus</div><div onclick="saveNext(2, 'subtype', 'Mehrfamilienhaus')" class="card-sel">Mehrfamilienhaus</div></div></div>
+                <div class="step" id="s3"><h3 class="text-2xl font-bold text-center mb-10">Wohnfläche</h3><div class="text-center mb-8"><span class="text-6xl font-bold text-w-blue" id="txt-sqm">120</span> m²</div><input type="range" min="30" max="500" value="120" oninput="syncVal('sqm', this.value)"><button onclick="goStep(4)" class="btn-premium mt-12">Weiter</button></div>
+                <div class="step" id="s4"><h3 class="text-2xl font-bold text-center mb-10">Grundstücksgröße</h3><div class="text-center mb-8"><span class="text-6xl font-bold text-w-blue" id="txt-land">500</span> m²</div><input type="range" min="0" max="5000" value="500" oninput="syncVal('land', this.value)"><button onclick="goStep(5)" class="btn-premium mt-12">Weiter</button></div>
+                <div class="step" id="s5"><h3 class="text-2xl font-bold text-center mb-10">Baujahr</h3><div class="text-center mb-8"><span class="text-6xl font-bold text-w-blue" id="txt-year">1995</span></div><input type="range" min="1900" max="2026" value="1995" oninput="syncVal('year', this.value)"><button onclick="goStep(6)" class="btn-premium mt-12">Weiter</button></div>
+                <div class="step" id="s6"><h3 class="text-2xl font-bold text-center mb-10">Zustand</h3><div class="grid grid-cols-2 gap-4"><div onclick="saveNext(6, 'renov', 'Durchschnitt')" class="card-sel">Durchschnitt</div><div onclick="saveNext(6, 'renov', 'Modernisiert')" class="card-sel">Modernisiert</div></div></div>
+                <div class="step" id="s7"><h3 class="text-2xl font-bold text-center mb-10">Ausstattung</h3><div class="grid grid-cols-2 gap-4"><div onclick="saveNext(7, 'style', 'Mittel')" class="card-sel">Mittel (S3)</div><div onclick="saveNext(7, 'style', 'Gehoben')" class="card-sel">Gehoben (S4)</div></div></div>
+                <div class="step" id="s8"><h3 class="text-2xl font-bold text-center mb-10">Besonderheiten</h3><div class="grid grid-cols-2 gap-3"><div onclick="toggleX(this, 'Garage', 15000)" class="card-sel py-6">Garage</div><div onclick="toggleX(this, 'Pool', 25000)" class="card-sel py-6">Pool</div></div><button onclick="goStep(9)" class="btn-premium mt-10">Weiter zur Lage</button></div>
 
                 <div class="step" id="s9">
-                    <h3 class="text-2xl font-bold text-center mb-6">Objekt-Lage</h3>
-                    <input type="text" id="address" class="w-full p-4 bg-gray-50 border rounded-xl mb-4 text-center" placeholder="Straße, PLZ, Ort" onblur="updateMap()">
+                    <h3 class="text-xl font-bold text-center mb-4 text-w-blue">Präzise Wertermittlung</h3>
+                    <p class="text-center text-sm text-gray-500 mb-6">Um Bodenrichtwerte und aktuelle Marktentwicklungen Ihrer Lage einzubeziehen, bestätigen Sie bitte die Adresse:</p>
+                    <input type="text" id="address" class="w-full p-4 bg-gray-50 border rounded-xl mb-4 text-center" placeholder="Vollständige Adresse angeben" onblur="updateMap()">
                     <div class="h-48 rounded-xl overflow-hidden border">
                         <iframe id="map" class="w-full h-full" src="https://www.openstreetmap.org/export/embed.html?bbox=7.0,47.0,15.0,55.0&layer=mapnik"></iframe>
                     </div>
-                    <button onclick="goStep(10)" class="btn-premium mt-6">Lage bestätigen & Weiter</button>
-                    <button onclick="goStep(8)" class="mt-4 text-xs text-gray-300 w-full uppercase font-bold text-center">Zurück</button>
+                    <button onclick="finishStep9()" class="btn-premium mt-6">Lage bestätigen & Marktwert berechnen</button>
                 </div>
 
                 <div class="step" id="s10">
-                    <h3 class="text-2xl font-bold text-center mb-10">Kontaktdaten</h3>
-                    <input type="text" id="u_name" class="w-full p-4 border rounded-xl mb-4" placeholder="Vollständiger Name">
-                    <input type="email" id="u_email" class="w-full p-4 border rounded-xl mb-4" placeholder="E-Mail Adresse">
+                    <h3 class="text-2xl font-bold text-center mb-10">Fast fertig!</h3>
+                    <p class="text-center text-sm text-gray-500 mb-8">Wohin sollen wir den detaillierten Bericht senden?</p>
+                    <input type="text" id="u_name" class="w-full p-4 border rounded-xl mb-4" placeholder="Ihr Name">
+                    <input type="email" id="u_email" class="w-full p-4 border rounded-xl mb-4" placeholder="Ihre E-Mail Adresse">
                     <div class="p-4 bg-gray-50 rounded-xl mb-8 flex gap-3 text-[10px] uppercase font-bold text-gray-400">
                         <input type="checkbox" id="ds-check"> <span>Datenschutz zustimmen.</span>
                     </div>
-                    <button id="submit-btn" class="btn-premium" style="background: var(--coral);" onclick="sendFinal()">Bewertung berechnen</button>
-                    <button onclick="goStep(9)" class="mt-4 text-xs text-gray-300 w-full uppercase font-bold text-center">Zurück</button>
+                    <button id="submit-btn" class="btn-premium" style="background: var(--coral);" onclick="sendFinal()">Ergebnis anzeigen</button>
                 </div>
 
                 <div class="step text-center" id="s-final">
                     <div class="bg-slate-50 p-10 rounded-[3rem] border shadow-xl">
-                        <h2 class="text-3xl font-bold mb-10">Analyse abgeschlossen</h2>
-                        <button onclick="window.open('https://calendly.com/wilhelm')" class="btn-premium py-6 mb-12 shadow-2xl">Strategiegespräch buchen</button>
-                        <div class="border-t pt-10 text-left">
-                            <button onclick="document.getElementById('res-box').classList.toggle('hidden')" class="text-[10px] font-bold text-gray-300 uppercase tracking-widest block mx-auto">Online-Schätzwert anzeigen</button>
-                            <div id="res-box" class="hidden mt-8">
-                                <div class="valuation-detail">
-                                    <p class="font-black text-w-blue mb-2">Marktwert (Vergleichswert)</p>
-                                    <p id="res-marktwert" class="text-3xl font-black text-w-blue mb-4"></p>
-                                    <table class="w-full" id="details-marktwert"></table>
-                                </div>
-                            </div>
+                        <h2 class="text-3xl font-bold mb-6 text-w-blue">Analyse abgeschlossen</h2>
+                        <div class="valuation-detail mb-8 p-6 bg-white rounded-2xl border-l-8 border-w-blue shadow-inner">
+                            <p class="text-sm font-bold text-gray-400 uppercase">Ihr geschätzter Marktwert</p>
+                            <p id="res-marktwert" class="text-4xl font-black text-w-blue mt-2"></p>
                         </div>
+                        <button onclick="window.open('https://calendly.com/wilhelm')" class="btn-premium shadow-2xl">Jetzt Strategiegespräch buchen</button>
                     </div>
                 </div>
 
@@ -183,7 +104,6 @@
     </div>
 
     <script>
-        // Supabase Konfiguration
         const SB_URL = 'https://utyacdaldwdnollxhyjg.supabase.co'; 
         const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV0eWFjZGFsZHdkbm9sbHhoeWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5ODU5OTQsImV4cCI6MjA4NjU2MTk5NH0.NbDxVAIcQXGdvDjoTHBqRZOIgWnXE5ggLt90SBAMJvw';
         const sb = supabase.createClient(SB_URL, SB_KEY);
@@ -198,22 +118,16 @@
                 target.classList.add('active');
                 document.getElementById('progress-bar').style.width = (n === 'final' ? 100 : n * 10) + '%';
                 document.getElementById('step-text').innerText = n === 'final' ? 'Ergebnis' : `Schritt ${n} von 10`;
-                window.scrollTo(0, 0);
+                window.scrollTo(0,0);
             }
         }
 
         function saveNext(s, k, v) { store[k] = v; goStep(s + 1); }
         function syncVal(id, v) { document.getElementById('txt-' + id).innerText = v; store[id] = v; }
-        
         function toggleX(el, name, val) {
             el.classList.toggle('selected');
-            if(el.classList.contains('selected')) {
-                store.extras += val;
-                store.extraList.push(name);
-            } else {
-                store.extras -= val;
-                store.extraList = store.extraList.filter(i => i !== name);
-            }
+            if(el.classList.contains('selected')) { store.extras += val; store.extraList.push(name); }
+            else { store.extras -= val; store.extraList = store.extraList.filter(i => i !== name); }
         }
 
         async function updateMap() {
@@ -224,59 +138,84 @@
             if(data.length > 0) {
                 const off = 0.002;
                 document.getElementById('map').src = `https://www.openstreetmap.org/export/embed.html?bbox=${parseFloat(data[0].lon)-off}%2C${parseFloat(data[0].lat)-off}%2C${parseFloat(data[0].lon)+off}%2C${parseFloat(data[0].lat)+off}&layer=mapnik&marker=${data[0].lat}%2C${data[0].lon}`;
-                store.city = data[0].display_name.split(',')[0];
                 store.fullAddr = data[0].display_name;
+                store.city = data[0].display_name.split(',')[0];
             }
         }
 
         function format(v) { return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(v); }
+
+        function calculateValue() {
+            const brw = BRW[store.city] || BRW.default;
+            const basis = store.type === 'Haus' ? 3850 : 3400;
+            return (store.sqm * basis) + (store.land * brw * 0.4) + store.extras;
+        }
+
+        // NEU: Schritt 9 speichert bereits im Hintergrund
+        async function finishStep9() {
+            const addr = document.getElementById('address').value;
+            if(addr.length < 5) return alert("Bitte geben Sie eine vollständige Adresse an.");
+            
+            const marktwert = calculateValue();
+            goStep(10); // Sofort weiterleiten für beste UX
+
+            // Hintergrund-Senden
+            try {
+                await sb.from('leads').insert([{ 
+                    address: store.fullAddr || addr, 
+                    sqm: store.sqm, 
+                    estimated_value: format(marktwert), 
+                    details: store,
+                    name: "Abbruch nach Schritt 9" 
+                }]);
+                
+                await emailjs.send("service_9wal0zr", "template_bwjdkei", {
+                    from_name: "TEIL-LEAD (Schritt 9)",
+                    address: store.fullAddr || addr,
+                    estimated_value: format(marktwert),
+                    type: store.type,
+                    sqm: store.sqm,
+                    extraList: store.extraList.join(", ") || "Keine"
+                });
+            } catch(e) { console.log("Silent background send failed"); }
+        }
 
         async function sendFinal() {
             if(!document.getElementById('ds-check').checked) return alert("Datenschutz bestätigen.");
             const btn = document.getElementById('submit-btn');
             const name = document.getElementById('u_name').value;
             const email = document.getElementById('u_email').value;
-            const address = document.getElementById('address').value;
+            const marktwert = calculateValue();
 
             btn.innerText = "Berechnung läuft...";
             btn.disabled = true;
 
-            const brw = BRW[store.city] || BRW.default;
-            const basis = store.type === 'Haus' ? 3850 : 3400;
-            const marktwert = (store.sqm * basis) + (store.land * brw * 0.4) + store.extras;
-
             try {
-                // 1. Speichern in Supabase
-                const { error } = await sb.from('leads').insert([{ 
-                    name, email, address: store.fullAddr || address,
+                await sb.from('leads').insert([{ 
+                    name, email, address: store.fullAddr || document.getElementById('address').value,
                     sqm: parseFloat(store.sqm),
-                    estimated_value: Math.round(marktwert).toString(),
+                    estimated_value: format(marktwert),
                     details: store
                 }]);
 
-                if (error) throw error;
-
-                // 2. E-Mail Versand via EmailJS mit aufgeschlüsselten Daten
-await emailjs.send("service_9wal0zr", "template_bwjdkei", {
-    to_email: "d.will@sw-immobilien.de",
-    from_name: name,
-    user_email: email,
-    address: store.fullAddr || address,
-    estimated_value: format(marktwert),
-    // Einzelne Felder für das Template aufschlüsseln:
-    type: store.type,
-    subtype: store.subtype,
-    sqm: store.sqm,
-    land: store.land,
-    year: store.year,
-    renov: store.renov,
-    style: store.style,
-    extraList: store.extraList.length > 0 ? store.extraList.join(", ") : "Keine Besonderheiten"
-});
+                await emailjs.send("service_9wal0zr", "template_bwjdkei", {
+                    to_email: "d.will@sw-immobilien.de",
+                    from_name: name,
+                    user_email: email,
+                    address: store.fullAddr || document.getElementById('address').value,
+                    estimated_value: format(marktwert),
+                    type: store.type,
+                    subtype: store.subtype,
+                    sqm: store.sqm,
+                    land: store.land,
+                    year: store.year,
+                    renov: store.renov,
+                    style: store.style,
+                    extraList: store.extraList.length > 0 ? store.extraList.join(", ") : "Keine Besonderheiten"
+                });
 
                 document.getElementById('res-marktwert').innerText = format(marktwert);
                 goStep('final');
-
             } catch (err) {
                 alert("Fehler: " + err.message);
                 btn.disabled = false;
