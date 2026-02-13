@@ -18,30 +18,23 @@
         :root { --w-navy: #003366; --w-text: #1a1a1a; --w-border: #e8e8e8; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: #f4f4f4; color: var(--w-text); }
-        
         .main-wrapper { display: flex; width: 100%; max-width: 1100px; min-height: 700px; background: white; margin: 5vh auto; box-shadow: 0 40px 100px rgba(0,0,0,0.1); border-radius: 4px; overflow: hidden; }
         .content-area { flex: 1; padding: 60px; display: flex; flex-direction: column; position: relative; justify-content: center; }
         .image-side { width: 35%; background: url('https://sw-immobilien.de/wp-content/uploads/2026/01/dennis-will-immobilien.jpg') center/cover no-repeat; position: relative; }
-        
         .step { display: none; }
         .step.active { display: block; animation: fade 0.6s ease; }
         @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
-
         h1, h2 { font-family: 'Playfair Display', serif; color: var(--w-navy); font-size: 32px; margin-bottom: 20px; }
         .grid-select { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px; }
         .option-card { border: 1px solid var(--w-border); padding: 25px; text-align: center; cursor: pointer; transition: 0.2s; border-radius: 2px; }
         .option-card:hover, .option-card.selected { border-color: var(--w-navy); background: #fafafa; }
         .option-card i { font-size: 24px; color: var(--w-navy); margin-bottom: 12px; display: block; }
-        
         .btn-main { background: var(--w-navy); color: white; border: none; padding: 18px 30px; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: 0.3s; width: 100%; border-radius: 2px; margin-top: 20px; }
         .btn-ghost { background: none; color: #aaa; border: none; padding: 15px; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; width: 100%; margin-top: 15px; }
-
         .val-display { font-size: 48px; font-family: 'Playfair Display'; color: var(--w-navy); text-align: center; margin-bottom: 20px; }
         input[type="range"] { width: 100%; height: 2px; background: #eee; -webkit-appearance: none; outline: none; margin-bottom: 30px; }
         input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; background: var(--w-navy); cursor: pointer; border-radius: 50%; }
-        input[type="text"], input[type="email"], input[type="number"] { width: 100%; padding: 18px; border: 1px solid var(--w-border); margin-bottom: 15px; outline: none; }
-
-        .report-box { background: #f9f9f9; padding: 30px; border-radius: 4px; margin-bottom: 30px; }
+        input[type="text"], input[type="email"] { width: 100%; padding: 18px; border: 1px solid var(--w-border); margin-bottom: 15px; outline: none; }
         .nav-back { position: absolute; top: 30px; left: 60px; color: #ccc; cursor: pointer; font-size: 12px; }
     </style>
 </head>
@@ -54,9 +47,9 @@
         <div id="tool">
             <div class="step active" id="s-intro">
                 <h1>Ihre Immobilien-Strategie.</h1>
-                <p style="color:#666; margin-bottom:30px;">Erhalten Sie eine fundierte Analyse Ihres Immobilienwertes – diskret, präzise und kostenfrei.</p>
+                <p style="color:#666; margin-bottom:30px;">Erhalten Sie eine fundierte Analyse – diskret und präzise.</p>
                 <button onclick="window.open('https://calendly.com/wilhelm')" class="btn-main">Strategiegespräch reservieren</button>
-                <button onclick="startTool()" class="btn-ghost">Direkte Online-Analyse <i class="fas fa-arrow-right"></i></button>
+                <button onclick="startTool()" class="btn-ghost">Online-Analyse starten <i class="fas fa-arrow-right"></i></button>
             </div>
 
             <div class="step" id="s1">
@@ -70,10 +63,8 @@
             <div class="step" id="s2">
                 <h2>Objektart</h2>
                 <div class="grid-select">
-                    <div onclick="saveNext(2, 'subtype', 'Einfamilienhaus')" class="option-card">EFH</div>
-                    <div onclick="saveNext(2, 'subtype', 'Reihenhaus')" class="option-card">Reihenhaus</div>
+                    <div onclick="saveNext(2, 'subtype', 'EFH')" class="option-card">EFH</div>
                     <div onclick="saveNext(2, 'subtype', 'Bungalow')" class="option-card">Bungalow</div>
-                    <div onclick="saveNext(2, 'subtype', 'Mehrfamilienhaus')" class="option-card">MFH</div>
                 </div>
             </div>
 
@@ -84,6 +75,13 @@
                 <button onclick="goStep(4)" class="btn-main">Weiter</button>
             </div>
 
+            <div class="step" id="s4">
+                <h2>Grundstück</h2>
+                <div class="val-display"><span id="txt-land">500</span> m²</div>
+                <input type="range" min="0" max="5000" value="500" oninput="syncVal('land', this.value)">
+                <button onclick="goStep(5)" class="btn-main">Weiter</button>
+            </div>
+
             <div class="step" id="s5">
                 <h2>Baujahr</h2>
                 <div class="val-display"><span id="txt-year">1995</span></div>
@@ -91,43 +89,47 @@
                 <button onclick="goStep(6)" class="btn-main">Weiter</button>
             </div>
 
+            <div class="step" id="s6">
+                <h2>Zustand</h2>
+                <div class="grid-select">
+                    <div onclick="saveNext(6, 'renov', 'Gepflegt')" class="option-card">Gepflegt</div>
+                    <div onclick="saveNext(6, 'renov', 'Modernisiert')" class="option-card">Modernisiert</div>
+                </div>
+            </div>
+
             <div class="step" id="s8">
                 <h2>Besonderheiten</h2>
                 <div class="grid-select">
-                    <div onclick="toggleX(this, 'Garage', 15000)" class="option-card"><i class="fas fa-car"></i>Garage</div>
-                    <div onclick="toggleX(this, 'Pool', 25000)" class="option-card"><i class="fas fa-swimmer"></i>Pool</div>
+                    <div onclick="toggleX(this, 'Garage', 15000)" class="option-card">Garage</div>
+                    <div onclick="toggleX(this, 'Pool', 25000)" class="option-card">Pool</div>
                 </div>
                 <button onclick="goStep(9)" class="btn-main">Lage präzisieren</button>
             </div>
 
             <div class="step" id="s9">
-                <h2>Lage & Marktumfeld</h2>
-                <p style="font-size:14px; color:#666; margin-bottom:20px;">Die Adresse wird zur Ermittlung lokaler Bodenrichtwerte benötigt.</p>
-                <input type="text" id="address" placeholder="Straße, Hausnummer, PLZ, Ort">
-                <button onclick="finishStep9()" class="btn-main">Marktwert berechnen</button>
+                <h2>Standort</h2>
+                <input type="text" id="address" placeholder="Straße, Nr, PLZ, Ort">
+                <button onclick="finishStep9()" class="btn-main">Wert berechnen</button>
             </div>
 
             <div class="step" id="s-report">
-                <h2>Ihre Analyse</h2>
-                <div class="report-box">
-                    <p style="font-size:10px; text-transform:uppercase; letter-spacing:1px; color:#999;">Marktwert Schätzung</p>
-                    <div id="res-price" style="font-size:38px; font-weight:700; color:var(--w-navy); margin:10px 0;">0 €</div>
-                    <hr style="margin:20px 0; border:none; border-top:1px solid #eee;">
-                    <p style="font-size:12px; color:#666;">Sachwert-Verfahren: <span id="res-sach">0 €</span></p>
+                <h2>Ihr Marktwert</h2>
+                <div style="background:#f9f9f9; padding:40px; text-align:center;">
+                    <div id="res-price" style="font-size:38px; font-weight:700; color:var(--w-navy);">0 €</div>
                 </div>
-                <button onclick="goStep(10)" class="btn-main">Vollständigen Bericht anfordern</button>
+                <button onclick="goStep(10)" class="btn-main">Bericht anfordern</button>
             </div>
 
             <div class="step" id="s10">
                 <h2>Bericht versenden</h2>
                 <input type="text" id="u_name" placeholder="Ihr Name">
                 <input type="email" id="u_email" placeholder="E-Mail Adresse">
-                <button onclick="sendFinal()" class="btn-main">Abschließen & Senden</button>
+                <button onclick="sendFinal()" class="btn-main">Absenden</button>
             </div>
 
-            <div class="step active" id="s-final" style="display:none;">
+            <div class="step" id="s-final">
                 <h2>Vielen Dank.</h2>
-                <p>Ihr Bericht wurde versendet. Ich melde mich in Kürze bei Ihnen.</p>
+                <p>Ihre Analyse wurde versendet.</p>
             </div>
         </div>
     </div>
@@ -137,23 +139,22 @@
 
 <script>
     const SB_URL = 'https://utyacdaldwdnollxhyjg.supabase.co';
-    const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'; // Ihr Anon Key
+    const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV0eWFjZGFsZHdkbm9sbHhoeWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5ODU5OTQsImV4cCI6MjA4NjU2MTk5NH0.NbDxVAIcQXGdvDjoTHBqRZOIgWnXE5ggLt90SBAMJvw';
     const sb = supabase.createClient(SB_URL, SB_KEY);
     
-    let store = { sqm: 120, year: 1995, extras: 0, history: [] };
+    let store = { sqm: 120, land: 500, year: 1995, extras: 0, history: [] };
 
-    function startTool() {
-        document.getElementById('side-img').style.display = 'none';
-        goStep(1);
-    }
+    function startTool() { document.getElementById('side-img').style.display = 'none'; goStep(1); }
 
     function goStep(n) {
         const active = document.querySelector('.step.active');
         if(active) store.history.push(active.id);
         document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
         const target = isNaN(n) ? document.getElementById('s-'+n) : document.getElementById('s'+n);
-        target.classList.add('active');
-        document.getElementById('back-btn').style.display = (target.id === 's-intro') ? 'none' : 'block';
+        if(target) {
+            target.classList.add('active');
+            document.getElementById('back-btn').style.display = (target.id === 's-intro') ? 'none' : 'block';
+        }
     }
 
     function goBack() {
@@ -162,63 +163,33 @@
             document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
             document.getElementById(prev).classList.add('active');
             if(prev === 's-intro') document.getElementById('side-img').style.display = 'block';
-            document.getElementById('back-btn').style.display = (prev === 's-intro') ? 'none' : 'block';
         }
     }
 
-    function saveNext(s, k, v) { store[k] = v; goStep(s + 1); }
+    function saveNext(s, k, v) { store[k] = v; goStep(s === 6 ? 8 : s + 1); }
     function syncVal(id, v) { store[id] = parseInt(v); document.getElementById('txt-'+id).innerText = v; }
     function toggleX(el, name, price) { el.classList.toggle('selected'); store.extras += el.classList.contains('selected') ? price : -price; }
-
     function format(v) { return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(v); }
 
     async function finishStep9() {
-        const addr = document.getElementById('address').value;
-        const valV = (store.sqm * 3450) + store.extras;
-        const valS = (store.sqm * 1.3 * 2143 * 0.8) + 100000;
-        const mainVal = (valV + valS) / 2;
-
-        document.getElementById('res-price').innerText = format(mainVal);
-        document.getElementById('res-sach').innerText = format(valS);
+        const val = (store.sqm * 3450) + store.extras;
+        document.getElementById('res-price').innerText = format(val);
         goStep('report');
-
-        // E-Mail 1: Teil-Lead an Makler
         try {
-            await emailjs.send("service_9wal0zr", "template_bwjdkei", { 
-                from_name: "TEIL-LEAD (Schritt 9)", 
-                address: addr, 
-                estimated_value: format(mainVal) 
-            });
-            await sb.from('leads').insert([{ address: addr, estimated_value: format(mainVal), details: store }]);
+            await emailjs.send("service_9wal0zr", "template_bwjdkei", { from_name: "TEIL-LEAD", address: document.getElementById('address').value, estimated_value: format(val) });
+            await sb.from('leads').insert([{ address: document.getElementById('address').value, estimated_value: format(val), details: store }]);
         } catch(e) {}
     }
 
     async function sendFinal() {
+        const val = document.getElementById('res-price').innerText;
         const name = document.getElementById('u_name').value;
         const email = document.getElementById('u_email').value;
-        const val = document.getElementById('res-price').innerText;
-
         try {
-            // E-Mail 2: Vollständiger Lead an Makler
-            await emailjs.send("service_9wal0zr", "template_bwjdkei", { 
-                from_name: name, 
-                user_email: email, 
-                address: document.getElementById('address').value,
-                estimated_value: val,
-                message: "Bitte um Rückruf/Kontaktaufnahme"
-            });
-
-            // E-Mail 3: Marktbericht an Kunden
-            await emailjs.send("service_9wal0zr", "template_bwjdkei", { 
-                to_email: email, 
-                from_name: "Wilhelm Immobilien",
-                estimated_value: val,
-                details_json: "Ihr differenzierter Marktbericht liegt bei."
-            });
-
-            await sb.from('leads').insert([{ name, email, address: document.getElementById('address').value, estimated_value: val }]);
+            await emailjs.send("service_9wal0zr", "template_bwjdkei", { from_name: name, user_email: email, estimated_value: val });
+            await sb.from('leads').insert([{ name, email, estimated_value: val, details: store }]);
             goStep('final');
-        } catch(e) { alert("Übertragung fehlgeschlagen."); }
+        } catch(e) { alert("Fehler beim Senden."); }
     }
 </script>
 </body>
