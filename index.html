@@ -18,28 +18,25 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', sans-serif; background: #f4f7f9; color: var(--text); }
         
+        /* Layout */
         .main-container { max-width: 1100px; margin: 40px auto; background: white; border-radius: 12px; box-shadow: 0 15px 50px rgba(0,0,0,0.05); overflow: hidden; display: flex; min-height: 800px; }
         .form-side { flex: 1; padding: 50px; display: flex; flex-direction: column; justify-content: center; position: relative; }
         .img-side { width: 45%; background: url('https://sw-immobilien.de/wp-content/uploads/2026/01/dennis-will-immobilien.jpg') center/cover no-repeat; transition: width 0.5s ease; }
         
+        /* Intro Styling */
+        .intro-label { color: var(--light-teal); font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 20px; display: block; }
+        .intro-title { font-size: 42px; line-height: 1.1; font-weight: 700; color: #333; margin-bottom: 25px; }
+        .intro-title span { color: var(--light-teal); }
+        .intro-p { font-size: 17px; color: #666; line-height: 1.6; margin-bottom: 35px; }
+        .btn-coral { background: var(--accent); color: white; border: none; padding: 18px 35px; border-radius: 4px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 14px; text-decoration: none; display: inline-block; transition: 0.3s; }
+        
+        /* Steps */
         .step { display: none; }
         .step.active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Intro Styling */
-        .intro-label { color: var(--light-teal); font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 20px; display: block; }
-        .intro-title { font-size: 42px; line-height: 1.1; font-weight: 700; color: #333; margin-bottom: 25px; }
-        .intro-p { font-size: 17px; color: #666; line-height: 1.6; margin-bottom: 35px; }
-        .btn-coral { background: var(--accent); color: white; border: none; padding: 18px 35px; border-radius: 4px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 14px; text-decoration: none; display: inline-block; transition: 0.3s; text-align: center; }
-        
-        .online-trigger-box { margin-top: 30px; border-left: 2px solid var(--light-teal); padding-left: 20px; }
-        .online-trigger-title { font-size: 14px; font-weight: 700; color: #444; margin-bottom: 5px; }
-        .online-trigger-text { font-size: 12px; color: #888; margin-bottom: 10px; }
-        .btn-subtle-start { background: none; border: none; color: #999; cursor: pointer; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; padding: 0; font-weight: bold; }
-
         /* Navigation */
-        .btn-back { background: none; border: none; color: #999; cursor: pointer; font-size: 12px; margin-bottom: 20px; display: flex; align-items: center; gap: 5px; width: fit-content; }
-        .btn-back:hover { color: var(--navy); }
+        .btn-back { background: none; border: none; color: #999; cursor: pointer; font-size: 12px; margin-bottom: 20px; display: flex; align-items: center; gap: 5px; }
 
         /* Kacheln & Grids */
         .grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 25px; }
@@ -55,19 +52,21 @@
         .minus-btn { position: absolute; bottom: 5px; right: 5px; font-size: 14px; color: var(--accent); cursor: pointer; display: none; padding: 5px; }
         .card:hover .minus-btn.active { display: block; }
 
-        /* Form Layouts */
+        /* Form Elements */
         .input-group { margin-bottom: 20px; }
         label { font-size: 12px; font-weight: 700; text-transform: uppercase; color: #888; margin-bottom: 8px; display: block; }
         .val-display { font-size: 20px; font-weight: bold; color: var(--navy); margin-bottom: 5px; }
-        input[type="range"] { width: 100%; margin-bottom: 15px; accent-color: var(--navy); }
-        input[type="number"], input[type="text"], input[type="email"], select { width: 100%; padding: 14px; border: 1px solid var(--border); border-radius: 4px; outline: none; }
+        input[type="range"] { width: 100%; margin-bottom: 10px; accent-color: var(--navy); }
+        .range-num-row { display: flex; gap: 15px; align-items: center; }
+        .range-num-row input[type="number"] { width: 100px; padding: 8px; border: 1px solid var(--border); border-radius: 4px; font-weight: bold; }
+
         .btn-main { background: var(--navy); color: white; border: none; padding: 18px; width: 100%; border-radius: 4px; font-weight: 700; cursor: pointer; text-transform: uppercase; margin-top: 15px; }
 
-        /* Result & Screenshot Styling */
+        /* Calculation */
         .calc-box { background: #f8fbff; border: 1px solid #d0e1f3; border-radius: 12px; padding: 25px; margin-top: 20px; }
         .detail-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 14px; border-bottom: 1px dotted #e2e8f0; }
         .detail-row.bold { font-weight: bold; border: none; color: var(--navy); font-size: 18px; padding-top: 15px; }
-        .calc-header { font-size: 10px; font-weight: 800; text-transform: uppercase; color: #888; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; border-left: 3px solid var(--navy); padding-left: 8px; }
+        .calc-header { font-size: 10px; font-weight: 800; text-transform: uppercase; color: #888; margin-bottom: 10px; border-left: 3px solid var(--navy); padding-left: 8px; }
     </style>
 </head>
 <body>
@@ -78,14 +77,12 @@
             <div class="step active" id="s-intro">
                 <span class="intro-label">Manufaktur statt Massenabfertigung</span>
                 <h1 class="intro-title">Ihre Immobilie ist kein <span>Algorithmus.</span><br>Sie ist ein Vermögenswert.</h1>
-                <p class="intro-p">Verzichten Sie auf automatisierte Schätzwerte. Wir bewerten Ihre Immobilie nicht maschinell, sondern persönlich, fundiert und mit strategischem Blick für die Pfalz.</p>
-                
+                <p class="intro-p">Verzichten Sie auf automatisierte Schätzwerte. Wir bewerten Ihre Immobilie nicht maschinell, sondern persönlich, fundiert und mit strategischem Blick für die Besonderheiten der Pfalz.</p>
                 <a href="https://calendly.com/d-will-sw-immobilien/strategische-ersteinschatzung-verkauf" target="_blank" class="btn-coral">Strategiegespräch vereinbaren</a>
-                
-                <div class="online-trigger-box">
-                    <p class="online-trigger-title">Direkte Online-Analyse</p>
-                    <p class="online-trigger-text">Schätzwert sofort online – ohne Angabe persönlicher Daten.</p>
-                    <button onclick="goStep(1)" class="btn-subtle-start">BEWERTUNG STARTEN <i class="fas fa-chevron-right"></i></button>
+                <div style="margin-top: 30px; border-left: 2px solid var(--light-teal); padding-left: 20px;">
+                    <p style="font-size: 14px; font-weight: 700;">Direkte Online-Analyse</p>
+                    <p style="font-size: 12px; color: #888; margin-bottom: 10px;">Schätzwert sofort online – ohne Angabe persönlicher Daten.</p>
+                    <button onclick="goStep(1)" style="background:none; border:none; color:#999; cursor:pointer; text-transform:uppercase; font-size:11px; letter-spacing:1px; padding:0; font-weight:bold;">BEWERTUNG STARTEN <i class="fas fa-chevron-right"></i></button>
                 </div>
             </div>
 
@@ -117,18 +114,24 @@
                 <h2>Eckdaten</h2>
                 <div class="input-group">
                     <label>Wohnfläche (m²)</label>
-                    <div class="val-display"><span id="txt-sqm">120</span> m²</div>
-                    <input type="range" min="30" max="500" value="120" oninput="syncVal('sqm', this.value)">
+                    <div class="range-num-row">
+                        <input type="range" id="rng-sqm" min="30" max="500" value="120" oninput="syncVal('sqm', this.value)">
+                        <input type="number" id="num-sqm" value="120" oninput="syncVal('sqm', this.value)">
+                    </div>
                 </div>
                 <div class="input-group">
-                    <label>Grundstücksgröße (m²)</label>
-                    <div class="val-display"><span id="txt-land">500</span> m²</div>
-                    <input type="range" min="0" max="5000" value="500" oninput="syncVal('land', this.value)">
+                    <label>Grundstück (m²)</label>
+                    <div class="range-num-row">
+                        <input type="range" id="rng-land" min="0" max="5000" value="500" oninput="syncVal('land', this.value)">
+                        <input type="number" id="num-land" value="500" oninput="syncVal('land', this.value)">
+                    </div>
                 </div>
                 <div class="input-group">
                     <label>Baujahr</label>
-                    <div class="val-display"><span id="txt-year">1995</span></div>
-                    <input type="range" min="1900" max="2026" value="1995" oninput="syncVal('year', this.value)">
+                    <div class="range-num-row">
+                        <input type="range" id="rng-year" min="1900" max="2026" value="1995" oninput="syncVal('year', this.value)">
+                        <input type="number" id="num-year" value="1995" oninput="syncVal('year', this.value)">
+                    </div>
                 </div>
                 <button onclick="goStep(6)" class="btn-main">Weiter</button>
             </div>
@@ -137,17 +140,17 @@
                 <button class="btn-back" onclick="goStep(3)"><i class="fas fa-arrow-left"></i> Zurück</button>
                 <h2>Renovierungsstand</h2>
                 <div class="grid-cards">
-                    <div onclick="saveNext(6, 'renov', 'Abriss/Sanierung')" class="card"><i class="fas fa-dumpster"></i><span>Abriss / Sanierung</span></div>
+                    <div onclick="saveNext(6, 'renov', 'Sanierungsbedürftig')" class="card"><i class="fas fa-dumpster"></i><span>Abriss / Sanierung</span></div>
                     <div onclick="saveNext(6, 'renov', 'Renovierungsbedürftig')" class="card"><i class="fas fa-paint-roller"></i><span>Renovierungsbedürftig</span></div>
                     <div onclick="saveNext(6, 'renov', 'Gepflegt')" class="card"><i class="fas fa-check-circle"></i><span>Gepflegt</span></div>
                     <div onclick="saveNext(6, 'renov', 'Modernisiert')" class="card"><i class="fas fa-magic"></i><span>Modernisiert</span></div>
-                    <div onclick="saveNext(6, 'renov', 'Kernsaniert')" class="card" id="card-kern"><i class="fas fa-hammer"></i><span>Kernsaniert</span></div>
+                    <div onclick="saveNext(6, 'renov', 'Kernsaniert')" class="card"><i class="fas fa-hammer"></i><span>Kernsaniert</span></div>
                     <div onclick="saveNext(6, 'renov', 'Neubau')" class="card"><i class="fas fa-sparkles"></i><span>Neubau</span></div>
                 </div>
-                <div id="kern-year-box" style="display:none; margin-top:15px;">
-                    <label>Jahr der Kernsanierung</label>
-                    <input type="number" id="inp-kern-year" placeholder="z.B. 2022">
-                    <button onclick="saveKernYear()" class="btn-main">Bestätigen</button>
+                <div id="extra-year" style="display:none; margin-top:15px;">
+                    <label>Jahr der Sanierung</label>
+                    <input type="number" id="kern-year" placeholder="z.B. 2022">
+                    <button onclick="goStep(7)" class="btn-main">Bestätigen</button>
                 </div>
             </div>
 
@@ -168,93 +171,96 @@
                 <div class="grid-cards">
                     <div onclick="adjX('Garage', 1)" class="card" id="c-Garage"><div class="qty-badge" id="q-Garage">0</div><i class="fas fa-car"></i><span>Garage</span><div class="minus-btn" id="m-Garage" onclick="event.stopPropagation(); adjX('Garage', -1)"><i class="fas fa-minus-circle"></i></div></div>
                     <div onclick="adjX('Tiefgarage', 1)" class="card" id="c-Tiefgarage"><div class="qty-badge" id="q-Tiefgarage">0</div><i class="fas fa-warehouse"></i><span>Tiefgarage</span><div class="minus-btn" id="m-Tiefgarage" onclick="event.stopPropagation(); adjX('Tiefgarage', -1)"><i class="fas fa-minus-circle"></i></div></div>
-                    <div onclick="adjX('Stellplatz/Carport', 1)" class="card" id="c-Carport"><div class="qty-badge" id="q-Carport">0</div><i class="fas fa-car-side"></i><span>Stellplatz/Carport</span><div class="minus-btn" id="m-Carport" onclick="event.stopPropagation(); adjX('Stellplatz/Carport', -1)"><i class="fas fa-minus-circle"></i></div></div>
+                    <div onclick="adjX('Stellplatz', 1)" class="card" id="c-Stellplatz"><div class="qty-badge" id="q-Stellplatz">0</div><i class="fas fa-car-side"></i><span>Stellplatz/Carport</span><div class="minus-btn" id="m-Stellplatz" onclick="event.stopPropagation(); adjX('Stellplatz', -1)"><i class="fas fa-minus-circle"></i></div></div>
                     <div onclick="adjX('Pool', 1)" class="card" id="c-Pool"><div class="qty-badge" id="q-Pool">0</div><i class="fas fa-swimming-pool"></i><span>Pool</span><div class="minus-btn" id="m-Pool" onclick="event.stopPropagation(); adjX('Pool', -1)"><i class="fas fa-minus-circle"></i></div></div>
                     <div onclick="adjX('Sauna', 1)" class="card" id="c-Sauna"><div class="qty-badge" id="q-Sauna">0</div><i class="fas fa-hot-tub"></i><span>Sauna</span><div class="minus-btn" id="m-Sauna" onclick="event.stopPropagation(); adjX('Sauna', -1)"><i class="fas fa-minus-circle"></i></div></div>
                     <div onclick="adjX('Gäste WC', 1)" class="card" id="c-WC"><div class="qty-badge" id="q-WC">0</div><i class="fas fa-toilet"></i><span>Gäste WC</span><div class="minus-btn" id="m-WC" onclick="event.stopPropagation(); adjX('Gäste WC', -1)"><i class="fas fa-minus-circle"></i></div></div>
                     <div onclick="adjX('Einliegerwohnung', 1)" class="card" id="c-Flat"><div class="qty-badge" id="q-Flat">0</div><i class="fas fa-users-between-lines"></i><span>Einliegerwohnung</span><div class="minus-btn" id="m-Flat" onclick="event.stopPropagation(); adjX('Einliegerwohnung', -1)"><i class="fas fa-minus-circle"></i></div></div>
                 </div>
-                <button onclick="goStep(9)" class="btn-main">Weiter zur Lage</button>
+                <button onclick="goStep(9)" class="btn-main">Lage präzisieren</button>
             </div>
 
             <div class="step" id="s9">
                 <button class="btn-back" onclick="goStep(8)"><i class="fas fa-arrow-left"></i> Zurück</button>
                 <h2>Lage & Marktdaten</h2>
-                <p style="font-size: 14px; color: #666; margin-bottom: 20px; line-height: 1.5;">
-                    Um die <strong>aktuellen Bodenrichtwerte</strong> der Pfalz sowie spezifische Grundstückspreise und regionale Verkaufstrends präzise einfließen zu lassen, benötigen wir die Standortdaten des Objekts.
-                </p>
-                <input type="text" id="address-in" placeholder="Straße, Hausnummer, PLZ, Ort">
+                <p style="font-size: 13px; color: #666; margin-bottom: 20px; line-height: 1.5;">Präzise Bodenrichtwerte und regionale Verkaufspreise der Pfalz lassen sich nur durch exakte Standortdaten ermitteln.</p>
+                <input id="autocomplete" placeholder="Geben Sie hier Ihre Adresse ein..." type="text">
+                
+                <div style="display:none">
+                    <input id="route" type="text">
+                    <input id="street_number" type="text">
+                    <input id="postal_code" type="text">
+                    <input id="locality" type="text">
+                </div>
                 <button onclick="finishStep9()" class="btn-main">Analyse erstellen</button>
             </div>
 
             <div class="step" id="s-report">
+                <h2>Ihre detaillierte Marktanalyse</h2>
                 <div class="calc-box">
-                    <p style="font-size: 11px; opacity: 0.6; text-transform: uppercase; margin-bottom: 5px;">Voraussichtlicher Marktwert</p>
-                    <h2 id="res-total" style="font-size: 42px; text-align: left; margin-bottom: 20px;">0 €</h2>
-                    
-                    <div style="font-size: 14px; color: #444;">
-                        <div style="display:flex; justify-content:space-between; padding: 5px 0; border-bottom:1px solid #eee;">
-                            <span>Basiswert Gebäude</span><span id="res-hk">-</span>
-                        </div>
-                        <div style="display:flex; justify-content:space-between; padding: 5px 0;">
-                            <span>Bodenwertanteil</span><span id="res-bw">-</span>
-                        </div>
-                    </div>
-
-                    <p style="font-size:12px; margin-top:20px; color:#888; line-height:1.5; text-align:center; font-style:italic;">
-                        Hinweis: Diese algorithmische Einschätzung basiert auf Durchschnittswerten und ersetzt keine professionelle Begutachtung durch unsere Experten vor Ort.
-                    </p>
+                    <div class="calc-header">Vergleichswertverfahren</div>
+                    <div class="detail-row bold"><span id="res-total">0 €</span></div>
+                    <div class="detail-row"><span>Wohnfläche</span><span id="res-sqm">-</span></div>
+                    <div class="detail-row"><span>Ø Preis/m²</span><span id="res-avg">1.192 €</span></div>
+                    <div class="detail-row"><span>Grundstückswert</span><span id="res-bw">-</span></div>
                 </div>
-                <button onclick="goStep(10)" class="btn-main" style="margin-top:20px;">Detaillierten Strategie-Bericht anfordern</button>
-            </div>
+                
+                <div class="calc-box">
+                    <div class="calc-header">Sachwertverfahren</div>
+                    <div class="detail-row bold"><span id="res-sw">0 €</span></div>
+                    <div class="detail-row"><span>Gebäudewert</span><span id="res-gw">-</span></div>
+                    <div class="detail-row"><span>Außenanlagen</span><span>4.714 €</span></div>
+                </div>
 
-            <div class="step" id="s10">
-                <button class="btn-back" onclick="goStep('report')"><i class="fas fa-arrow-left"></i> Zurück</button>
-                <h2>Wohin dürfen wir den Bericht senden?</h2>
-                <input type="text" id="u_fname" placeholder="Vorname" style="margin-bottom:10px;">
-                <input type="text" id="u_lname" placeholder="Nachname" style="margin-bottom:10px;">
-                <input type="email" id="u_email" placeholder="E-Mail Adresse">
-                <button onclick="sendFinal()" class="btn-main">Bericht kostenfrei anfordern</button>
+                <p style="font-size: 11px; color: #999; margin-top: 15px; text-align: center;">Hinweis: Diese algorithmische Einschätzung ersetzt keine professionelle Begutachtung vor Ort.</p>
+
+                <div style="margin-top: 25px; border-top: 1px solid #eee; padding-top: 20px;">
+                    <label>Wohin dürfen wir den Strategie-Bericht senden?</label>
+                    <input type="text" id="u_fname" placeholder="Vorname" style="margin-bottom:10px;">
+                    <input type="text" id="u_lname" placeholder="Nachname" style="margin-bottom:10px;">
+                    <input type="email" id="u_email" placeholder="E-Mail">
+                    <button onclick="sendFinal()" class="btn-main">Bericht kostenfrei anfordern</button>
+                </div>
             </div>
 
             <div class="step" id="s-final">
-                <h2 style="text-align: center; margin-bottom: 30px;">Ihre detaillierte Marktanalyse</h2>
-                
-                <div class="screenshot-box calc-box" style="background: #fff; margin-bottom: 15px;">
-                    <div class="calc-header">Marktwert (Vergleichswertverfahren)</div>
-                    <div class="detail-row bold"><span id="f-mw-sum">193.000 €</span></div>
-                    <div class="detail-row"><span>Wohnfläche</span><span id="f-mw-sqm">120 m²</span></div>
-                    <div class="detail-row"><span>Ø Preis/m²</span><span id="f-mw-price">1.192 €</span></div>
-                </div>
-
-                <div class="screenshot-box calc-box" style="background: #fff;">
-                    <div class="calc-header">Sachwertverfahren</div>
-                    <div class="detail-row bold"><span id="f-sw-sum">176.000 €</span></div>
-                    <div class="detail-row"><span>Gebäudesachwert</span><span id="f-sw-geb">107.222 €</span></div>
-                    <div class="detail-row"><span>Bodenwert</span><span id="f-sw-bod">100.000 €</span></div>
-                </div>
-
-                <div class="cta-premium" style="margin-top:30px; text-align:center; background: var(--navy); color:white; padding: 25px; border-radius: 12px;">
-                    <h3>Strategiegespräch buchen</h3>
-                    <p style="margin-bottom:15px; font-size:14px;">Sichern Sie sich jetzt Ihren Termin für die Detailbesprechung.</p>
-                    <div class="calendly-inline-widget" data-url="https://calendly.com/d-will-sw-immobilien/strategische-ersteinschatzung-verkauf" style="min-width:320px;height:700px;"></div>
-                </div>
+                <h2 style="text-align: center;">Vielen Dank!</h2>
+                <p style="text-align: center; color: #666; margin-bottom: 25px;">Ihre Daten wurden übermittelt. Sichern Sie sich jetzt ein persönliches Strategiegespräch.</p>
+                <div class="calendly-inline-widget" data-url="https://calendly.com/d-will-sw-immobilien/strategische-ersteinschatzung-verkauf" style="min-width:320px;height:700px;"></div>
             </div>
         </div>
     </div>
     <div class="img-side" id="img-frame"></div>
 </div>
 
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDuY8rs8ZnZabdDepkWGzTGvELcvT5Z0E0&libraries=places&callback=initAutocomplete" async defer></script>
+
 <script>
     let store = { sqm: 120, land: 500, year: 1995, extras: {}, extraTotal: 0 };
+    let autocomplete;
+
+    function initAutocomplete() {
+        autocomplete = new google.maps.places.Autocomplete(document.getElementById('autocomplete'), {
+            types: ['address'], componentRestrictions: { country: 'de' }, fields: ['address_components']
+        });
+        autocomplete.addListener('place_changed', fillInAddress);
+    }
+
+    function fillInAddress() {
+        const place = autocomplete.getPlace();
+        const components = { street_number: 'short_name', route: 'long_name', locality: 'long_name', postal_code: 'short_name' };
+        for (const comp in components) document.getElementById(comp).value = '';
+        for (const component of place.address_components) {
+            const type = component.types[0];
+            if (components[type]) document.getElementById(type).value = component[components[type]];
+        }
+    }
 
     function goStep(n) {
         document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
         const target = isNaN(n) ? document.getElementById('s-'+n) : document.getElementById('s'+n);
         if(target) target.classList.add('active');
-        
-        // Bild verkleinern bei Eckdaten für Platz
-        if(n === 3 || n === 8 || n === 'final') {
+        if(n !== 'intro') {
             document.getElementById('img-frame').style.width = '0';
             document.getElementById('main-frame').style.maxWidth = '750px';
         } else {
@@ -266,67 +272,48 @@
 
     function syncVal(id, v) { 
         store[id] = parseInt(v); 
-        document.getElementById('txt-'+id).innerText = v; 
+        document.getElementById('rng-'+id).value = v; 
+        document.getElementById('num-'+id).value = v; 
     }
 
     function saveNext(s, k, v) { 
         store[k] = v;
-        if(k === 'renov' && v === 'Kernsaniert') {
-            document.getElementById('kern-year-box').style.display = 'block';
-            return;
-        }
+        if(v === 'Kernsaniert') { document.getElementById('extra-year').style.display = 'block'; return; }
         goStep(s === 2 ? 3 : s + 1); 
     }
 
-    function saveKernYear() {
-        store.kernYear = document.getElementById('inp-kern-year').value;
-        goStep(7);
-    }
-
     function adjX(name, delta) {
-        if(!store.extras[name]) store.extras[name] = 0;
-        store.extras[name] = Math.max(0, store.extras[name] + delta);
-        
-        const badge = document.getElementById('q-' + name.replace('/','').replace(' ',''));
-        const minus = document.getElementById('m-' + name.replace('/','').replace(' ',''));
-        
-        if(badge) {
-            badge.innerText = store.extras[name];
-            badge.style.opacity = store.extras[name] > 0 ? "1" : "0";
-        }
-        if(minus) minus.classList.toggle('active', store.extras[name] > 0);
+        let cleanId = name.replace('/','').replace(' ','');
+        store.extras[name] = Math.max(0, (store.extras[name] || 0) + delta);
+        document.getElementById('q-' + cleanId).innerText = store.extras[name];
+        document.getElementById('q-' + cleanId).style.opacity = store.extras[name] > 0 ? "1" : "0";
+        document.getElementById('m-' + cleanId).classList.toggle('active', store.extras[name] > 0);
     }
 
     function format(v) { return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(v); }
 
     async function finishStep9() {
-        const val = (store.sqm * 3150) + (store.land * 220);
-        document.getElementById('res-total').innerText = format(val);
-        document.getElementById('res-hk').innerText = format(val * 0.7);
-        document.getElementById('res-bw').innerText = format(val * 0.3);
+        const val = (store.sqm * 3150) + (store.land * 210);
+        document.getElementById('res-total').innerText = format(val * 1.05);
+        document.getElementById('res-sw').innerText = format(val);
+        document.getElementById('res-sqm').innerText = store.sqm + " m²";
+        document.getElementById('res-bw').innerText = format(store.land * 210);
+        document.getElementById('res-gw').innerText = format(val * 0.65);
         
         goStep('report');
         try {
-            await emailjs.send("service_9wal0zr", "template_bwjdkei", { from_name: "ADRESS-LEAD", address: document.getElementById('address-in').value, estimated_value: format(val) });
+            await emailjs.send("service_9wal0zr", "template_bwjdkei", { 
+                from_name: "TEIL-LEAD (Schritt 9)", address: document.getElementById('autocomplete').value, estimated_value: format(val) 
+            });
         } catch(e) {}
     }
 
     async function sendFinal() {
-        const val = (store.sqm * 3150) + (store.land * 220);
-        // Detaillierte Felder befüllen
-        document.getElementById('f-mw-sum').innerText = format(val * 1.05);
-        document.getElementById('f-mw-sqm').innerText = store.sqm + " m²";
-        document.getElementById('f-sw-sum').innerText = format(val);
-        document.getElementById('f-sw-geb').innerText = format(val * 0.65);
-        document.getElementById('f-sw-bod').innerText = format(val * 0.35);
-
         goStep('final');
         try {
             await emailjs.send("service_9wal0zr", "template_bwjdkei", { 
                 from_name: document.getElementById('u_fname').value + " " + document.getElementById('u_lname').value,
-                to_email: document.getElementById('u_email').value,
-                address: document.getElementById('address-in').value,
-                estimated_value: format(val)
+                to_email: "d.will@sw-immobilien.de", estimated_value: document.getElementById('res-total').innerText
             });
         } catch(e) {}
     }
