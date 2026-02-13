@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exklusive Immobilienbewertung | Wilhelm Immobilien</title>
+    <title>Premium Immobilienanalyse | Wilhelm Immobilien</title>
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
@@ -16,11 +16,11 @@
     <style>
         :root { --navy: #003366; --border: #e2e8f0; --accent: #d9534f; --text: #333; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7f9; color: var(--text); overflow-x: hidden; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f9; color: var(--text); }
         
-        .main-container { max-width: 1100px; margin: 40px auto; background: white; border-radius: 8px; box-shadow: 0 15px 50px rgba(0,0,0,0.05); overflow: hidden; display: flex; min-height: 750px; }
-        .form-side { flex: 1; padding: 60px; display: flex; flex-direction: column; }
-        .img-side { width: 38%; background: url('https://sw-immobilien.de/wp-content/uploads/2026/01/dennis-will-immobilien.jpg') center/cover no-repeat; position: relative; }
+        .main-container { max-width: 1100px; margin: 40px auto; background: white; border-radius: 8px; box-shadow: 0 15px 50px rgba(0,0,0,0.05); overflow: hidden; display: flex; min-height: 750px; transition: max-width 0.5s ease; }
+        .form-side { flex: 1; padding: 60px; display: flex; flex-direction: column; justify-content: center; }
+        .img-side { width: 38%; background: url('https://sw-immobilien.de/wp-content/uploads/2026/01/dennis-will-immobilien.jpg') center/cover no-repeat; position: relative; transition: width 0.5s ease; }
         
         .step { display: none; }
         .step.active { display: block; animation: fadeIn 0.4s ease; }
@@ -28,27 +28,23 @@
 
         h1, h2, h3 { color: var(--navy); margin-bottom: 25px; font-weight: 600; }
         .btn-main { background: var(--navy); color: white; border: none; padding: 18px; width: 100%; border-radius: 4px; font-weight: 600; cursor: pointer; transition: 0.3s; margin-top: 20px; text-transform: uppercase; letter-spacing: 1px; }
-        .btn-main:hover { background: #002244; transform: translateY(-1px); }
-        .btn-back { background: none; border: none; color: #999; cursor: pointer; margin-top: 15px; font-size: 12px; }
+        .btn-main:hover { background: #002244; }
 
-        .grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px; margin-bottom: 30px; }
         .card { border: 1px solid var(--border); padding: 20px; border-radius: 8px; text-align: center; cursor: pointer; transition: 0.2s; position: relative; }
         .card:hover, .card.selected { border-color: var(--navy); background: #f8fbff; }
         .card i { display: block; font-size: 24px; color: var(--navy); margin-bottom: 12px; }
         .badge { position: absolute; top: 8px; right: 8px; background: var(--navy); color: white; border-radius: 50%; width: 22px; height: 22px; font-size: 11px; line-height: 22px; }
 
-        input[type="text"], input[type="number"], input[type="email"] { width: 100%; padding: 15px; border: 1px solid var(--border); border-radius: 4px; margin-top: 8px; outline: none; font-family: inherit; }
-        .input-group { margin-bottom: 25px; }
-        label { font-size: 13px; font-weight: 600; color: #666; text-transform: uppercase; }
+        input[type="text"], input[type="number"] { width: 100%; padding: 15px; border: 1px solid var(--border); border-radius: 4px; outline: none; font-family: inherit; margin-bottom: 10px; }
+        input[type="range"] { width: 100%; height: 4px; background: #e2e8f0; -webkit-appearance: none; margin-bottom: 25px; outline: none; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; background: var(--navy); border-radius: 50%; cursor: pointer; }
 
-        /* Report Style */
+        .val-display { font-size: 32px; font-weight: bold; color: var(--navy); text-align: center; margin-bottom: 10px; }
         .report-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 30px; }
-        .report-card { border: 1px solid var(--border); border-radius: 12px; padding: 25px; background: white; }
-        .val-main { background: var(--navy); color: white; padding: 20px; border-radius: 8px; text-align: center; margin-bottom: 30px; }
-        .val-main p { font-size: 11px; text-transform: uppercase; opacity: 0.8; margin-bottom: 5px; }
-        .val-main h2 { color: white; margin: 0; font-size: 36px; }
-        .detail-row { display: flex; justify-content: space-between; font-size: 13px; padding: 8px 0; border-bottom: 1px solid #f1f1f1; color: #555; }
-        .detail-row b { color: var(--navy); }
+        .report-card { border: 1px solid var(--border); border-radius: 12px; padding: 25px; background: white; font-size: 13px; }
+        .val-main-box { background: var(--navy); color: white; padding: 25px; border-radius: 8px; text-align: center; margin-bottom: 25px; }
+        .detail-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f1f1f1; }
     </style>
 </head>
 <body>
@@ -57,66 +53,63 @@
     <div class="form-side">
         <div id="tool">
             <div class="step active" id="s-intro">
-                <span style="background: var(--accent); color: white; padding: 4px 12px; border-radius: 50px; font-size: 11px; font-weight: bold;">STRATEGIE</span>
-                <h1 style="margin-top: 15px;">Ihre Immobilien-Werte im Fokus.</h1>
-                <p style="color: #666; margin-bottom: 40px; font-size: 17px; line-height: 1.6;">
-                    Erhalten Sie eine fundierte Ersteinschätzung Ihres Objektes – diskret, präzise und basierend auf aktuellen Marktdaten der Region.
-                </p>
-                <button onclick="goStep(1)" class="btn-main">Analyse starten</button>
-                <p style="text-align: center; margin-top: 20px; font-size: 12px; color: #999;">Diskretion garantiert • Keine automatische Kontaktaufnahme</p>
+                <span style="background: var(--accent); color: white; padding: 4px 12px; border-radius: 50px; font-size: 11px; font-weight: bold;">EMPFOHLEN</span>
+                <h1 style="margin-top: 15px;">Wunschtermin direkt sichern.</h1>
+                <p style="color: #666; margin-bottom: 30px;">Wählen Sie Ihren Slot für eine 15-minütige Ersteinschätzung oder starten Sie die Online-Analyse.</p>
+                
+                <div style="background: #f8fbff; padding: 25px; border-radius: 8px; border: 1px solid var(--navy); margin-bottom: 20px; text-align: center;">
+                    <h4 style="color: var(--navy); margin-bottom: 15px;">Strategiegespräch reservieren</h4>
+                    <button onclick="window.open('https://calendly.com/d-will-sw-immobilien/strategische-ersteinschatzung-verkauf')" class="btn-main" style="margin-top: 0;">TERMIN WÄHLEN</button>
+                </div>
+                
+                <button onclick="startTool()" style="background:none; border:none; color: #999; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 11px; letter-spacing: 1px;">Direkt zur Online-Analyse <i class="fas fa-chevron-right"></i></button>
             </div>
 
             <div class="step" id="s1">
-                <h2>Objekt-Kategorie</h2>
+                <h2>Was bewerten wir?</h2>
                 <div class="grid-cards">
                     <div onclick="saveNext(1, 'type', 'Haus')" class="card"><i class="fas fa-home"></i><span>Haus</span></div>
                     <div onclick="saveNext(1, 'type', 'Wohnung')" class="card"><i class="fas fa-building"></i><span>Wohnung</span></div>
-                    <div onclick="saveNext(1, 'type', 'Grundstück')" class="card"><i class="fas fa-map"></i><span>Grundstück</span></div>
                 </div>
-                <button class="btn-back" onclick="goStep('intro')">ZURÜCK</button>
             </div>
 
             <div class="step" id="s2">
                 <h2>Spezifizierung</h2>
                 <div class="grid-cards">
-                    <div onclick="saveNext(2, 'subtype', 'Einfamilienhaus')" class="card"><span>Einfamilienhaus</span></div>
-                    <div onclick="saveNext(2, 'subtype', 'Reihenmittelhaus')" class="card"><span>Reihenmittelhaus</span></div>
-                    <div onclick="saveNext(2, 'subtype', 'Reihenendhaus')" class="card"><span>Reihenendhaus</span></div>
-                    <div onclick="saveNext(2, 'subtype', 'Bungalow')" class="card"><span>Bungalow</span></div>
-                    <div onclick="saveNext(2, 'subtype', 'Stadtvilla')" class="card"><span>Stadtvilla</span></div>
+                    <div onclick="saveNext(2, 'subtype', 'Einfamilienhaus')" class="card"><i class="fas fa-home"></i><span>Einfamilienhaus</span></div>
+                    <div onclick="saveNext(2, 'subtype', 'Reihenmittelhaus')" class="card"><i class="fas fa-grip-lines-vertical"></i><span>Reihenmittelhaus</span></div>
+                    <div onclick="saveNext(2, 'subtype', 'Reihenendhaus')" class="card"><i class="fas fa-border-right"></i><span>Reihenendhaus</span></div>
+                    <div onclick="saveNext(2, 'subtype', 'Bungalow')" class="card"><i class="fas fa-layer-group"></i><span>Bungalow</span></div>
+                    <div onclick="saveNext(2, 'subtype', 'Stadtvilla')" class="card"><i class="fas fa-hotel"></i><span>Stadtvilla</span></div>
                 </div>
-                <button class="btn-back" onclick="goStep(1)">ZURÜCK</button>
             </div>
 
             <div class="step" id="s3">
                 <h2>Eckdaten</h2>
-                <div class="input-group">
-                    <label>Wohnfläche (m²)</label>
-                    <input type="number" id="sqm-in" value="120">
+                <div style="margin-bottom: 25px;">
+                    <label style="font-size: 12px; font-weight: bold; color: #666;">WOHNFLÄCHE (m²)</label>
+                    <div class="val-display"><span id="txt-sqm">120</span> m²</div>
+                    <input type="range" min="30" max="500" value="120" oninput="syncVal('sqm', this.value)">
                 </div>
-                <div class="input-group">
-                    <label>Grundstücksgröße (m²)</label>
-                    <input type="number" id="land-in" value="500">
+                <div style="margin-bottom: 25px;">
+                    <label style="font-size: 12px; font-weight: bold; color: #666;">GRUNDSTÜCK (m²)</label>
+                    <div class="val-display"><span id="txt-land">500</span> m²</div>
+                    <input type="range" min="0" max="5000" value="500" oninput="syncVal('land', this.value)">
                 </div>
-                <div class="input-group">
-                    <label>Baujahr</label>
-                    <input type="number" id="year-in" value="1995">
+                <div style="margin-bottom: 25px;">
+                    <label style="font-size: 12px; font-weight: bold; color: #666;">BAUJAHR</label>
+                    <div class="val-display"><span id="txt-year">1995</span></div>
+                    <input type="range" min="1900" max="2026" value="1995" oninput="syncVal('year', this.value)">
                 </div>
-                <button onclick="saveKombi()" class="btn-main">Weiter</button>
+                <button onclick="goStep(6)" class="btn-main">Weiter</button>
             </div>
 
             <div class="step" id="s6">
                 <h2>Zustand</h2>
                 <div class="grid-cards">
-                    <div onclick="saveNext(6, 'renov', 'Sanierungsbedürftig')" class="card"><i class="fas fa-tools"></i><span>Sanierungsbed.</span></div>
-                    <div onclick="saveNext(6, 'renov', 'Gepflegt')" class="card"><i class="fas fa-check"></i><span>Gepflegt</span></div>
+                    <div onclick="saveNext(6, 'renov', 'Gepflegt')" class="card"><i class="fas fa-check-circle"></i><span>Gepflegt</span></div>
                     <div onclick="saveNext(6, 'renov', 'Modernisiert')" class="card"><i class="fas fa-sparkles"></i><span>Modernisiert</span></div>
-                    <div onclick="showSanYear()" class="card"><i class="fas fa-hammer"></i><span>Kernsaniert</span></div>
-                </div>
-                <div id="san-year-box" style="display:none; margin-top: 15px;">
-                    <label>Jahr der Kernsanierung</label>
-                    <input type="number" id="san-in" placeholder="z.B. 2020">
-                    <button onclick="saveSan()" class="btn-main" style="padding: 10px;">Bestätigen</button>
+                    <div onclick="saveNext(6, 'renov', 'Kernsanierung')" class="card"><i class="fas fa-hammer"></i><span>Kernsanierung</span></div>
                 </div>
             </div>
 
@@ -124,71 +117,45 @@
                 <h2>Besonderheiten</h2>
                 <div class="grid-cards">
                     <div onclick="incX(this, 'Garage', 15000)" class="card"><i class="fas fa-car"></i><span>Garage</span></div>
-                    <div onclick="incX(this, 'Carport', 8000)" class="card"><i class="fas fa-umbrella-beach"></i><span>Carport</span></div>
-                    <div onclick="incX(this, 'Stellplatz', 5000)" class="card"><i class="fas fa-parking"></i><span>Stellplatz</span></div>
                     <div onclick="incX(this, 'Pool', 25000)" class="card"><i class="fas fa-swimmer"></i><span>Pool</span></div>
+                    <div onclick="incX(this, 'Einliegerwohnung', 45000)" class="card"><i class="fas fa-users"></i><span>Einlieger-Whg.</span></div>
                 </div>
                 <button onclick="goStep(9)" class="btn-main">Lage präzisieren</button>
             </div>
 
             <div class="step" id="s9">
                 <h2>Standort-Analyse</h2>
-                <p style="font-size: 14px; color: #666; margin-bottom: 25px; line-height: 1.5;">
-                    Um **Bodenrichtwerte** und regionale Marktbewegungen in Ihre Analyse einzubeziehen, ist die Angabe der Adresse zwingend erforderlich. Nur so kann ein effektiver Marktwert ermittelt werden.
-                </p>
-                <div class="input-group">
-                    <label>Vollständige Adresse (Pflichtfeld)</label>
-                    <input type="text" id="address-in" placeholder="Straße, Hausnummer, PLZ, Ort" required>
-                </div>
-                <button onclick="finishStep9()" class="btn-main">Analyse finalisieren</button>
+                <p style="font-size: 14px; color: #666; margin-bottom: 20px;">Die Adresse ist zwingend erforderlich für Bodenrichtwerte.</p>
+                <input type="text" id="address-in" placeholder="Straße, Hausnummer, PLZ, Ort" required>
+                <button onclick="finishStep9()" class="btn-main">Marktwert berechnen</button>
             </div>
 
-            <div class="step" id="s-report" style="width: 100%;">
-                <h2 style="text-align: center;">Ihre Marktanalyse</h2>
-                
-                <div class="val-main">
-                    <p>Gesamtwert Schätzung</p>
+            <div class="step" id="s-report">
+                <div class="val-main-box">
+                    <p>GESCHÄTZTER IMMOBILIENWERT</p>
                     <h2 id="res-total">0 €</h2>
                 </div>
-
                 <div class="report-grid">
                     <div class="report-card">
-                        <h4 style="font-size: 11px; text-transform: uppercase; color: #999; margin-bottom: 15px;">Vergleichswertverfahren</h4>
+                        <p style="font-weight: bold; margin-bottom: 10px;">Vergleichswertverfahren</p>
                         <div class="detail-row"><span>Fläche</span><b id="rep-sqm"></b></div>
-                        <div class="detail-row"><span>Bodenwert</span><b id="rep-land"></b></div>
-                        <div class="detail-row"><span>Extras</span><b id="rep-extras"></b></div>
-                        <div class="detail-row" style="margin-top: 10px; border-top: 2px solid var(--navy);"><span>Marktwert</span><b id="rep-v"></b></div>
+                        <div class="detail-row"><span>Marktwert</span><b id="rep-v"></b></div>
                     </div>
                     <div class="report-card">
-                        <h4 style="font-size: 11px; text-transform: uppercase; color: #999; margin-bottom: 15px;">Sachwert (NHK 2010)</h4>
-                        <div class="detail-row"><span>NHK 2025</span><b id="rep-nhk"></b></div>
-                        <div class="detail-row"><span>Alterswertm.</span><b id="rep-age"></b></div>
-                        <div class="detail-row" style="margin-top: 10px; border-top: 2px solid var(--navy);"><span>Sachwert</span><b id="rep-s"></b></div>
+                        <p style="font-weight: bold; margin-bottom: 10px;">Sachwert (NHK 2010)</p>
+                        <div class="detail-row"><span>NHK 2025</span><b>2.143 €/m²</b></div>
+                        <div class="detail-row"><span>Sachwert</span><b id="rep-s"></b></div>
                     </div>
                 </div>
-
-                <div style="margin-top: 40px;">
-                    <h3 style="font-size: 18px; text-align: center;">Bericht jetzt anfordern</h3>
+                <div style="margin-top: 30px;">
                     <input type="text" id="u_name" placeholder="Ihr Name">
-                    <input type="email" id="u_email" placeholder="Ihre E-Mail Adresse">
-                    <button onclick="sendFinal()" class="btn-main">Detaillierten Bericht senden</button>
+                    <button onclick="sendFinal()" class="btn-main">Bericht an Dennis Will senden</button>
                 </div>
             </div>
 
             <div class="step" id="s-final">
-                <div id="termin-buchung" class="uk-section" style="background-color: #f9f9f9;">
-                    <div class="uk-container uk-container-small">
-                        <div class="uk-text-center uk-margin-medium-bottom">
-                            <span class="uk-label" style="background-color: #d9534f; color:white; padding: 2px 10px; font-size: 0.8rem; margin-bottom: 10px; display:inline-block; border-radius: 4px;">Empfohlen</span>
-                            <h2 style="font-weight: 700; color: #333; margin-top:10px;">Wunschtermin direkt sichern.</h2>
-                            <p style="color: #666; font-size: 1.1rem;">Wählen Sie Ihren passenden Slot für die 15-minütige Ersteinschätzung.</p>
-                        </div>
-                        <div style="border-top: 6px solid #d9534f; border-radius: 8px; overflow: hidden; background: white; margin-top:20px;">
-                            <div class="calendly-inline-widget" data-url="https://calendly.com/d-will-sw-immobilien/strategische-ersteinschatzung-verkauf?hide_event_type_details=1&hide_gdpr_banner=1" style="min-width:320px;height:700px;"></div>
-                        </div>
-                    </div>
-                </div>
-                <button onclick="location.reload()" class="btn-ghost" style="display:block; margin: 30px auto;">NEUE BEWERTUNG STARTEN</button>
+                <div class="calendly-inline-widget" data-url="https://calendly.com/d-will-sw-immobilien/strategische-ersteinschatzung-verkauf?hide_event_type_details=1&hide_gdpr_banner=1" style="min-width:320px;height:700px;"></div>
+                <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
             </div>
         </div>
     </div>
@@ -196,18 +163,16 @@
     <div class="img-side" id="img-frame"></div>
 </div>
 
-<script src="https://assets.calendly.com/assets/external/widget.js" async></script>
-
 <script>
     const SB_URL = 'https://utyacdaldwdnollxhyjg.supabase.co';
-    const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'; // Ihr Key
+    const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV0eWFjZGFsZHdkbm9sbHhoeWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5ODU5OTQsImV4cCI6MjA4NjU2MTk5NH0.NbDxVAIcQXGdvDjoTHBqRZOIgWnXE5ggLt90SBAMJvw';
     const sb = supabase.createClient(SB_URL, SB_KEY);
     
     let store = { sqm: 120, land: 500, year: 1995, extras: {}, extraTotal: 0 };
 
     function startTool() {
-        document.getElementById('img-frame').style.display = 'none';
-        document.getElementById('main-frame').style.maxWidth = '850px';
+        document.getElementById('img-frame').style.width = '0';
+        document.getElementById('main-frame').style.maxWidth = '750px';
         goStep(1);
     }
 
@@ -218,12 +183,7 @@
     }
 
     function saveNext(s, k, v) { store[k] = v; goStep(s === 2 ? 3 : s + 1); }
-    function saveKombi() {
-        store.sqm = parseInt(document.getElementById('sqm-in').value);
-        store.land = parseInt(document.getElementById('land-in').value);
-        store.year = parseInt(document.getElementById('year-in').value);
-        goStep(6);
-    }
+    function syncVal(id, v) { store[id] = parseInt(v); document.getElementById('txt-'+id).innerText = v; }
 
     function incX(el, name, price) {
         store.extras[name] = (store.extras[name] || 0) + 1;
@@ -233,53 +193,36 @@
         el.appendChild(badge);
     }
 
-    function showSanYear() { document.getElementById('san-year-box').style.display = 'block'; }
-    function saveSan() { store.renov = "Kernsaniert (" + document.getElementById('san-in').value + ")"; goStep(8); }
-
     function format(v) { return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(v); }
 
     async function finishStep9() {
         const addr = document.getElementById('address-in').value;
-        if(!addr) return alert("Die Adresse ist für die Wertermittlung zwingend erforderlich.");
+        if(!addr) return alert("Die Adresse ist erforderlich.");
         
-        // Kalkulations-Logik nach Ihren Vorlagen
-        const valV = (store.sqm * 3485) + (store.land * 200) + store.extraTotal;
-        const nhk = 2143;
-        const valS = (store.sqm * 1.3 * nhk * 0.83) + (store.land * 200);
+        const valV = (store.sqm * 3485) + store.extraTotal;
+        const valS = (store.sqm * 1.3 * 2143 * 0.8) + (store.land * 200);
         const mainVal = (valV + valS) / 2;
 
         document.getElementById('res-total').innerText = format(mainVal);
         document.getElementById('rep-sqm').innerText = store.sqm + " m²";
-        document.getElementById('rep-extras').innerText = format(store.extraTotal);
         document.getElementById('rep-v').innerText = format(valV);
         document.getElementById('rep-s').innerText = format(valS);
-        document.getElementById('rep-nhk').innerText = format(nhk) + "/m²";
 
         goStep('report');
 
-        // E-Mail 1: Teil-Lead an Dennis
         try {
-            await emailjs.send("service_9wal0zr", "template_bwjdkei", {
-                from_name: "TEIL-LEAD (Adresse abgegeben)",
-                address: addr,
-                estimated_value: format(mainVal)
-            });
+            await emailjs.send("service_9wal0zr", "template_bwjdkei", { from_name: "TEIL-LEAD", address: addr, estimated_value: format(mainVal) });
             await sb.from('leads').insert([{ address: addr, estimated_value: format(mainVal), details: store }]);
         } catch(e) {}
     }
 
     async function sendFinal() {
-        const name = document.getElementById('u_name').value;
-        const email = document.getElementById('u_email').value;
-        if(!name || !email) return alert("Bitte geben Sie Namen und E-Mail an.");
-
         try {
-            await emailjs.send("service_9wal0zr", "template_bwjdkei", {
+            await emailjs.send("service_9wal0zr", "template_bwjdkei", { 
+                from_name: document.getElementById('u_name').value, 
                 to_email: "d.will@sw-immobilien.de",
-                from_name: name,
-                user_email: email,
-                estimated_value: document.getElementById('res-total').innerText,
-                address: document.getElementById('address-in').value
+                address: document.getElementById('address-in').value,
+                estimated_value: document.getElementById('res-total').innerText
             });
             goStep('final');
         } catch(e) { alert("Senden fehlgeschlagen."); }
