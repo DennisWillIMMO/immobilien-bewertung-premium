@@ -227,7 +227,7 @@
     btn.innerText = "Berechnung läuft...";
     btn.disabled = true;
 
-    // Wertermittlungs-Logik aus bewertungs-widget-standalone.html
+    // Wertermittlungs-Logik (Marktwert-Verfahren)
     const brw = BRW[store.city] || BRW.default;
     const basis = store.type === 'Haus' ? 3850 : 3400;
     const marktwert = (store.sqm * basis) + (store.land * brw * 0.4) + store.extras;
@@ -235,7 +235,9 @@
     try {
         // 1. Speichern in Supabase
         const { error } = await sb.from('leads').insert([{ 
-            name, email, address: store.fullAddr || address,
+            name: name, 
+            email: email, 
+            address: store.fullAddr || address,
             sqm: parseFloat(store.sqm),
             estimated_value: Math.round(marktwert).toString(),
             details: store
@@ -245,9 +247,14 @@
 
         // 2. Erfolg: Ergebnis anzeigen
         document.getElementById('res-marktwert').innerText = format(marktwert);
-        
-        // 3. Info-Meldung (optional)
-        console.log("Lead gespeichert. Webhook löst Hintergrund-E-Mail aus.");
+        document.getElementById('details-marktwert').innerHTML = `
+            <tr><td>Wohnfläche</td><td>${store.sqm} m²</td></tr>
+            <tr><td>Bodenrichtwert</td><td>${brw} €/m²</td></tr>
+            <tr><td>Besonderheiten</td><td>+${format(store.extras)}</td></tr>
+        `;
+
+        // 3. Webhook löst nun im Hintergrund die E-Mail aus
+        console.log("Lead erfolgreich gespeichert. Hintergrund-E-Mail wird via Webhook gesendet.");
         
         goStep('final');
 
