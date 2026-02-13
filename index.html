@@ -4,103 +4,124 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Premium Immobilienbewertung | Wilhelm Immobilien</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="bg-gray-100 p-2 md:p-10 font-sans">
 
-    <div class="app-card">
-        <div class="header-ui">
+    <div class="max-w-3xl mx-auto bg-white rounded-[3rem] shadow-2xl overflow-hidden border border-gray-100">
+        <div class="bg-gray-50 px-10 py-5 border-b flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-gray-400">
             <span>Wertermittlung</span>
             <span id="step-txt">Schritt 1 von 10</span>
         </div>
-        <div class="bar-container">
-            <div id="bar" class="bar-fill"></div>
+        <div class="h-1.5 w-full bg-gray-100">
+            <div id="bar" class="h-full transition-all duration-700 bg-[#003366]" style="width: 10%;"></div>
         </div>
-        
-        <div id="steps-container">
-            <div class="step active" id="s1">
-                <h3>Was möchten Sie bewerten?</h3>
-                <div class="grid-ui">
-                    <div class="card-btn" onclick="nav(2, 'type', 'Haus')">
-                        <i class="fas fa-home"></i>
-                        <span>Haus</span>
+
+        <div class="p-8 md:p-14">
+            <div id="steps-container">
+
+                <div class="step active" id="s1">
+                    <h3 class="text-3xl font-bold mb-10 text-center text-gray-800">Was möchten Sie bewerten?</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                        <div onclick="nav(2, 'type', 'Haus')" class="card-sel">
+                            <i class="fas fa-home text-4xl mb-4"></i><span class="font-bold">Haus</span>
+                        </div>
+                        <div onclick="nav(2, 'type', 'Wohnung')" class="card-sel">
+                            <i class="fas fa-building text-4xl mb-4"></i><span class="font-bold">Wohnung</span>
+                        </div>
+                        <div onclick="nav(2, 'type', 'Grundstück')" class="card-sel">
+                            <i class="fas fa-map text-4xl mb-4"></i><span class="font-bold">Grundstück</span>
+                        </div>
                     </div>
-                    <div class="card-btn" onclick="nav(2, 'type', 'Wohnung')">
-                        <i class="fas fa-building"></i>
-                        <span>Wohnung</span>
+                </div>
+
+                <div class="step" id="s2">
+                    <h3 class="text-3xl font-bold mb-10 text-center">Welcher Haustyp?</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                        <div onclick="nav(3, 'subtype', 'Einfamilienhaus')" class="card-sel">Einfamilienhaus</div>
+                        <div onclick="nav(3, 'subtype', 'Doppelhaushälfte')" class="card-sel">Doppelhaushälfte</div>
+                        <div onclick="nav(3, 'subtype', 'Reihenhaus')" class="card-sel">Reihenhaus</div>
+                        <div onclick="nav(3, 'subtype', 'Mehrfamilienhaus')" class="card-sel">Mehrfamilienhaus</div>
                     </div>
-                    <div class="card-btn" onclick="nav(2, 'type', 'Grundstück')">
-                        <i class="fas fa-map-marked-alt"></i>
-                        <span>Grundstück</span>
+                    <button onclick="nav(1)" class="btn-back">← Zurück</button>
+                </div>
+
+                <div class="step" id="s3">
+                    <h3 class="text-3xl font-bold mb-10 text-center">Fläche & Zimmer</h3>
+                    <div class="space-y-10 mb-10">
+                        <div>
+                            <label class="text-xs font-black text-gray-400 uppercase tracking-widest block mb-4">
+                                Wohnfläche: <span id="txt-sqm" class="text-[#003366]">120</span> m²
+                            </label>
+                            <input type="range" id="sqm-slider" min="30" max="500" value="120" class="w-full" oninput="syncVal('sqm', this.value)">
+                            <input type="number" id="sqm" value="120" class="num-input w-full p-4 border rounded-xl text-center mt-4 font-bold" oninput="syncVal('sqm', this.value)">
+                        </div>
                     </div>
+                    <button onclick="nav(9)" class="btn-main">Weiter</button>
+                    <button onclick="nav(2)" class="btn-back">Zurück</button>
                 </div>
-            </div>
 
-            <div class="step" id="s2">
-                <h3>Wohnfläche in m²</h3>
-                <input type="number" id="sqm" class="input-premium" placeholder="z.B. 140" min="10">
-                <button class="btn-main" onclick="nav(3)">Weiter</button>
-                <button class="btn-back" onclick="nav(1)">Zurück</button>
-            </div>
-
-            <div class="step" id="s3">
-                <h3>Zustand der Immobilie</h3>
-                <div class="grid-ui">
-                    <div class="card-btn" onclick="nav(9, 'condition', 'Neuwertig')"><span>Neuwertig</span></div>
-                    <div class="card-btn" onclick="nav(9, 'condition', 'Renoviert')"><span>Renoviert</span></div>
-                    <div class="card-btn" onclick="nav(9, 'condition', 'Sanierungsbedürftig')"><span>Sanierungsbedürftig</span></div>
+                <div class="step" id="s9">
+                    <h3 class="text-3xl font-bold mb-10 text-center text-gray-800">Objekt-Lage</h3>
+                    <div class="space-y-4 mb-6">
+                        <input type="text" id="address" class="input-premium w-full p-4 border rounded-xl" placeholder="Straße, PLZ, Ort" onblur="updateMap()">
+                        <div class="relative h-64 rounded-[2rem] bg-gray-100 overflow-hidden border border-gray-200">
+                            <iframe id="map" class="w-full h-full border-none" src="https://www.openstreetmap.org/export/embed.html?bbox=7.0,47.0,15.0,55.0&layer=mapnik"></iframe>
+                        </div>
+                    </div>
+                    <button onclick="nav(10)" class="btn-main">Adresse bestätigen</button>
+                    <button onclick="nav(3)" class="btn-back">Zurück</button>
                 </div>
-                <button class="btn-back" onclick="nav(2)">Zurück</button>
-            </div>
 
-            <div class="step" id="s9">
-                <h3>Objekt-Lage</h3>
-                <input type="text" id="address" class="input-premium" placeholder="Straße, PLZ, Ort" onblur="updateMap()">
-                <div class="map-frame" style="height: 250px; border-radius: 20px; overflow: hidden; margin-bottom: 20px; border: 1px solid #e2e8f0;">
-                    <iframe id="map" width="100%" height="100%" frameborder="0" src="https://www.openstreetmap.org/export/embed.html?bbox=8.0,50.0,9.0,51.0&layer=mapnik"></iframe>
+                <div class="step" id="s10">
+                    <h3 class="text-3xl font-bold mb-10 text-center">Abschluss</h3>
+                    <div class="space-y-4 mb-8">
+                        <input type="text" id="u_name" class="input-premium w-full p-4 border rounded-xl" placeholder="Vollständiger Name">
+                        <input type="email" id="u_email" class="input-premium w-full p-4 border rounded-xl" placeholder="E-Mail Adresse">
+                        <div class="p-4 bg-gray-50 rounded-xl flex gap-3">
+                            <input type="checkbox" id="ds-check" class="mt-1">
+                            <label class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Ich stimme der Datenverarbeitung zu.</label>
+                        </div>
+                    </div>
+                    <button class="btn-main" id="submit-btn" style="background: #FF7F50;" onclick="sendToSupabase()">Bewertung abschließen</button>
+                    <button onclick="nav(9)" class="btn-back">Zurück</button>
                 </div>
-                <button class="btn-main" onclick="nav(10)">Adresse bestätigen</button>
-                <button class="btn-back" onclick="nav(3)">Zurück</button>
-            </div>
 
-            <div class="step" id="s10">
-                <h3>Kontaktdaten</h3>
-                <input type="text" id="u_name" class="input-premium" placeholder="Vollständiger Name">
-                <input type="email" id="u_email" class="input-premium" placeholder="E-Mail Adresse">
-                <button class="btn-main" id="submit-btn" style="background: var(--coral);" onclick="sendToSupabase()">Bewertung abschließen</button>
-                <button class="btn-back" onclick="nav(9)">Zurück</button>
-            </div>
+                <div class="step" id="s-final">
+                    <div class="premium-res p-10 bg-gradient-to-b from-blue-50/50 to-white rounded-[3rem] border border-blue-100 shadow-xl text-center">
+                        <div style="font-size: 10px; font-weight: 800; color: #b39a6a; letter-spacing: 3px; margin-bottom: 20px;">ANALYSE ABGESCHLOSSEN</div>
+                        <a href="#termin" class="block w-full btn-main py-6 text-xl mb-10 shadow-2xl">STRATEGIEGESPRÄCH BUCHEN</a>
+                        
+                        <button onclick="document.getElementById('res-box').classList.toggle('hidden')" class="text-[10px] font-black text-blue-300 uppercase tracking-[3px] hover:text-blue-900 transition">Online-Wert anzeigen</button>
 
-            <div class="step" id="s-final">
-                <div class="premium-res">
-                    <div style="font-size: 10px; font-weight: 800; color: #b39a6a; letter-spacing: 3px; margin-bottom: 20px;">ANALYSE BEREIT</div>
-                    <div class="price-display" id="res-price">--- €</div>
-                    <button class="btn-main" onclick="window.open('https://calendly.com/wilhelm', '_blank')">Strategiegespräch buchen</button>
-                    <button onclick="location.reload()" style="margin-top: 30px; background: none; border: none; color: #cbd5e1; font-size: 10px; font-weight: 800; text-transform: uppercase; cursor: pointer; letter-spacing: 1px;">Bewertung neustarten</button>
+                        <div id="res-box" class="hidden mt-10 p-8 bg-white rounded-[2rem] border border-gray-100 shadow-sm animate-fadeIn">
+                            <p class="text-[10px] font-black uppercase text-gray-400 mb-2 tracking-[4px]">Voraussichtlicher Marktwert*</p>
+                            <p id="res-price" class="text-4xl md:text-5xl font-black text-[#003366] tracking-tighter"></p>
+                        </div>
+                    </div>
+                    <button onclick="location.reload()" class="btn-back mt-10">Bewertung neustarten</button>
                 </div>
+
             </div>
         </div>
     </div>
 
     <script>
-        // SUPABASE KONFIGURATION
-        const SUPABASE_URL = 'https://utyacdaldwdnollxhyjg.supabase.co'; 
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV0eWFjZGFsZHdkbm9sbHhoeWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5ODU5OTQsImV4cCI6MjA4NjU2MTk5NH0.NbDxVAIcQXGdvDjoTHBqRZOIgWnXE5ggLt90SBAMJvw';
+        // DEINE SUPABASE DATEN (Hier stehen deine echten Daten bereits drin)
+        const SB_URL = 'https://utyacdaldwdnollxhyjg.supabase.co'; 
+        const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV0eWFjZGFsZHdkbm9sbHhoeWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5ODU5OTQsImV4cCI6MjA4NjU2MTk5NH0.NbDxVAIcQXGdvDjoTHBqRZOIgWnXE5ggLt90SBAMJvw';
         
-        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
+        const sb = supabase.createClient(SB_URL, SB_KEY);
         let dataStore = {};
 
-        // NAVIGATION
         function nav(n, key, val) {
             if(key && val) dataStore[key] = val;
-            
             document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
             const target = document.getElementById(n === 'final' ? 's-final' : 's' + n);
-            
             if(target) {
                 target.classList.add('active');
                 document.getElementById('bar').style.width = (n === 'final' ? 100 : n * 10) + '%';
@@ -109,59 +130,50 @@
             }
         }
 
-        // KARTEN UPDATE
+        function syncVal(id, v) {
+            document.getElementById(id).value = v;
+            document.getElementById('txt-' + id).innerText = v;
+            dataStore[id] = v;
+        }
+
         async function updateMap() {
             const adr = document.getElementById('address').value;
             if(adr.length < 5) return;
-            try {
-                const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(adr)}&limit=1`);
-                const json = await res.json();
-                if(json.length > 0) {
-                    const { lat, lon } = json[0];
-                    const off = 0.002;
-                    document.getElementById('map').src = `https://www.openstreetmap.org/export/embed.html?bbox=${parseFloat(lon)-off}%2C${parseFloat(lat)-off}%2C${parseFloat(lon)+off}%2C${parseFloat(lat)+off}&layer=mapnik&marker=${lat}%2C${lon}`;
-                }
-            } catch(e) { console.error("Kartenfehler", e); }
+            const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(adr)}&limit=1`);
+            const json = await res.json();
+            if(json.length > 0) {
+                const { lat, lon } = json[0];
+                const off = 0.002;
+                document.getElementById('map').src = `https://www.openstreetmap.org/export/embed.html?bbox=${parseFloat(lon)-off}%2C${parseFloat(lat)-off}%2C${parseFloat(lon)+off}%2C${parseFloat(lat)+off}&layer=mapnik&marker=${lat}%2C${lon}`;
+            }
         }
 
-        // DATEN AN SUPABASE SENDEN
         async function sendToSupabase() {
+            if(!document.getElementById('ds-check').checked) return alert("Bitte Datenschutz zustimmen.");
+            
             const btn = document.getElementById('submit-btn');
             const sqm = document.getElementById('sqm').value;
             const name = document.getElementById('u_name').value;
             const email = document.getElementById('u_email').value;
-            const address = document.getElementById('address').value;
-
-            if(!name || !email) return alert("Bitte Name und E-Mail angeben.");
 
             btn.innerText = "Wird verarbeitet...";
             btn.disabled = true;
 
-            const estValue = sqm * 4150; // Beispielhafte Wertermittlung
+            const estValue = sqm * 4150; // Deine Basis-Logik
 
-            const { error } = await sb.from('leads').insert([
-                { 
-                    name: name, 
-                    email: email, 
-                    address: address, 
-                    sqm: parseFloat(sqm),
-                    estimated_value: estValue.toString()
-                }
-            ]);
+            const { error } = await sb.from('leads').insert([{ 
+                name, email, address: document.getElementById('address').value, 
+                sqm: parseFloat(sqm), estimated_value: estValue.toString(), details: dataStore 
+            }]);
 
             if(!error) {
                 document.getElementById('res-price').innerText = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(estValue);
                 nav('final');
             } else {
-                alert("Fehler beim Speichern. Bitte prüfe die Supabase Tabellen-Struktur.");
-                btn.innerText = "Bewertung abschließen";
+                alert("Fehler beim Speichern.");
+                btn.innerText = "Abschließen";
                 btn.disabled = false;
             }
-        }
-
-        // SERVICE WORKER
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js');
         }
     </script>
 </body>
