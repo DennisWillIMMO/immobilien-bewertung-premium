@@ -218,37 +218,49 @@
         }
 
         async function sendFinal() {
-            if(!document.getElementById('ds-check').checked) return alert("Datenschutz bestätigen.");
-            const btn = document.getElementById('submit-btn');
-            btn.innerText = "Berechnung..."; btn.disabled = true;
+    if(!document.getElementById('ds-check').checked) return alert("Datenschutz bestätigen.");
+    const btn = document.getElementById('submit-btn');
+    const name = document.getElementById('u_name').value;
+    const email = document.getElementById('u_email').value;
+    const address = document.getElementById('address').value;
 
-            const brw = BRW[store.city] || BRW.default;
-            const basis = store.type === 'Haus' ? 3850 : 3400;
-            const marktwert = (store.sqm * basis) + (store.land * brw * 0.4) + store.extras;
+    btn.innerText = "Berechnung läuft...";
+    btn.disabled = true;
 
-            const { error } = await sb.from('leads').insert([{ 
-                name: document.getElementById('u_name').value, 
-                email: document.getElementById('u_email').value,
-                address: store.fullAddr || document.getElementById('address').value,
-                sqm: parseFloat(store.sqm),
-                estimated_value: Math.round(marktwert).toString(),
-                details: store
-            }]);
+    // Wertermittlungs-Logik aus bewertungs-widget-standalone.html
+    const brw = BRW[store.city] || BRW.default;
+    const basis = store.type === 'Haus' ? 3850 : 3400;
+    const marktwert = (store.sqm * basis) + (store.land * brw * 0.4) + store.extras;
 
-            if(!error) {
-                document.getElementById('res-marktwert').innerText = format(marktwert);
-                document.getElementById('details-marktwert').innerHTML = `
-                    <tr><td>Wohnfläche</td><td>${store.sqm} m²</td></tr>
-                    <tr><td>Bodenrichtwert</td><td>${brw} €/m²</td></tr>
-                    <tr><td>Besonderheiten</td><td>+${format(store.extras)}</td></tr>
-                `;
-                goStep('final');
-            } else {
-                alert("Fehler beim Speichern."); btn.disabled = false;
-            }
-        }
+    try {
+        // 1. Speichern in Supabase
+        const { error } = await sb.from('leads').insert([{ 
+            name, email, address: store.fullAddr || address,
+            sqm: parseFloat(store.sqm),
+            estimated_value: Math.round(marktwert).toString(),
+            details: store
+        }]);
 
-        function format(v) { return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(v); }
+        if (error) throw error;
+
+        // 2. Erfolg: Ergebnis anzeigen
+        document.getElementById('res-marktwert').innerText = format(marktwert);
+        
+        // 3. Info-Meldung (optional)
+        console.log("Lead gespeichert. Webhook löst Hintergrund-E-Mail aus.");
+        
+        goStep('final');
+
+    } catch (err) {
+        alert("Fehler beim Speichern: " + err.message);
+        btn.disabled = false;
+        btn.innerText = "Bewertung berechnen";
+    }
+}
+
+function format(v) { 
+    return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(v); 
+}
     </script>
 </body>
 </html>
