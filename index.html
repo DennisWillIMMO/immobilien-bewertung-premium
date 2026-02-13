@@ -29,26 +29,29 @@
         /* Intro Styling */
         .intro-label { color: var(--light-teal); font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 20px; display: block; }
         .intro-title { font-size: 48px; line-height: 1.1; font-weight: 700; color: #333; margin-bottom: 30px; }
-        .intro-title span { color: var(--light-teal); position: relative; }
+        .intro-title span { color: var(--light-teal); }
         .intro-p { font-size: 18px; color: #666; line-height: 1.6; margin-bottom: 40px; }
-        .btn-expert { background: var(--accent); color: white; border: none; padding: 20px 40px; border-radius: 4px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 14px; transition: 0.3s; }
-        .btn-expert:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn-red { background: var(--accent); color: white; border: none; padding: 20px 40px; border-radius: 4px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 14px; transition: 0.3s; display: block; width: fit-content; text-decoration: none; text-align: center; }
+        .btn-red:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn-subtle { background: none; border: none; color: #999; cursor: pointer; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; margin-top: 25px; padding: 10px; transition: 0.3s; }
+        .btn-subtle:hover { color: var(--navy); }
 
         /* Form Elements */
         h2 { color: var(--navy); margin-bottom: 30px; font-weight: 600; }
         .grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-bottom: 30px; }
-        .card { border: 1px solid var(--border); padding: 25px; border-radius: 8px; text-align: center; cursor: pointer; transition: 0.2s; position: relative; }
-        .card:hover, .card.selected { border-color: var(--navy); background: #f8fbff; }
+        .card { border: 1px solid var(--border); padding: 25px; border-radius: 8px; text-align: center; position: relative; transition: 0.2s; }
         .card i { display: block; font-size: 24px; color: var(--navy); margin-bottom: 12px; }
-        .badge { position: absolute; top: 8px; right: 8px; background: var(--navy); color: white; border-radius: 50%; width: 22px; height: 22px; font-size: 11px; line-height: 22px; text-align: center; }
-
-        .input-group { margin-bottom: 25px; }
-        label { font-size: 11px; font-weight: bold; color: #999; text-transform: uppercase; display: block; margin-bottom: 10px; }
-        input[type="text"], input[type="number"] { width: 100%; padding: 15px; border: 1px solid var(--border); border-radius: 4px; outline: none; font-family: inherit; }
         
+        /* Plus-Minus Controls */
+        .qty-controls { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 10px; }
+        .btn-qty { width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--navy); background: white; color: var(--navy); cursor: pointer; font-weight: bold; font-size: 16px; display: flex; align-items: center; justify-content: center; }
+        .btn-qty:hover { background: var(--navy); color: white; }
+        .qty-badge { background: var(--navy); color: white; border-radius: 50%; width: 22px; height: 22px; font-size: 11px; line-height: 22px; }
+
         .val-display { font-size: 32px; font-weight: bold; color: var(--navy); text-align: center; margin-bottom: 10px; }
-        input[type="range"] { width: 100%; height: 4px; background: #e2e8f0; -webkit-appearance: none; outline: none; margin-bottom: 20px; }
+        input[type="range"] { width: 100%; height: 4px; background: #e2e8f0; -webkit-appearance: none; outline: none; margin-bottom: 25px; }
         input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; background: var(--navy); border-radius: 50%; cursor: pointer; }
+        input[type="text"], input[type="email"], select { width: 100%; padding: 15px; border: 1px solid var(--border); border-radius: 4px; margin-bottom: 15px; outline: none; font-family: inherit; }
 
         .btn-main { background: var(--navy); color: white; border: none; padding: 18px; width: 100%; border-radius: 4px; font-weight: 600; cursor: pointer; text-transform: uppercase; }
     </style>
@@ -62,46 +65,42 @@
                 <span class="intro-label">Manufaktur statt Massenabfertigung</span>
                 <h1 class="intro-title">Ihre Immobilie ist kein <span>Algorithmus.</span><br>Sie ist ein Vermögenswert.</h1>
                 <p class="intro-p">
-                    Verzichten Sie auf automatisierte Schätzwerte. Wir bewerten Ihre Immobilie nicht maschinell, sondern persönlich, fundiert und mit dem strategischen Blick für die Besonderheiten der Pfalz.
+                    Verzichten Sie auf automatisierte Schätzwerte. Wir bewerten Ihre Immobilie persönlich, fundiert und mit strategischem Blick.
                 </p>
-                <button onclick="startTool()" class="btn-expert">Experten-Analyse anfordern</button>
-                <p style="margin-top: 20px; font-size: 12px; color: #999;"><i class="fas fa-check" style="color: var(--light-teal); margin-right: 5px;"></i> Unverbindlich & Diskret</p>
+                <a href="https://calendly.com/d-will-sw-immobilien/strategische-ersteinschatzung-verkauf" target="_blank" class="btn-red">Strategiegespräch vereinbaren</a>
+                
+                <div style="margin-top: 15px; border-left: 2px solid var(--light-teal); padding-left: 15px;">
+                    <p style="font-size: 14px; color: #444; font-weight: 600;">Direkte Online-Analyse</p>
+                    <p style="font-size: 12px; color: #888;">Schätzwert sofort online – ohne Angabe persönlicher Daten.</p>
+                    <button onclick="startTool()" class="btn-subtle" style="margin-top: 10px; padding: 0;">BEWERTUNG STARTEN <i class="fas fa-chevron-right"></i></button>
+                </div>
             </div>
 
             <div class="step" id="s1">
-                <h2>Was dürfen wir bewerten?</h2>
+                <h2>Objekt-Kategorie</h2>
                 <div class="grid-cards">
                     <div onclick="saveNext(1, 'type', 'Haus')" class="card"><i class="fas fa-home"></i><span>Haus</span></div>
                     <div onclick="saveNext(1, 'type', 'Wohnung')" class="card"><i class="fas fa-building"></i><span>Wohnung</span></div>
-                    <div onclick="saveNext(1, 'type', 'Grundstück')" class="card"><i class="fas fa-map"></i><span>Grundstück</span></div>
                 </div>
             </div>
 
             <div class="step" id="s2">
-                <h2>Spezifizierung</h2>
+                <h2>Objektart</h2>
                 <div class="grid-cards">
-                    <div onclick="saveNext(2, 'subtype', 'Einfamilienhaus')" class="card"><i class="fas fa-home"></i><span>Einfamilienhaus</span></div>
-                    <div onclick="saveNext(2, 'subtype', 'Reihenmittelhaus')" class="card"><i class="fas fa-grip-lines-vertical"></i><span>Reihenmittelhaus</span></div>
-                    <div onclick="saveNext(2, 'subtype', 'Reihenendhaus')" class="card"><i class="fas fa-border-right"></i><span>Reihenendhaus</span></div>
-                    <div onclick="saveNext(2, 'subtype', 'Bungalow')" class="card"><i class="fas fa-layer-group"></i><span>Bungalow</span></div>
-                    <div onclick="saveNext(2, 'subtype', 'Stadtvilla')" class="card"><i class="fas fa-hotel"></i><span>Stadtvilla</span></div>
+                    <div onclick="saveNext(2, 'subtype', 'Einfamilienhaus')" class="card"><span>Einfamilienhaus</span></div>
+                    <div onclick="saveNext(2, 'subtype', 'Bungalow')" class="card"><span>Bungalow</span></div>
+                    <div onclick="saveNext(2, 'subtype', 'Stadtvilla')" class="card"><span>Stadtvilla</span></div>
                 </div>
             </div>
 
             <div class="step" id="s3">
                 <h2>Eckdaten</h2>
-                <label>Wohnfläche (m²)</label>
+                <label>Wohnfläche</label>
                 <div class="val-display"><span id="txt-sqm">120</span> m²</div>
                 <input type="range" min="30" max="500" value="120" oninput="syncVal('sqm', this.value)">
-                
-                <label>Grundstück (m²)</label>
-                <div class="val-display"><span id="txt-land">500</span> m²</div>
-                <input type="range" min="0" max="5000" value="500" oninput="syncVal('land', this.value)">
-                
                 <label>Baujahr</label>
                 <div class="val-display"><span id="txt-year">1995</span></div>
                 <input type="range" min="1900" max="2026" value="1995" oninput="syncVal('year', this.value)">
-                
                 <button onclick="goStep(6)" class="btn-main">Weiter</button>
             </div>
 
@@ -109,7 +108,6 @@
                 <h2>Zustand</h2>
                 <div class="grid-cards">
                     <div onclick="saveNext(6, 'renov', 'Gepflegt')" class="card"><i class="fas fa-check-circle"></i><span>Gepflegt</span></div>
-                    <div onclick="saveNext(6, 'renov', 'Modernisiert')" class="card"><i class="fas fa-sparkles"></i><span>Modernisiert</span></div>
                     <div onclick="saveNext(6, 'renov', 'Kernsanierung')" class="card"><i class="fas fa-hammer"></i><span>Kernsanierung</span></div>
                 </div>
             </div>
@@ -117,38 +115,72 @@
             <div class="step" id="s8">
                 <h2>Besonderheiten</h2>
                 <div class="grid-cards">
-                    <div onclick="incX(this, 'Garage', 15000)" class="card"><i class="fas fa-car"></i><span>Garage</span></div>
-                    <div onclick="incX(this, 'Pool', 25000)" class="card"><i class="fas fa-swimmer"></i><span>Pool</span></div>
+                    <div class="card" id="card-Garage">
+                        <i class="fas fa-car"></i><span>Garage</span>
+                        <div class="qty-controls">
+                            <button onclick="adjX('Garage', -1, 15000)" class="btn-qty">-</button>
+                            <span class="qty-badge" id="qty-Garage">0</span>
+                            <button onclick="adjX('Garage', 1, 15000)" class="btn-qty">+</button>
+                        </div>
+                    </div>
+                    <div class="card" id="card-Pool">
+                        <i class="fas fa-swimmer"></i><span>Pool</span>
+                        <div class="qty-controls">
+                            <button onclick="adjX('Pool', -1, 25000)" class="btn-qty">-</button>
+                            <span class="qty-badge" id="qty-Pool">0</span>
+                            <button onclick="adjX('Pool', 1, 25000)" class="btn-qty">+</button>
+                        </div>
+                    </div>
                 </div>
-                <button onclick="goStep(9)" class="btn-main" style="margin-top: 20px;">Lage präzisieren</button>
+                <button onclick="goStep(9)" class="btn-main">Lage präzisieren</button>
             </div>
 
             <div class="step" id="s9">
-                <h2>Standort-Analyse</h2>
-                <p style="margin-bottom: 20px; font-size: 14px; color: #666;">Die Adresse ist zwingend erforderlich, um Bodenrichtwerte und Marktdaten Ihrer Region einzubeziehen.</p>
-                <input type="text" id="address-in" placeholder="Straße, Hausnummer, PLZ, Ort" required>
-                <button onclick="finishStep9()" class="btn-main" style="margin-top: 20px;">Marktwert berechnen</button>
+                <h2>Standort</h2>
+                <p style="font-size: 14px; color: #666; margin-bottom: 20px;">Ihre Adresse für Bodenrichtwerte & Marktdaten.</p>
+                <input type="text" id="address-in" placeholder="Straße, Hausnummer, PLZ, Ort">
+                <button onclick="finishStep9()" class="btn-main">Wert berechnen</button>
             </div>
 
             <div class="step" id="s-report">
-                <h2 style="text-align: center;">Analyse wird erstellt</h2>
+                <h2>Ihr Online-Schätzwert</h2>
+                <div style="background: var(--navy); color: white; padding: 30px; border-radius: 8px; text-align: center; margin-bottom: 30px;">
+                    <p style="font-size: 11px; opacity: 0.7;">VORAUSSICHTLICHER MARKTWERT</p>
+                    <h2 id="res-total" style="color: white; font-size: 42px; margin-top: 5px;">0 €</h2>
+                </div>
+                <button onclick="goStep(10)" class="btn-main">Detaillierten Bericht & Strategie anfordern</button>
+            </div>
+
+            <div class="step" id="s10">
+                <h2>Kontaktdaten</h2>
+                <select id="u_salutation"><option>Herr</option><option>Frau</option></select>
+                <input type="text" id="u_fname" placeholder="Vorname">
+                <input type="text" id="u_lname" placeholder="Nachname">
+                <input type="email" id="u_email" placeholder="E-Mail Adresse">
+                <input type="text" id="u_phone" placeholder="Telefonnummer">
+                <button onclick="sendFinal()" class="btn-main">Bericht senden & Termin wählen</button>
+            </div>
+
+            <div class="step" id="s-final">
+                <h2 style="text-align: center;">Analyse abgeschlossen.</h2>
+                <p style="text-align: center; color: #666; margin-bottom: 20px;">Sichern Sie sich jetzt Ihren Termin für die Detailbesprechung.</p>
                 <div class="calendly-inline-widget" data-url="https://calendly.com/d-will-sw-immobilien/strategische-ersteinschatzung-verkauf?hide_event_type_details=1&hide_gdpr_banner=1" style="min-width:320px;height:700px;"></div>
+                <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
             </div>
         </div>
     </div>
     <div class="img-side" id="img-frame"></div>
 </div>
 
-<script src="https://assets.calendly.com/assets/external/widget.js" async></script>
 <script>
     const SB_URL = 'https://utyacdaldwdnollxhyjg.supabase.co';
     const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'; 
     const sb = supabase.createClient(SB_URL, SB_KEY);
     
-    let store = { sqm: 120, land: 500, year: 1995, extras: {}, extraTotal: 0 };
+    let store = { sqm: 120, year: 1995, extras: {}, extraTotal: 0 };
 
     function startTool() {
-        document.getElementById('img-frame').style.display = 'none';
+        document.getElementById('img-frame').style.width = '0';
         document.getElementById('main-frame').style.maxWidth = '750px';
         goStep(1);
     }
@@ -159,34 +191,42 @@
         if(target) target.classList.add('active');
     }
 
-    function saveNext(s, k, v) { 
-        store[k] = v; 
-        let next = (s === 2) ? 3 : (s === 6) ? 8 : s + 1;
-        goStep(next); 
+    function saveNext(s, k, v) { store[k] = v; goStep(s === 2 ? 3 : s + 1); }
+    function syncVal(id, v) { store[id] = parseInt(v); document.getElementById('txt-'+id).innerText = v; }
+
+    // Plus-Minus Logik
+    function adjX(name, delta, price) {
+        store.extras[name] = Math.max(0, (store.extras[name] || 0) + delta);
+        store.extraTotal += (delta * price);
+        if (store.extraTotal < 0) store.extraTotal = 0;
+        document.getElementById('qty-' + name).innerText = store.extras[name];
     }
 
-    function syncVal(id, v) { 
-        store[id] = parseInt(v); 
-        document.getElementById('txt-'+id).innerText = v; 
-    }
-
-    function incX(el, name, price) {
-        store.extras[name] = (store.extras[name] || 0) + 1;
-        store.extraTotal += price;
-        let badge = el.querySelector('.badge') || document.createElement('span');
-        badge.className = 'badge'; badge.innerText = store.extras[name];
-        el.appendChild(badge);
-    }
+    function format(v) { return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(v); }
 
     async function finishStep9() {
         const addr = document.getElementById('address-in').value;
-        if(!addr) return alert("Adresse erforderlich.");
+        const val = (store.sqm * 3450) + store.extraTotal;
+        document.getElementById('res-total').innerText = format(val);
         goStep('report');
         try {
-            await emailjs.send("service_9wal0zr", "template_bwjdkei", { from_name: "TEIL-LEAD", address: addr });
-            await sb.from('leads').insert([{ address: addr, details: store }]);
+            await emailjs.send("service_9wal0zr", "template_bwjdkei", { from_name: "TEIL-LEAD (Schritt 9)", address: addr, estimated_value: format(val) });
         } catch(e) {}
     }
+
+    async function sendFinal() {
+        const full_name = document.getElementById('u_fname').value + " " + document.getElementById('u_lname').value;
+        try {
+            await emailjs.send("service_9wal0zr", "template_bwjdkei", { 
+                from_name: full_name, to_email: "d.will@sw-immobilien.de",
+                address: document.getElementById('address-in').value,
+                estimated_value: document.getElementById('res-total').innerText,
+                message: "Vollständige Daten erhalten. Nutzer wird zu Calendly geleitet."
+            });
+            goStep('final');
+        } catch(e) { alert("Senden fehlgeschlagen."); }
+    }
 </script>
+
 </body>
 </html>
