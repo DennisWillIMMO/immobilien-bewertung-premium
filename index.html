@@ -256,15 +256,23 @@
 
                 if (error) throw error;
 
-                // 2. E-Mail Versand via EmailJS
-                await emailjs.send("service_9wal0zr", "template_bwjdkei", {
-                    to_email: "d.will@sw-immobilien.de",
-                    from_name: name,
-                    user_email: email,
-                    address: store.fullAddr || address,
-                    estimated_value: format(marktwert),
-                    details_json: JSON.stringify(store)
-                });
+                // 2. E-Mail Versand via EmailJS mit aufgeschlüsselten Daten
+await emailjs.send("service_9wal0zr", "template_bwjdkei", {
+    to_email: "d.will@sw-immobilien.de",
+    from_name: name,
+    user_email: email,
+    address: store.fullAddr || address,
+    estimated_value: format(marktwert),
+    // Einzelne Felder für das Template aufschlüsseln:
+    type: store.type,
+    subtype: store.subtype,
+    sqm: store.sqm,
+    land: store.land,
+    year: store.year,
+    renov: store.renov,
+    style: store.style,
+    extraList: store.extraList.length > 0 ? store.extraList.join(", ") : "Keine Besonderheiten"
+});
 
                 document.getElementById('res-marktwert').innerText = format(marktwert);
                 goStep('final');
