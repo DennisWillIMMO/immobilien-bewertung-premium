@@ -8,102 +8,234 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --w-blue: #003366;
+            --w-gold: #b39a6a;
+            --coral: #FF7F50;
+            --bg-soft: #f8fafc;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            min-height: 100vh;
+            color: #1e293b;
+        }
+
+        .step { display: none; animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .step.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Asketisches Card-Design */
+        .card-sel {
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            border-radius: 1.5rem;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 1.5rem;
+        }
+
+        .card-sel:hover {
+            border-color: var(--w-gold);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-sel.selected {
+            border-color: var(--w-blue);
+            background: #f8fafc;
+            border-width: 2px;
+        }
+
+        .card-sel i {
+            color: var(--w-blue);
+            font-size: 2.5rem;
+            margin-bottom: 1.25rem;
+            opacity: 0.9;
+        }
+
+        .btn-premium {
+            background: var(--w-blue);
+            color: white;
+            padding: 1.25rem;
+            border-radius: 1.25rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(0, 51, 102, 0.15);
+        }
+
+        .btn-premium:hover {
+            background: #002244;
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(0, 51, 102, 0.25);
+        }
+
+        /* Adress-Finder Styling */
+        .address-finder-ui {
+            background: white;
+            border-radius: 2rem;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+        }
+
+        /* Input Styling */
+        .input-premium {
+            width: 100%;
+            padding: 1.25rem;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            font-weight: 500;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .input-premium:focus {
+            border-color: var(--w-gold);
+            background: white;
+        }
+
+        /* Slider */
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 4px;
+            background: #e2e8f0;
+            border-radius: 2px;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 28px;
+            height: 28px;
+            background: var(--w-blue);
+            border: 5px solid white;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+    </style>
 </head>
-<body class="bg-gray-100 p-2 md:p-10 font-sans">
+<body class="p-4 md:p-12 flex items-center justify-center">
 
-    <div class="max-w-3xl mx-auto bg-white rounded-[3rem] shadow-2xl overflow-hidden border border-gray-100">
-        <div class="bg-gray-50 px-10 py-5 border-b flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-gray-400">
-            <span>Wertermittlung</span>
-            <span id="step-txt">Schritt 1 von 10</span>
+    <div class="w-full max-w-3xl bg-white rounded-[3rem] shadow-[0_50px_120px_rgba(0,0,0,0.15)] overflow-hidden border border-white">
+        
+        <div class="px-10 py-6 flex justify-between items-center bg-slate-50/50 border-b border-gray-100">
+            <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">Exklusive Marktanalyse</span>
+            <span id="step-txt" class="text-[10px] font-bold uppercase tracking-[0.2em] text-w-blue">Erstkontakt</span>
         </div>
-        <div class="h-1.5 w-full bg-gray-100">
-            <div id="bar" class="h-full transition-all duration-700 bg-[#003366]" style="width: 10%;"></div>
+        <div class="h-1.5 w-full bg-gray-50">
+            <div id="bar" class="h-full bg-w-blue transition-all duration-700" style="width: 5%"></div>
         </div>
 
-        <div class="p-8 md:p-14">
-            <div id="steps-container">
+        <div class="p-8 md:p-16">
+            <div id="valuation-tool">
 
-                <div class="step active" id="s1">
-                    <h3 class="text-3xl font-bold mb-10 text-center text-gray-800">Was möchten Sie bewerten?</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-                        <div onclick="nav(2, 'type', 'Haus')" class="card-sel">
-                            <i class="fas fa-home text-4xl mb-4"></i><span class="font-bold">Haus</span>
+                <div class="step active" id="s-intro">
+                    <div class="text-center mb-12">
+                        <h2 class="text-4xl font-bold text-gray-800 mb-6 leading-tight">Wie möchten Sie<br>starten?</h2>
+                        <p class="text-gray-500 max-w-sm mx-auto italic">Wählen Sie zwischen der persönlichen Expertenberatung oder einer schnellen Online-Einschätzung.</p>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-gradient-to-br from-slate-50 to-white p-8 rounded-[2rem] border-2 border-w-blue shadow-lg relative overflow-hidden group hover:scale-[1.02] transition-all cursor-pointer" onclick="window.open('https://calendly.com/wilhelm', '_blank')">
+                            <div class="absolute top-4 right-6 bg-w-blue text-white text-[9px] font-bold px-3 py-1 rounded-full tracking-widest uppercase">Empfohlen</div>
+                            <h4 class="text-xl font-bold text-w-blue mb-2">Persönliches Strategiegespräch</h4>
+                            <p class="text-sm text-gray-500 mb-6">30 Min. Deep-Dive Marktstrategie & Wertermittlung vor Ort oder Video.</p>
+                            <button class="btn-premium w-full bg-w-blue">Termin jetzt reservieren</button>
                         </div>
-                        <div onclick="nav(2, 'type', 'Wohnung')" class="card-sel">
-                            <i class="fas fa-building text-4xl mb-4"></i><span class="font-bold">Wohnung</span>
+
+                        <div class="text-center py-4">
+                            <span class="text-[10px] font-bold uppercase tracking-widest text-gray-300">Oder alternativ</span>
                         </div>
-                        <div onclick="nav(2, 'type', 'Grundstück')" class="card-sel">
-                            <i class="fas fa-map text-4xl mb-4"></i><span class="font-bold">Grundstück</span>
-                        </div>
+
+                        <button onclick="nav(1)" class="w-full py-5 rounded-2xl border border-gray-200 font-bold text-gray-600 hover:bg-gray-50 transition uppercase text-xs tracking-widest">
+                            Direkt zur Online-Wertermittlung
+                        </button>
+                    </div>
+                </div>
+
+                <div class="step" id="s1">
+                    <h3 class="text-3xl font-bold text-center mb-12">Objekttyp wählen</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div onclick="nav(2, 'type', 'Haus')" class="card-sel"><i class="fas fa-home"></i><span class="font-bold uppercase text-[11px] tracking-widest">Haus</span></div>
+                        <div onclick="nav(2, 'type', 'Wohnung')" class="card-sel"><i class="fas fa-building"></i><span class="font-bold uppercase text-[11px] tracking-widest">Wohnung</span></div>
+                        <div onclick="nav(2, 'type', 'Grundstück')" class="card-sel"><i class="fas fa-map"></i><span class="font-bold uppercase text-[11px] tracking-widest">Grundstück</span></div>
                     </div>
                 </div>
 
                 <div class="step" id="s2">
-                    <h3 class="text-3xl font-bold mb-10 text-center">Welcher Haustyp?</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                        <div onclick="nav(3, 'subtype', 'Einfamilienhaus')" class="card-sel">Einfamilienhaus</div>
-                        <div onclick="nav(3, 'subtype', 'Doppelhaushälfte')" class="card-sel">Doppelhaushälfte</div>
-                        <div onclick="nav(3, 'subtype', 'Reihenhaus')" class="card-sel">Reihenhaus</div>
-                        <div onclick="nav(3, 'subtype', 'Mehrfamilienhaus')" class="card-sel">Mehrfamilienhaus</div>
-                    </div>
-                    <button onclick="nav(1)" class="btn-back">← Zurück</button>
-                </div>
-
-                <div class="step" id="s3">
-                    <h3 class="text-3xl font-bold mb-10 text-center">Fläche & Zimmer</h3>
-                    <div class="space-y-10 mb-10">
-                        <div>
-                            <label class="text-xs font-black text-gray-400 uppercase tracking-widest block mb-4">
-                                Wohnfläche: <span id="txt-sqm" class="text-[#003366]">120</span> m²
-                            </label>
-                            <input type="range" id="sqm-slider" min="30" max="500" value="120" class="w-full" oninput="syncVal('sqm', this.value)">
-                            <input type="number" id="sqm" value="120" class="num-input w-full p-4 border rounded-xl text-center mt-4 font-bold" oninput="syncVal('sqm', this.value)">
+                    <h3 class="text-3xl font-bold text-center mb-12 tracking-tight">Wohnfläche</h3>
+                    <div class="space-y-12">
+                        <div class="text-center">
+                            <span class="text-6xl font-black text-w-blue"><span id="txt-sqm">120</span> <span class="text-2xl text-gray-300 font-normal">m²</span></span>
                         </div>
+                        <input type="range" id="sqm-slider" min="30" max="500" value="120" oninput="syncVal('sqm', this.value)">
+                        <input type="number" id="sqm" value="120" class="hidden">
                     </div>
-                    <button onclick="nav(9)" class="btn-main">Weiter</button>
-                    <button onclick="nav(2)" class="btn-back">Zurück</button>
+                    <button onclick="nav(9)" class="btn-premium w-full mt-16">Weiter</button>
                 </div>
 
                 <div class="step" id="s9">
-                    <h3 class="text-3xl font-bold mb-10 text-center text-gray-800">Objekt-Lage</h3>
-                    <div class="space-y-4 mb-6">
-                        <input type="text" id="address" class="input-premium w-full p-4 border rounded-xl" placeholder="Straße, PLZ, Ort" onblur="updateMap()">
-                        <div class="relative h-64 rounded-[2rem] bg-gray-100 overflow-hidden border border-gray-200">
+                    <h3 class="text-3xl font-bold text-center mb-4">Lage des Objekts</h3>
+                    <p class="text-center text-gray-400 text-sm mb-12">Präzise Standortbestimmung für die Marktanalyse.</p>
+                    <div class="address-finder-ui mb-10">
+                        <div class="p-6 bg-white border-b border-gray-100">
+                            <input type="text" id="address" class="input-premium" placeholder="Straße, PLZ, Ort" onblur="updateMap()">
+                        </div>
+                        <div class="h-64 relative bg-gray-50">
                             <iframe id="map" class="w-full h-full border-none" src="https://www.openstreetmap.org/export/embed.html?bbox=7.0,47.0,15.0,55.0&layer=mapnik"></iframe>
                         </div>
                     </div>
-                    <button onclick="nav(10)" class="btn-main">Adresse bestätigen</button>
-                    <button onclick="nav(3)" class="btn-back">Zurück</button>
+                    <button onclick="nav(10)" class="btn-premium w-full">Standort bestätigen</button>
                 </div>
 
                 <div class="step" id="s10">
-                    <h3 class="text-3xl font-bold mb-10 text-center">Abschluss</h3>
-                    <div class="space-y-4 mb-8">
-                        <input type="text" id="u_name" class="input-premium w-full p-4 border rounded-xl" placeholder="Vollständiger Name">
-                        <input type="email" id="u_email" class="input-premium w-full p-4 border rounded-xl" placeholder="E-Mail Adresse">
-                        <div class="p-4 bg-gray-50 rounded-xl flex gap-3">
-                            <input type="checkbox" id="ds-check" class="mt-1">
-                            <label class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Ich stimme der Datenverarbeitung zu.</label>
+                    <h3 class="text-3xl font-bold text-center mb-12 leading-tight">Ihre Ergebnisse<br>werden berechnet</h3>
+                    <div class="space-y-4 mb-10">
+                        <input type="text" id="u_name" class="input-premium" placeholder="Vollständiger Name">
+                        <input type="email" id="u_email" class="input-premium" placeholder="E-Mail Adresse">
+                        <div class="flex items-start gap-4 p-5 bg-gray-50 rounded-2xl">
+                            <input type="checkbox" id="ds-check" class="mt-1 w-5 h-5 accent-w-blue">
+                            <label for="ds-check" class="text-[10px] text-gray-500 uppercase tracking-widest font-bold leading-relaxed">Ich stimme der Datenverarbeitung zu.</label>
                         </div>
                     </div>
-                    <button class="btn-main" id="submit-btn" style="background: #FF7F50;" onclick="sendToSupabase()">Bewertung abschließen</button>
-                    <button onclick="nav(9)" class="btn-back">Zurück</button>
+                    <button id="submit-btn" class="btn-premium w-full bg-[#FF7F50]" onclick="sendToSupabase()">Analyse jetzt abschließen</button>
                 </div>
 
-                <div class="step" id="s-final">
-                    <div class="premium-res p-10 bg-gradient-to-b from-blue-50/50 to-white rounded-[3rem] border border-blue-100 shadow-xl text-center">
-                        <div style="font-size: 10px; font-weight: 800; color: #b39a6a; letter-spacing: 3px; margin-bottom: 20px;">ANALYSE ABGESCHLOSSEN</div>
-                        <a href="#termin" class="block w-full btn-main py-6 text-xl mb-10 shadow-2xl">STRATEGIEGESPRÄCH BUCHEN</a>
+                <div class="step text-center" id="s-final">
+                    <div class="bg-gradient-to-b from-slate-50 to-white p-12 rounded-[3.5rem] border border-gray-100 shadow-2xl relative">
+                        <div class="w-20 h-20 bg-white shadow-lg rounded-full flex items-center justify-center mx-auto mb-10">
+                            <i class="fas fa-check text-w-blue text-3xl"></i>
+                        </div>
+                        <h2 class="text-3xl font-bold text-gray-800 mb-12 leading-tight">Analyse bereit</h2>
                         
-                        <button onclick="document.getElementById('res-box').classList.toggle('hidden')" class="text-[10px] font-black text-blue-300 uppercase tracking-[3px] hover:text-blue-900 transition">Online-Wert anzeigen</button>
+                        <button onclick="window.open('https://calendly.com/wilhelm', '_blank')" class="btn-premium w-full py-6 text-xl mb-12 shadow-2xl scale-105 transform hover:scale-110 transition-all">
+                            Strategiegespräch buchen
+                        </button>
 
-                        <div id="res-box" class="hidden mt-10 p-8 bg-white rounded-[2rem] border border-gray-100 shadow-sm animate-fadeIn">
-                            <p class="text-[10px] font-black uppercase text-gray-400 mb-2 tracking-[4px]">Voraussichtlicher Marktwert*</p>
-                            <p id="res-price" class="text-4xl md:text-5xl font-black text-[#003366] tracking-tighter"></p>
+                        <div class="border-t border-gray-100 pt-10">
+                            <button onclick="document.getElementById('res-box').classList.toggle('hidden')" class="text-[11px] font-bold text-gray-300 uppercase tracking-[3px] hover:text-w-blue transition-all">Online-Wert anzeigen</button>
+                            <div id="res-box" class="hidden mt-10 p-10 bg-white rounded-[2.5rem] border border-w-gold shadow-sm animate-fadeIn">
+                                <p class="text-[10px] font-bold text-w-gold uppercase tracking-[4px] mb-4">Voraussichtlicher Wert*</p>
+                                <p id="res-price" class="text-4xl md:text-5xl font-black text-w-blue tracking-tighter italic"></p>
+                            </div>
                         </div>
                     </div>
-                    <button onclick="location.reload()" class="btn-back mt-10">Bewertung neustarten</button>
+                    <button onclick="location.reload()" class="btn-back mt-12 text-[10px] font-bold uppercase tracking-widest hover:text-w-gold transition">Bewertung neustarten</button>
                 </div>
 
             </div>
@@ -111,66 +243,69 @@
     </div>
 
     <script>
-        // DEINE SUPABASE DATEN (Hier stehen deine echten Daten bereits drin)
+        // SUPABASE DATEN
         const SB_URL = 'https://utyacdaldwdnollxhyjg.supabase.co'; 
         const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV0eWFjZGFsZHdkbm9sbHhoeWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5ODU5OTQsImV4cCI6MjA4NjU2MTk5NH0.NbDxVAIcQXGdvDjoTHBqRZOIgWnXE5ggLt90SBAMJvw';
-        
         const sb = supabase.createClient(SB_URL, SB_KEY);
+
         let dataStore = {};
 
         function nav(n, key, val) {
-            if(key && val) dataStore[key] = val;
+            if(key) dataStore[key] = val;
             document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-            const target = document.getElementById(n === 'final' ? 's-final' : 's' + n);
+            
+            const targetId = (n === 'final') ? 's-final' : (n === 1 ? 's1' : (n === 2 ? 's2' : (n === 3 ? 's3' : (n === 9 ? 's9' : (n === 10 ? 's10' : '')))));
+            const target = document.getElementById(targetId);
+            
             if(target) {
                 target.classList.add('active');
                 document.getElementById('bar').style.width = (n === 'final' ? 100 : n * 10) + '%';
-                document.getElementById('step-txt').innerText = `Schritt ${n === 'final' ? 10 : n} von 10`;
-                window.scrollTo(0, 0);
+                document.getElementById('step-txt').innerText = n === 'final' ? 'Ergebnis' : `Schritt ${n} von 10`;
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }
 
         function syncVal(id, v) {
             document.getElementById(id).value = v;
             document.getElementById('txt-' + id).innerText = v;
-            dataStore[id] = v;
         }
 
         async function updateMap() {
             const adr = document.getElementById('address').value;
             if(adr.length < 5) return;
-            const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(adr)}&limit=1`);
-            const json = await res.json();
-            if(json.length > 0) {
-                const { lat, lon } = json[0];
-                const off = 0.002;
-                document.getElementById('map').src = `https://www.openstreetmap.org/export/embed.html?bbox=${parseFloat(lon)-off}%2C${parseFloat(lat)-off}%2C${parseFloat(lon)+off}%2C${parseFloat(lat)+off}&layer=mapnik&marker=${lat}%2C${lon}`;
-            }
+            try {
+                const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(adr)}&limit=1`);
+                const json = await res.json();
+                if(json.length > 0) {
+                    const { lat, lon } = json[0];
+                    const off = 0.002;
+                    document.getElementById('map').src = `https://www.openstreetmap.org/export/embed.html?bbox=${parseFloat(lon)-off}%2C${parseFloat(lat)-off}%2C${parseFloat(lon)+off}%2C${parseFloat(lat)+off}&layer=mapnik&marker=${lat}%2C${lon}`;
+                }
+            } catch(e) {}
         }
 
         async function sendToSupabase() {
-            if(!document.getElementById('ds-check').checked) return alert("Bitte Datenschutz zustimmen.");
-            
+            if(!document.getElementById('ds-check').checked) return alert("Datenschutz bestätigen.");
             const btn = document.getElementById('submit-btn');
             const sqm = document.getElementById('sqm').value;
             const name = document.getElementById('u_name').value;
             const email = document.getElementById('u_email').value;
 
-            btn.innerText = "Wird verarbeitet...";
+            btn.innerText = "Sicherung...";
             btn.disabled = true;
 
-            const estValue = sqm * 4150; // Deine Basis-Logik
+            const estValue = sqm * 4150;
 
             const { error } = await sb.from('leads').insert([{ 
                 name, email, address: document.getElementById('address').value, 
-                sqm: parseFloat(sqm), estimated_value: estValue.toString(), details: dataStore 
+                sqm: parseFloat(sqm), estimated_value: estValue.toString()
             }]);
 
             if(!error) {
                 document.getElementById('res-price').innerText = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(estValue);
                 nav('final');
             } else {
-                alert("Fehler beim Speichern.");
+                alert("Verbindungsfehler. Bitte prüfen Sie Ihre Supabase Spalten (estimated_value).");
                 btn.innerText = "Abschließen";
                 btn.disabled = false;
             }
