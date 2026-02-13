@@ -227,7 +227,6 @@
     btn.innerText = "Berechnung läuft...";
     btn.disabled = true;
 
-    // Wertermittlungs-Logik (Marktwert-Verfahren)
     const brw = BRW[store.city] || BRW.default;
     const basis = store.type === 'Haus' ? 3850 : 3400;
     const marktwert = (store.sqm * basis) + (store.land * brw * 0.4) + store.extras;
@@ -235,9 +234,7 @@
     try {
         // 1. Speichern in Supabase
         const { error } = await sb.from('leads').insert([{ 
-            name: name, 
-            email: email, 
-            address: store.fullAddr || address,
+            name: name, email: email, address: address,
             sqm: parseFloat(store.sqm),
             estimated_value: Math.round(marktwert).toString(),
             details: store
@@ -245,28 +242,32 @@
 
         if (error) throw error;
 
-        // 2. Erfolg: Ergebnis anzeigen
-        document.getElementById('res-marktwert').innerText = format(marktwert);
-        document.getElementById('details-marktwert').innerHTML = `
-            <tr><td>Wohnfläche</td><td>${store.sqm} m²</td></tr>
-            <tr><td>Bodenrichtwert</td><td>${brw} €/m²</td></tr>
-            <tr><td>Besonderheiten</td><td>+${format(store.extras)}</td></tr>
-        `;
+        // 2. Interne E-Mail-Benachrichtigung auslösen
+        // Wir nutzen hier einen direkten API-Aufruf (Fetch)
+        await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                service_id: 'default_service',
+                template_id: 'DEIN_TEMPLATE_ID', // Erhältst du bei EmailJS
+                user_id: 'DEIN_USER_ID',         // Erhältst du bei EmailJS
+                template_params: {
+                    to_email: 'd.will@sw-immobilien.de',
+                    from_name: name,
+                    message: `Neuer Lead: ${name}, Wert: ${format(marktwert)}, Adresse: ${address}`
+                }
+            })
+        });
 
-        // 3. Webhook löst nun im Hintergrund die E-Mail aus
-        console.log("Lead erfolgreich gespeichert. Hintergrund-E-Mail wird via Webhook gesendet.");
-        
+        // 3. Ergebnis anzeigen
+        document.getElementById('res-marktwert').innerText = format(marktwert);
         goStep('final');
 
     } catch (err) {
-        alert("Fehler beim Speichern: " + err.message);
+        alert("System-Fehler: " + err.message);
         btn.disabled = false;
         btn.innerText = "Bewertung berechnen";
     }
-}
-
-function format(v) { 
-    return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(v); 
 }
     </script>
 </body>
