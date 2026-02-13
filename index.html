@@ -64,8 +64,6 @@
                     <h3 class="text-2xl font-bold text-center mb-10">Objektart</h3>
                     <div class="grid grid-cols-2 gap-4">
                         <div onclick="saveNext(2, 'subtype', 'Einfamilienhaus')" class="card-sel">Einfamilienhaus</div>
-                        <div onclick="saveNext(2, 'subtype', 'Doppelhaushälfte')" class="card-sel">Doppelhaushälfte</div>
-                        <div onclick="saveNext(2, 'subtype', 'Reihenhaus')" class="card-sel">Reihenhaus</div>
                         <div onclick="saveNext(2, 'subtype', 'Mehrfamilienhaus')" class="card-sel">Mehrfamilienhaus</div>
                     </div>
                     <button onclick="goStep(1)" class="mt-8 text-xs text-gray-300 w-full">Zurück</button>
@@ -95,9 +93,7 @@
                 <div class="step" id="s6">
                     <h3 class="text-2xl font-bold text-center mb-10">Zustand</h3>
                     <div class="grid grid-cols-2 gap-4">
-                        <div onclick="saveNext(6, 'renov', 'Neuwertig')" class="card-sel">Neuwertig</div>
-                        <div onclick="saveNext(6, 'renov', 'Durchschnitt')" class="card-sel">Durchschnitt</div>
-                        <div onclick="saveNext(6, 'renov', 'Renoviert')" class="card-sel">Renoviert</div>
+                        <div onclick="saveNext(6, 'renov', 'Durchschnitt')" class="card-sel">Normal</div>
                         <div onclick="saveNext(6, 'renov', 'Kernsaniert')" class="card-sel">Kernsaniert</div>
                     </div>
                 </div>
@@ -105,20 +101,16 @@
                 <div class="step" id="s7">
                     <h3 class="text-2xl font-bold text-center mb-10">Ausstattung</h3>
                     <div class="grid grid-cols-2 gap-4">
-                        <div onclick="saveNext(7, 'style', 'Einfach')" class="card-sel">Einfach (S2)</div>
-                        <div onclick="saveNext(7, 'style', 'Mittel')" class="card-sel">Mittel (S3)</div>
+                        <div onclick="saveNext(7, 'style', 'Mittel')" class="card-sel">Standard (S3)</div>
                         <div onclick="saveNext(7, 'style', 'Gehoben')" class="card-sel">Gehoben (S4)</div>
-                        <div onclick="saveNext(7, 'style', 'Stark gehoben')" class="card-sel">Luxus (S5)</div>
                     </div>
                 </div>
 
                 <div class="step" id="s8">
                     <h3 class="text-2xl font-bold text-center mb-10">Besonderheiten</h3>
-                    <div class="grid grid-cols-2 gap-3" id="extras-grid">
-                        <div onclick="this.classList.toggle('selected')" data-val="Garage" class="card-sel py-6">Garage</div>
-                        <div onclick="this.classList.toggle('selected')" data-val="Keller" class="card-sel py-6">Keller</div>
-                        <div onclick="this.classList.toggle('selected')" data-val="Aufzug" class="card-sel py-6">Aufzug</div>
-                        <div onclick="this.classList.toggle('selected')" data-val="Gäste-WC" class="card-sel py-6">Gäste-WC</div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div onclick="this.classList.toggle('selected')" class="card-sel py-6">Garage</div>
+                        <div onclick="this.classList.toggle('selected')" class="card-sel py-6">Keller</div>
                     </div>
                     <button onclick="goStep(9)" class="btn-premium mt-10">Weiter zur Lage</button>
                 </div>
@@ -149,7 +141,7 @@
                         
                         <div class="border-t pt-10">
                             <button onclick="document.getElementById('res-box').classList.toggle('hidden')" class="text-[10px] font-bold text-gray-300 uppercase tracking-widest">Online-Schätzwert anzeigen</button>
-                            <div id="res-box" class="hidden mt-8 text-left animate-fadeIn">
+                            <div id="res-box" class="hidden mt-8 text-left">
                                 <div class="valuation-detail">
                                     <p class="text-[10px] uppercase font-black text-w-blue mb-4 tracking-widest">Marktwert (Vergleichswertverfahren)</p>
                                     <p id="res-marktwert" class="text-3xl font-black text-w-blue mb-4"></p>
@@ -170,13 +162,12 @@
     </div>
 
     <script>
-        // Supabase & Bodenrichtwerte
         const SB_URL = 'https://utyacdaldwdnollxhyjg.supabase.co'; 
         const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV0eWFjZGFsZHdkbm9sbHhoeWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5ODU5OTQsImV4cCI6MjA4NjU2MTk5NH0.NbDxVAIcQXGdvDjoTHBqRZOIgWnXE5ggLt90SBAMJvw';
         const sb = supabase.createClient(SB_URL, SB_KEY);
         const BRW = { 'Hanau': 380, 'Gelnhausen': 220, 'default': 200 };
 
-        let store = { sqm: 120, land: 500, year: 1995, extras: [] };
+        let store = { sqm: 120, land: 500, year: 1995 };
 
         function goStep(n) {
             document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
@@ -207,18 +198,19 @@
         async function sendData() {
             if(!document.getElementById('ds-check').checked) return alert("Datenschutz bestätigen.");
             const btn = document.getElementById('submit-btn');
+            const name = document.getElementById('u_name').value;
+            const email = document.getElementById('u_email').value;
+            const address = document.getElementById('address').value;
+
             btn.innerText = "Berechnung läuft...";
             btn.disabled = true;
 
-            // Marktwert & NHK Logik
             const brw = BRW[store.city] || BRW.default;
             const marktwert = (store.sqm * 3800) + (store.land * brw * 0.4);
             const nhk = (store.sqm * 1.3 * 1100) * 0.85 + (store.land * brw);
 
             const { error } = await sb.from('leads').insert([{ 
-                name: document.getElementById('u_name').value, 
-                email: document.getElementById('u_email').value,
-                address: document.getElementById('address').value,
+                name: name, email: email, address: address,
                 sqm: parseFloat(store.sqm),
                 estimated_value: Math.round(marktwert).toString(),
                 details: store
@@ -226,9 +218,14 @@
 
             if(!error) {
                 document.getElementById('res-marktwert').innerText = format(marktwert);
-                document.getElementById('details-marktwert').innerHTML = `<tr><td>Basiswert Region</td><td>${format(3800)}/m²</td></tr><tr><td>Bodenrichtwert</td><td>${brw} €/m²</td></tr>`;
+                document.getElementById('details-marktwert').innerHTML = `<tr><td>Basiswert</td><td>${format(3800)}/m²</td></tr><tr><td>Bodenrichtwert</td><td>${brw} €/m²</td></tr>`;
                 document.getElementById('res-nhk').innerText = format(nhk);
-                document.getElementById('details-nhk').innerHTML = `<tr><td>Baukosten indexiert</td><td>${format(nhk*0.7)}</td></tr><tr><td>Bodenwert</td><td>${format(store.land*brw)}</td></tr>`;
+                document.getElementById('details-nhk').innerHTML = `<tr><td>Sachwert</td><td>${format(nhk)}</td></tr>`;
+                
+                // WhatsApp Benachrichtigung senden
+                const msg = `Hallo, ein neuer Lead ist eingetroffen!\nName: ${name}\nE-Mail: ${email}\nAdresse: ${address}\nGeschätzter Wert: ${format(marktwert)}`;
+                window.open(`https://wa.me/491794498559?text=${encodeURIComponent(msg)}`, '_blank');
+                
                 goStep('final');
             } else {
                 alert("Fehler: " + error.message);
