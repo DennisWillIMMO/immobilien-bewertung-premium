@@ -4,10 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Premium Immobilienbewertung | Wilhelm Immobilien</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <script type="text/javascript">
+       (function(){
+          // Initialisierung mit Ihrem Public Key
+          emailjs.init("_xVMakll6CBznjSHE");
+       })();
+    </script>
+
     <style>
         :root { --w-blue: #003366; --w-gold: #b39a6a; --coral: #FF7F50; }
         body { font-family: 'DM Sans', sans-serif; background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%); min-height: 100vh; }
@@ -68,7 +79,7 @@
                         <div onclick="saveNext(2, 'subtype', 'Reihenhaus')" class="card-sel">Reihenhaus</div>
                         <div onclick="saveNext(2, 'subtype', 'Mehrfamilienhaus')" class="card-sel">Mehrfamilienhaus</div>
                     </div>
-                    <button onclick="goStep(1)" class="mt-8 text-xs text-gray-300 w-full uppercase font-bold">Zurück</button>
+                    <button onclick="goStep(1)" class="mt-8 text-xs text-gray-300 w-full uppercase font-bold text-center">Zurück</button>
                 </div>
 
                 <div class="step" id="s3">
@@ -76,7 +87,7 @@
                     <div class="text-center mb-8"><span class="text-6xl font-bold text-w-blue" id="txt-sqm">120</span> m²</div>
                     <input type="range" min="30" max="500" value="120" oninput="syncVal('sqm', this.value)">
                     <button onclick="goStep(4)" class="btn-premium mt-12">Weiter</button>
-                    <button onclick="goStep(2)" class="mt-4 text-xs text-gray-300 w-full uppercase font-bold">Zurück</button>
+                    <button onclick="goStep(2)" class="mt-4 text-xs text-gray-300 w-full uppercase font-bold text-center">Zurück</button>
                 </div>
 
                 <div class="step" id="s4">
@@ -84,7 +95,7 @@
                     <div class="text-center mb-8"><span class="text-6xl font-bold text-w-blue" id="txt-land">500</span> m²</div>
                     <input type="range" min="0" max="5000" value="500" oninput="syncVal('land', this.value)">
                     <button onclick="goStep(5)" class="btn-premium mt-12">Weiter</button>
-                    <button onclick="goStep(3)" class="mt-4 text-xs text-gray-300 w-full uppercase font-bold">Zurück</button>
+                    <button onclick="goStep(3)" class="mt-4 text-xs text-gray-300 w-full uppercase font-bold text-center">Zurück</button>
                 </div>
 
                 <div class="step" id="s5">
@@ -92,7 +103,7 @@
                     <div class="text-center mb-8"><span class="text-6xl font-bold text-w-blue" id="txt-year">1995</span></div>
                     <input type="range" min="1900" max="2026" value="1995" oninput="syncVal('year', this.value)">
                     <button onclick="goStep(6)" class="btn-premium mt-12">Weiter</button>
-                    <button onclick="goStep(4)" class="mt-4 text-xs text-gray-300 w-full uppercase font-bold">Zurück</button>
+                    <button onclick="goStep(4)" class="mt-4 text-xs text-gray-300 w-full uppercase font-bold text-center">Zurück</button>
                 </div>
 
                 <div class="step" id="s6">
@@ -103,7 +114,7 @@
                         <div onclick="saveNext(6, 'renov', 'Modernisiert')" class="card-sel">Modernisiert</div>
                         <div onclick="saveNext(6, 'renov', 'Kernsaniert')" class="card-sel">Kernsaniert</div>
                     </div>
-                    <button onclick="goStep(5)" class="mt-8 text-xs text-gray-300 w-full uppercase font-bold">Zurück</button>
+                    <button onclick="goStep(5)" class="mt-8 text-xs text-gray-300 w-full uppercase font-bold text-center">Zurück</button>
                 </div>
 
                 <div class="step" id="s7">
@@ -114,7 +125,7 @@
                         <div onclick="saveNext(7, 'style', 'Gehoben')" class="card-sel">Gehoben (S4)</div>
                         <div onclick="saveNext(7, 'style', 'Luxus')" class="card-sel">Luxus (S5)</div>
                     </div>
-                    <button onclick="goStep(6)" class="mt-8 text-xs text-gray-300 w-full uppercase font-bold">Zurück</button>
+                    <button onclick="goStep(6)" class="mt-8 text-xs text-gray-300 w-full uppercase font-bold text-center">Zurück</button>
                 </div>
 
                 <div class="step" id="s8">
@@ -126,7 +137,7 @@
                         <div onclick="toggleX(this, 'Sauna', 10000)" class="card-sel py-6">Sauna</div>
                     </div>
                     <button onclick="goStep(9)" class="btn-premium mt-10">Weiter zur Lage</button>
-                    <button onclick="goStep(7)" class="mt-4 text-xs text-gray-300 w-full uppercase font-bold">Zurück</button>
+                    <button onclick="goStep(7)" class="mt-4 text-xs text-gray-300 w-full uppercase font-bold text-center">Zurück</button>
                 </div>
 
                 <div class="step" id="s9">
@@ -136,7 +147,7 @@
                         <iframe id="map" class="w-full h-full" src="https://www.openstreetmap.org/export/embed.html?bbox=7.0,47.0,15.0,55.0&layer=mapnik"></iframe>
                     </div>
                     <button onclick="goStep(10)" class="btn-premium mt-6">Lage bestätigen & Weiter</button>
-                    <button onclick="goStep(8)" class="mt-4 text-xs text-gray-300 w-full uppercase font-bold">Zurück</button>
+                    <button onclick="goStep(8)" class="mt-4 text-xs text-gray-300 w-full uppercase font-bold text-center">Zurück</button>
                 </div>
 
                 <div class="step" id="s10">
@@ -147,7 +158,7 @@
                         <input type="checkbox" id="ds-check"> <span>Datenschutz zustimmen.</span>
                     </div>
                     <button id="submit-btn" class="btn-premium" style="background: var(--coral);" onclick="sendFinal()">Bewertung berechnen</button>
-                    <button onclick="goStep(9)" class="mt-4 text-xs text-gray-300 w-full uppercase font-bold">Zurück</button>
+                    <button onclick="goStep(9)" class="mt-4 text-xs text-gray-300 w-full uppercase font-bold text-center">Zurück</button>
                 </div>
 
                 <div class="step text-center" id="s-final">
@@ -172,11 +183,12 @@
     </div>
 
     <script>
+        // Supabase Konfiguration
         const SB_URL = 'https://utyacdaldwdnollxhyjg.supabase.co'; 
         const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV0eWFjZGFsZHdkbm9sbHhoeWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5ODU5OTQsImV4cCI6MjA4NjU2MTk5NH0.NbDxVAIcQXGdvDjoTHBqRZOIgWnXE5ggLt90SBAMJvw';
         const sb = supabase.createClient(SB_URL, SB_KEY);
+        
         const BRW = { 'Hanau': 380, 'Gelnhausen': 220, 'default': 200 };
-
         let store = { sqm: 120, land: 500, year: 1995, extras: 0, extraList: [] };
 
         function goStep(n) {
@@ -217,58 +229,52 @@
             }
         }
 
+        function format(v) { return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(v); }
+
         async function sendFinal() {
-    if(!document.getElementById('ds-check').checked) return alert("Datenschutz bestätigen.");
-    const btn = document.getElementById('submit-btn');
-    const name = document.getElementById('u_name').value;
-    const email = document.getElementById('u_email').value;
-    const address = document.getElementById('address').value;
+            if(!document.getElementById('ds-check').checked) return alert("Datenschutz bestätigen.");
+            const btn = document.getElementById('submit-btn');
+            const name = document.getElementById('u_name').value;
+            const email = document.getElementById('u_email').value;
+            const address = document.getElementById('address').value;
 
-    btn.innerText = "Berechnung läuft...";
-    btn.disabled = true;
+            btn.innerText = "Berechnung läuft...";
+            btn.disabled = true;
 
-    const brw = BRW[store.city] || BRW.default;
-    const basis = store.type === 'Haus' ? 3850 : 3400;
-    const marktwert = (store.sqm * basis) + (store.land * brw * 0.4) + store.extras;
+            const brw = BRW[store.city] || BRW.default;
+            const basis = store.type === 'Haus' ? 3850 : 3400;
+            const marktwert = (store.sqm * basis) + (store.land * brw * 0.4) + store.extras;
 
-    try {
-        // 1. Speichern in Supabase
-        const { error } = await sb.from('leads').insert([{ 
-            name: name, email: email, address: address,
-            sqm: parseFloat(store.sqm),
-            estimated_value: Math.round(marktwert).toString(),
-            details: store
-        }]);
+            try {
+                // 1. Speichern in Supabase
+                const { error } = await sb.from('leads').insert([{ 
+                    name, email, address: store.fullAddr || address,
+                    sqm: parseFloat(store.sqm),
+                    estimated_value: Math.round(marktwert).toString(),
+                    details: store
+                }]);
 
-        if (error) throw error;
+                if (error) throw error;
 
-        // 2. Interne E-Mail-Benachrichtigung auslösen
-        // Wir nutzen hier einen direkten API-Aufruf (Fetch)
-        await fetch('https://api.emailjs.com/api/v1.0/email/send', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                service_id: 'default_service',
-                template_id: 'DEIN_TEMPLATE_ID', // Erhältst du bei EmailJS
-                user_id: 'DEIN_USER_ID',         // Erhältst du bei EmailJS
-                template_params: {
-                    to_email: 'd.will@sw-immobilien.de',
+                // 2. E-Mail Versand via EmailJS
+                await emailjs.send("service_9wal0zr", "template_bwjdkei", {
+                    to_email: "d.will@sw-immobilien.de",
                     from_name: name,
-                    message: `Neuer Lead: ${name}, Wert: ${format(marktwert)}, Adresse: ${address}`
-                }
-            })
-        });
+                    user_email: email,
+                    address: store.fullAddr || address,
+                    estimated_value: format(marktwert),
+                    details_json: JSON.stringify(store)
+                });
 
-        // 3. Ergebnis anzeigen
-        document.getElementById('res-marktwert').innerText = format(marktwert);
-        goStep('final');
+                document.getElementById('res-marktwert').innerText = format(marktwert);
+                goStep('final');
 
-    } catch (err) {
-        alert("System-Fehler: " + err.message);
-        btn.disabled = false;
-        btn.innerText = "Bewertung berechnen";
-    }
-}
+            } catch (err) {
+                alert("Fehler: " + err.message);
+                btn.disabled = false;
+                btn.innerText = "Bewertung berechnen";
+            }
+        }
     </script>
 </body>
 </html>
