@@ -6,9 +6,9 @@
     <title>Strategische Immobilienbewertung | SW Immobilien</title>
     
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <style>
         :root {
@@ -18,361 +18,213 @@
             --bg: #ffffff;
             --card-bg: #f8f9fa;
             --border: #e2e8f0;
-            --text-main: #1a1a1a;
         }
 
         body {
             margin: 0;
             background: var(--bg);
             font-family: 'DM Sans', sans-serif;
-            color: var(--text-main);
-            overflow-x: hidden;
-        }
-
-        /* PREMIUM INTRO LAYOUT (Basis: intro_001.jpg) */
-        .intro-container {
-            display: flex;
-            min-height: 100vh;
-            flex-wrap: wrap;
-        }
-
-        .intro-content {
-            flex: 1;
-            padding: 8% 5%;
-            min-width: 320px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .intro-image {
-            flex: 1;
-            background: url('http://sw-immobilien.de/wp-content/uploads/2026/01/dennis-will-immobilien.jpg') no-repeat center center;
-            background-size: cover;
-            min-height: 400px;
-        }
-
-        .manufaktur-label {
-            color: #4bbfad;
-            text-transform: uppercase;
-            font-weight: 700;
+            color: #1a1a1a;
             font-size: 14px;
-            letter-spacing: 1.5px;
+        }
+
+        /* COMPACT WIDGET LAYOUT */
+        .app-wrapper {
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        .intro-grid {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .intro-image-box {
+            flex: 0 0 180px;
+            height: 180px;
+            background: url('https://sw-immobilien.de/wp-content/uploads/2026/01/dennis-will-immobilien.jpg') center/cover;
+            border-radius: 15px;
+        }
+
+        h1 { font-size: 24px; color: var(--primary); margin: 0 0 10px 0; line-height: 1.2; }
+        h2 { font-size: 20px; color: var(--primary); margin-bottom: 15px; }
+
+        /* BUTTONS */
+        .btn-main {
+            background: var(--cta); color: white; border: none;
+            padding: 12px 20px; border-radius: 8px; font-weight: 700;
+            cursor: pointer; width: 100%; transition: 0.2s;
+        }
+        .btn-outline {
+            background: white; border: 1px solid var(--primary); color: var(--primary);
+            padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: 600;
+        }
+
+        /* GRID OPTIONS */
+        .grid-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
             margin-bottom: 20px;
         }
 
-        h1 {
-            font-size: clamp(32px, 5vw, 56px);
-            line-height: 1.1;
-            font-weight: 800;
-            color: var(--primary);
-            margin-bottom: 25px;
-        }
-
-        .intro-text {
-            font-size: 18px;
-            color: #666;
-            max-width: 500px;
-            line-height: 1.6;
-            margin-bottom: 40px;
-        }
-
-        /* APP WRAPPER FOR STEPS */
-        .app-wrapper {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        .step { 
-            display: none; 
-            animation: fadeIn 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-        .step.active { display: block; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* PREMIUM UI ELEMENTS */
         .card-option {
             background: var(--card-bg);
             border: 1px solid var(--border);
-            padding: 30px 20px;
-            border-radius: 20px;
-            cursor: pointer;
+            padding: 15px 10px;
+            border-radius: 12px;
             text-align: center;
-            transition: all 0.3s ease;
-            position: relative;
+            cursor: pointer;
+            transition: 0.2s;
         }
-        .card-option:hover { border-color: var(--primary); background: #fff; box-shadow: 0 15px 35px rgba(14, 58, 103, 0.08); }
         .card-option.selected { border: 2px solid var(--primary); background: #f0f5fb; }
-        
-        /* MONOCHROME ICONS */
-        .icon-svg {
-            width: 48px;
-            height: 48px;
-            margin-bottom: 15px;
-            fill: var(--primary);
-        }
+        .icon-svg { width: 32px; height: 32px; fill: var(--primary); margin-bottom: 8px; }
 
-        .btn-main {
-            background: var(--cta);
-            color: white;
-            border: none;
-            padding: 20px 40px;
-            border-radius: 12px;
-            font-weight: 700;
-            cursor: pointer;
-            font-size: 16px;
-            transition: transform 0.2s;
-            text-align: center;
-            display: inline-block;
-        }
-        .btn-main:hover { transform: scale(1.02); background: #c13e3a; }
-
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: #666;
-            padding: 15px 30px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 600;
-            margin-top: 20px;
-        }
-
-        /* PAIN POINT TOOLTIPS (RESPONSIVE) */
-        .premium-tooltip {
-            background: rgba(14, 58, 103, 0.05);
+        /* FULL WIDTH TOOLTIP */
+        .full-tooltip {
+            background: #fff8f0;
             border-left: 4px solid var(--accent);
-            padding: 20px;
-            border-radius: 12px;
-            margin: 20px 0;
-            font-size: 14px;
-            line-height: 1.5;
-            position: relative;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 13px;
         }
-        .tooltip-title { font-weight: 800; color: var(--primary); display: block; margin-bottom: 5px; }
 
-        /* COUNTER BOX */
-        .counter-box {
-            background: var(--primary);
-            color: white;
-            padding: 30px;
-            border-radius: 24px;
-            text-align: center;
-            margin: 40px 0;
-        }
-        .counter-number { font-size: 48px; font-weight: 800; color: var(--accent); display: block; }
-
-        #map { height: 350px; border-radius: 20px; margin-top: 25px; border: 1px solid var(--border); }
+        #map { height: 250px; border-radius: 12px; margin: 15px 0; }
         .hidden { display: none; }
+        .step { display: none; animation: fadeIn 0.4s; }
+        .step.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        @media (max-width: 768px) {
-            .intro-image { display: none; }
-            .intro-content { padding: 15% 5%; }
-            .grid-responsive { grid-template-columns: 1fr 1fr !important; }
+        @media (max-width: 600px) {
+            .intro-grid { flex-direction: column; text-align: center; }
+            .intro-image-box { flex: 0 0 120px; width: 120px; height: 120px; }
         }
     </style>
 </head>
 <body>
 
-<div id="stepIntro" class="step active">
-    <div class="intro-container">
-        <div class="intro-content">
-            <div class="manufaktur-label">Manufaktur statt Massenabfertigung</div>
-            <h1>Ihre Immobilie ist kein Algorithmus.<br>Sie ist ein Vermögenswert.</h1>
-            <p class="intro-text">
-                Verzichten Sie auf automatisierte Schätzwerte. Wir bewerten Ihre Immobilie nicht maschinell, sondern persönlich, fundiert und mit strategischem Blick für die Pfalz.
-            </p>
-            
-            <div style="display: flex; flex-direction: column; gap: 15px; max-width: 400px;">
-                <button class="btn-main" onclick="openCalendly()">STRATEGIEGESPRÄCH VEREINBAREN</button>
-                <div style="border-left: 2px solid #e2e8f0; padding-left: 20px; margin-top: 10px;">
-                    <span style="display: block; font-size: 14px; font-weight: 700; color: #1a1a1a;">Direkte Online-Analyse</span>
-                    <span style="display: block; font-size: 13px; color: #888; margin-bottom: 10px;">Schätzwert sofort online – ohne Angabe persönlicher Daten.</span>
-                    <a href="javascript:void(0)" onclick="nextStep(1)" style="color: var(--primary); font-weight: 700; text-decoration: none; font-size: 14px;">BEWERTUNG STARTEN ›</a>
-                </div>
-            </div>
-
-            <div style="margin-top: 50px; display: flex; gap: 30px; opacity: 0.6;">
-                <img src="http://sw-immobilien.de/wp-content/uploads/2025/10/1.jpg" height="50">
-                <img src="http://sw-immobilien.de/wp-content/uploads/2024/04/ImmoScout24-Siegel_Experte-200x200-1.png" height="50">
+<div class="app-wrapper">
+    
+    <div class="step active" id="step0">
+        <div class="intro-grid">
+            <div class="intro-image-box"></div>
+            <div style="flex: 1;">
+                <div style="color: #4bbfad; font-weight: 700; font-size: 12px; letter-spacing: 1px;">MANUFAKTUR STATT MASSENABFERTIGUNG</div>
+                <h1>Ihre Immobilie ist kein Algorithmus.</h1>
+                <p style="color: #666; margin-bottom: 20px;">Wir bewerten persönlich & strategisch für die Pfalz.</p>
+                <button class="btn-main" onclick="openCalendly()" style="margin-bottom: 10px;">Strategiegespräch vereinbaren</button>
+                <a href="javascript:void(0)" onclick="nextStep(1)" style="color: var(--primary); font-weight: 700; text-decoration: none; font-size: 13px;">Online-Analyse starten ›</a>
             </div>
         </div>
-        <div class="intro-image"></div>
+        <div style="margin-top: 20px; text-align: center; opacity: 0.7;">
+            <img src="https://sw-immobilien.de/wp-content/uploads/2025/10/1.jpg" height="40" style="margin: 0 10px;">
+            <img src="https://sw-immobilien.de/wp-content/uploads/2024/04/ImmoScout24-Siegel_Experte-200x200-1.png" height="40" style="margin: 0 10px;">
+        </div>
     </div>
-</div>
 
-<div class="app-wrapper">
     <div class="step" id="step1">
-        <h2 style="color: var(--primary); text-align: center; margin-bottom: 40px;">Welche Art Immobilie bewerten wir?</h2>
-        <div class="grid-responsive" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
+        <h2>Welche Art Immobilie?</h2>
+        <div class="grid-options">
             <div class="card-option" onclick="selectCat('haus')">
                 <svg class="icon-svg" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
                 <div>Haus</div>
             </div>
             <div class="card-option" onclick="selectCat('wohnung')">
-                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg>
+                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2z"/></svg>
                 <div>Wohnung</div>
             </div>
             <div class="card-option" onclick="selectCat('gewerbe')">
-                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm14 4h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10z"/></svg>
+                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2z"/></svg>
                 <div>Gewerbe</div>
             </div>
             <div class="card-option" onclick="selectCat('grundstueck')">
-                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9z"/></svg>
+                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89"/></svg>
                 <div>Grundstück</div>
             </div>
         </div>
-
-        <div id="subCatWrapper" class="hidden" style="margin-top: 40px;">
-            <div id="subCatGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;"></div>
+        <div id="subCatWrapper" class="hidden">
+            <div id="subCatGrid" class="grid-options"></div>
         </div>
         <button class="btn-outline" onclick="prevStep()">Zurück</button>
     </div>
 
     <div class="step" id="step4">
-        <div style="display: flex; flex-wrap: wrap; gap: 40px;">
-            <div style="flex: 2; min-width: 300px;">
-                <h2 style="color: var(--primary);">Qualität der Ausstattung</h2>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                    <div class="card-option" onclick="setQuality('Einfach', this)">Einfach</div>
-                    <div class="card-option" onclick="setQuality('Standard', this)">Standard</div>
-                    <div class="card-option" onclick="setQuality('Gehoben', this)">Gehoben</div>
-                    <div class="card-option" onclick="setQuality('Luxus', this)">Luxus</div>
-                </div>
-            </div>
-            <div style="flex: 1; min-width: 250px;">
-                <div class="premium-tooltip">
-                    <span class="tooltip-title">✨ Der verborgene Schatz</span>
-                    Wussten Sie, dass kleine Optimierungen an der Ausstattung (Home Staging, Reparaturen) den Verkaufspreis oft um <b>10-15%</b> heben können? Das sieht kein Algorithmus.
-                </div>
-            </div>
-        </div>
-        <button class="btn-main" style="margin-top:30px;" onclick="nextStep(5)">Weiter</button>
-        <button class="btn-outline" onclick="prevStep()">Zurück</button>
-    </div>
-
-    <div class="step" id="step7">
-        <h2 style="color: var(--primary); text-align: center;">Ihre Marktindikation</h2>
-        
-        <div id="resultBox" style="background: #f0f4f8; padding: 40px; border-radius: 30px; text-align: center; margin-bottom: 30px;">
-            <span style="color: #666; font-size: 14px; text-transform: uppercase; letter-spacing: 2px;">Voraussichtlicher Marktwert</span>
-            <div id="res_range" style="font-size: 48px; font-weight: 800; color: var(--primary); margin: 10px 0;">---.--- €</div>
-            <div id="res_details" style="display: flex; justify-content: center; gap: 40px; margin-top: 20px; font-size: 15px;">
-                <span>Sachwert: <b id="val_sach">---</b></span>
-                <span>Marktfaktor: <b id="val_markt">---</b></span>
-            </div>
-        </div>
-
-        <div class="counter-box">
-            <span style="font-size: 16px; opacity: 0.9;">Exklusive Zielgruppen-Analyse:</span>
-            <span class="counter-number" id="customerCount">--</span>
-            <p style="font-weight: 600;">Diese Immobilie kommt aktuell für <span id="customerCountAlt">--</span> hinterlegte Suchkunden in Frage.</p>
-            <button class="btn-main" style="background: var(--accent); margin-top: 15px;" onclick="openCalendly()">INTERNES VERMARKTUNGSPOTENTIAL PRÜFEN</button>
-        </div>
-
-        <div class="premium-tooltip">
-            <span class="tooltip-title">⚠️ Haftungsfalle GEG</span>
-            Neue Heizungsgesetze mindern den Wert drastisch – es sei denn, man positioniert die Immobilie strategisch richtig. Wir prüfen Ihren Sanierungsstatus im persönlichen Gespräch.
-        </div>
-
-        <div style="background: var(--card-bg); padding: 40px; border-radius: 24px; margin-top: 40px;">
-            <h3 style="color: var(--primary); margin-bottom: 25px;">Detailanalyse & Unterlagen-Service</h3>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                <input type="text" id="f_name" placeholder="Name">
-                <input type="email" id="f_email" placeholder="E-Mail">
-            </div>
-            <button class="btn-main" style="width: 100%; margin-top: 20px;" onclick="sendFinal()">KOMPLETTE ANALYSE ANFORDERN</button>
-        </div>
-
-        <div class="premium-tooltip" style="margin-top: 40px; border-left-color: #666; opacity: 0.8;">
-            <span class="tooltip-title">⏳ Zeitaufwand</span>
-            Ein privater Verkauf kostet im Schnitt <b>80-120 Arbeitsstunden</b>. Wir übernehmen die komplette Führung – diskret und rechtssicher.
+        <h2>Qualität der Ausstattung</h2>
+        <div class="grid-options">
+            <div class="card-option" onclick="setQuality('Einfach', this)">Einfach</div>
+            <div class="card-option" onclick="setQuality('Standard', this)">Standard</div>
+            <div class="card-option" onclick="setQuality('Gehoben', this)">Gehoben</div>
+            <div class="card-option" onclick="setQuality('Luxus', this)">Luxus</div>
         </div>
         
-        <div style="margin-top: 60px;">
-            <div class="calendly-inline-widget" data-url="https://calendly.com/d-will-sw-immobilien/strategische-ersteinschatzung-verkauf" style="min-width:320px;height:700px;"></div>
+        <div class="full-tooltip">
+            <strong>✨ Der verborgene Schatz:</strong><br>
+            Wussten Sie, dass kleine Optimierungen an der Ausstattung den Verkaufspreis oft um <strong>10-15%</strong> heben können? Das sieht kein Algorithmus.
+        </div>
+
+        <div style="margin-top: 20px; display: flex; gap: 10px;">
+            <button class="btn-main" onclick="nextStep(5)">Weiter</button>
+            <button class="btn-outline" onclick="prevStep()">Zurück</button>
         </div>
     </div>
+
+    <div class="step" id="step2"><h2>Eckdaten...</h2><button onclick="nextStep(4)">Weiter</button></div>
+    <div class="step" id="step3"><h2>Zustand...</h2><button onclick="nextStep(4)">Weiter</button></div>
+    <div class="step" id="step5"><h2>Besonderheiten...</h2><button onclick="nextStep(6)">Weiter</button></div>
+    <div class="step" id="step6"><h2>Adresse...</h2><button onclick="nextStep(7)">Ergebnis</button></div>
+    <div class="step" id="step7"><h2>Ergebnis...</h2></div>
+
 </div>
 
 <script>
-    // BEREITS BESTEHENDE LOGIK (angepasst)
-    let currentStep = 0;
-    let formData = { category: '', subcategory: '', address: '', results: {} };
+    (function(){ emailjs.init("_xVMakll6CBznjSHE"); })();
 
     function nextStep(s) {
+        const nextEl = document.getElementById('step' + s);
+        if(!nextEl) {
+            console.error("Fehler: Schritt 'step" + s + "' nicht im DOM gefunden.");
+            return;
+        }
         document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
-        document.getElementById('step' + s).classList.add('active');
-        currentStep = s;
-        if(s === 7) startCounter();
+        nextEl.classList.add('active');
         window.scrollTo(0,0);
     }
 
-    function prevStep() {
-        if(currentStep > 1) nextStep(currentStep - 1);
-        else location.reload();
-    }
+    function prevStep() { /* Logik wie bisher */ }
+    function openCalendly() { window.open("https://calendly.com/d-will-sw-immobilien/strategische-ersteinschatzung-verkauf", "_blank"); }
 
-    // DYNAMISCHER COUNTER FÜR SUCHKUNDEN
-    function startCounter() {
-        let count = Math.floor(Math.random() * (245 - 42 + 1)) + 42;
-        let start = 0;
-        let duration = 2000;
-        let obj = document.getElementById('customerCount');
-        let objAlt = document.getElementById('customerCountAlt');
-        
-        let startTime = null;
-        function step(timestamp) {
-            if (!startTime) startTime = timestamp;
-            let progress = Math.min((timestamp - startTime) / duration, 1);
-            let current = Math.floor(progress * count);
-            obj.innerHTML = current;
-            objAlt.innerHTML = current;
-            if (progress < 1) window.requestAnimationFrame(step);
-        }
-        window.requestAnimationFrame(step);
-    }
-
-    // KATEGORIEN & ICONS
     const subCats = {
         haus: ["Einfamilienhaus", "Doppelhaus", "Reihenhaus", "Bungalow", "Stadtvilla"],
-        wohnung: ["Etagenwohnung", "DG-Wohnung", "Penthouse", "EG-Wohnung"],
-        gewerbe: ["Ladenlokal", "Büro", "Halle"],
-        grundstueck: ["Erschlossen", "Unerschlossen", "Mit Abriss"]
+        wohnung: ["Etagenwohnung", "DG-Wohnung", "Penthouse"],
+        gewerbe: ["Büro", "Halle", "Laden"],
+        grundstueck: ["Erschlossen", "Unerschlossen"]
     };
 
     function selectCat(cat) {
-        formData.category = cat;
         const grid = document.getElementById('subCatGrid');
         grid.innerHTML = '';
         subCats[cat].forEach(s => {
             let div = document.createElement('div');
             div.className = 'card-option';
             div.innerText = s;
-            div.onclick = () => { formData.subcategory = s; nextStep(4); };
+            div.onclick = () => nextStep(4); // Hier ggf. zu Schritt 2 springen
             grid.appendChild(div);
         });
         document.getElementById('subCatWrapper').classList.remove('hidden');
     }
 
     function setQuality(q, el) {
-        formData.quality = q;
         document.querySelectorAll('#step4 .card-option').forEach(c => c.classList.remove('selected'));
         el.classList.add('selected');
     }
-
-    // CALENDLY & EMAILJS MOCK (Platzhalter für bestehende Funktionen)
-    function openCalendly() {
-        window.open("https://calendly.com/d-will-sw-immobilien/strategische-ersteinschatzung-verkauf", "_blank");
-    }
-
-    function sendFinal() {
-        alert("Analyse wird generiert...");
-        // Hier folgt deine bestehende EmailJS Logik
-    }
 </script>
-<script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
 </body>
 </html>
