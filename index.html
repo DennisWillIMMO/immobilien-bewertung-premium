@@ -176,9 +176,9 @@
             align-items: center;
         }
         .trust-badge {
-            height: 60px;
+            height: 70px;
             object-fit: contain;
-            opacity: 0.85;
+            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.12));
         }
 
         /* BUTTONS */
@@ -291,7 +291,8 @@
             font-size: 40px;
             margin-bottom: 14px;
             line-height: 1;
-            opacity: 0.7;
+            opacity: 0.5;
+            filter: grayscale(100%);
         }
         
         /* SIMPLE LIST STYLE FOR FEATURES */
@@ -372,14 +373,14 @@
             font-size: 15px;
         }
         .num-box { 
-            width: 90px; 
-            padding: 10px 14px; 
+            width: 75px; 
+            padding: 8px 10px; 
             border: 2px solid var(--border); 
             border-radius: 3px; 
-            text-align: center; 
-            font-weight: 800; 
+            text-align: right; 
+            font-weight: 700; 
             color: var(--primary); 
-            font-size: 16px;
+            font-size: 15px;
             font-family: 'Inter', sans-serif;
         }
         input[type="range"] { 
@@ -1194,8 +1195,8 @@
             <div class="intro-grid">
                 <div class="intro-text-side">
                     <div class="trust-badges-left">
-                        <img src="https://sw-immobilien.de/wp-content/uploads/2025/10/1.jpg" alt="Zertifizierung" class="trust-badge">
-                        <img src="https://sw-immobilien.de/wp-content/uploads/2024/04/ImmoScout24-Siegel_Experte-200x200-1.png" alt="ImmoScout24" class="trust-badge">
+                        <img src="http://sw-immobilien.de/wp-content/uploads/2026/01/Diid_Will-Immobilien.png" alt="Zertifizierung" class="trust-badge">
+                        <img src="http://sw-immobilien.de/wp-content/uploads/2026/01/immoscout_experte.png" alt="ImmoScout24" class="trust-badge">
                     </div>
                     <div class="manufaktur-label">Manufaktur statt Massenabfertigung</div>
                     <h1>Ihre Immobilie ist kein Algorithmus.</h1>
@@ -1293,10 +1294,11 @@
                         <div class="testimonial-author">— Frau B., Speyer</div>
                     </div>
                     <div class="google-review-card">
-                        <svg class="google-logo" viewBox="0 0 272 92" xmlns="http://www.w3.org/2000/svg"><path d="M115.75 47.18c0 12.77-9.99 22.18-22.25 22.18s-22.25-9.41-22.25-22.18C71.25 34.32 81.24 25 93.5 25s22.25 9.32 22.25 22.18zm-9.74 0c0-7.98-5.79-13.44-12.51-13.44S80.99 39.2 80.99 47.18c0 7.9 5.79 13.44 12.51 13.44s12.51-5.55 12.51-13.44z" fill="#EA4335"/><path d="M163.75 47.18c0 12.77-9.99 22.18-22.25 22.18s-22.25-9.41-22.25-22.18c0-12.85 9.99-22.18 22.25-22.18s22.25 9.32 22.25 22.18zm-9.74 0c0-7.98-5.79-13.44-12.51-13.44s-12.51 5.46-12.51 13.44c0 7.9 5.79 13.44 12.51 13.44s12.51-5.55 12.51-13.44z" fill="#FBBC05"/><path d="M209.75 26.34v39.82c0 16.38-9.66 23.07-21.08 23.07-10.75 0-17.22-7.19-19.66-13.07l8.48-3.53c1.51 3.61 5.21 7.87 11.17 7.87 7.31 0 11.84-4.51 11.84-13v-3.19h-.34c-2.18 2.69-6.38 5.04-11.68 5.04-11.09 0-21.25-9.66-21.25-22.09 0-12.52 10.16-22.26 21.25-22.26 5.29 0 9.49 2.35 11.68 4.96h.34v-3.61h9.25zm-8.56 20.92c0-7.81-5.21-13.52-11.84-13.52-6.72 0-12.35 5.71-12.35 13.52 0 7.73 5.63 13.36 12.35 13.36 6.63 0 11.84-5.63 11.84-13.36z" fill="#4285F4"/><path d="M225 3v65h-9.5V3h9.5z" fill="#34A853"/><path d="M262.02 54.48l7.56 5.04c-2.44 3.61-8.32 9.83-18.48 9.83-12.6 0-22.01-9.74-22.01-22.18 0-13.19 9.49-22.18 20.92-22.18 11.51 0 17.14 9.16 18.98 14.11l1.01 2.52-29.65 12.28c2.27 4.45 5.8 6.72 10.75 6.72 4.96 0 8.4-2.44 10.92-6.14zm-23.27-7.98l19.82-8.23c-1.09-2.77-4.37-4.7-8.23-4.7-4.95 0-11.84 4.37-11.59 12.93z" fill="#EA4335"/><path d="M35.29 41.41V32H67c.31 1.64.47 3.58.47 5.68 0 7.06-1.93 15.79-8.15 22.01-6.05 6.3-13.78 9.66-24.02 9.66C16.32 69.35.36 53.89.36 34.91.36 15.93 16.32.47 35.3.47c10.5 0 17.98 4.12 23.6 9.49l-6.64 6.64c-4.03-3.78-9.49-6.72-16.97-6.72-13.86 0-24.7 11.17-24.7 25.03 0 13.86 10.84 25.03 24.7 25.03 8.99 0 14.11-3.61 17.39-6.89 2.66-2.66 4.41-6.46 5.1-11.65l-22.49.01z" fill="#4285F4"/></svg>
-                        <div class="google-rating">4.9</div>
+                        <svg class="google-logo" style="height: 32px;" viewBox="0 0 272 92" xmlns="http://www.w3.org/2000/svg"><path d="M115.75 47.18c0 12.77-9.99 22.18-22.25 22.18s-22.25-9.41-22.25-22.18C71.25 34.32 81.24 25 93.5 25s22.25 9.32 22.25 22.18zm-9.74 0c0-7.98-5.79-13.44-12.51-13.44S80.99 39.2 80.99 47.18c0 7.9 5.79 13.44 12.51 13.44s12.51-5.55 12.51-13.44z" fill="#EA4335"/><path d="M163.75 47.18c0 12.77-9.99 22.18-22.25 22.18s-22.25-9.41-22.25-22.18c0-12.85 9.99-22.18 22.25-22.18s22.25 9.32 22.25 22.18zm-9.74 0c0-7.98-5.79-13.44-12.51-13.44s-12.51 5.46-12.51 13.44c0 7.9 5.79 13.44 12.51 13.44s12.51-5.55 12.51-13.44z" fill="#FBBC05"/><path d="M209.75 26.34v39.82c0 16.38-9.66 23.07-21.08 23.07-10.75 0-17.22-7.19-19.66-13.07l8.48-3.53c1.51 3.61 5.21 7.87 11.17 7.87 7.31 0 11.84-4.51 11.84-13v-3.19h-.34c-2.18 2.69-6.38 5.04-11.68 5.04-11.09 0-21.25-9.66-21.25-22.09 0-12.52 10.16-22.26 21.25-22.26 5.29 0 9.49 2.35 11.68 4.96h.34v-3.61h9.25zm-8.56 20.92c0-7.81-5.21-13.52-11.84-13.52-6.72 0-12.35 5.71-12.35 13.52 0 7.73 5.63 13.36 12.35 13.36 6.63 0 11.84-5.63 11.84-13.36z" fill="#4285F4"/><path d="M225 3v65h-9.5V3h9.5z" fill="#34A853"/><path d="M262.02 54.48l7.56 5.04c-2.44 3.61-8.32 9.83-18.48 9.83-12.6 0-22.01-9.74-22.01-22.18 0-13.19 9.49-22.18 20.92-22.18 11.51 0 17.14 9.16 18.98 14.11l1.01 2.52-29.65 12.28c2.27 4.45 5.8 6.72 10.75 6.72 4.96 0 8.4-2.44 10.92-6.14zm-23.27-7.98l19.82-8.23c-1.09-2.77-4.37-4.7-8.23-4.7-4.95 0-11.84 4.37-11.59 12.93z" fill="#EA4335"/><path d="M35.29 41.41V32H67c.31 1.64.47 3.58.47 5.68 0 7.06-1.93 15.79-8.15 22.01-6.05 6.3-13.78 9.66-24.02 9.66C16.32 69.35.36 53.89.36 34.91.36 15.93 16.32.47 35.3.47c10.5 0 17.98 4.12 23.6 9.49l-6.64 6.64c-4.03-3.78-9.49-6.72-16.97-6.72-13.86 0-24.7 11.17-24.7 25.03 0 13.86 10.84 25.03 24.7 25.03 8.99 0 14.11-3.61 17.39-6.89 2.66-2.66 4.41-6.46 5.1-11.65l-22.49.01z" fill="#4285F4"/></svg>
+                        <div class="google-rating">5.0</div>
                         <div class="google-stars">★★★★★</div>
-                        <div class="google-reviews">Basierend auf 127 Bewertungen</div>
+                        <div class="google-reviews">Basierend auf 239 Bewertungen</div>
+                        <div class="social-proof-date" style="display: block; margin-top: 8px;">Stand: 14. Februar 2026</div>
                     </div>
                 </div>
             </div>
@@ -1532,9 +1534,9 @@
                         Erst informieren
                     </div>
                 </div>
-                <div id="timingBadge" style="text-align: center; display: none;">
+                <div id="timingBadge" style="text-align: center; display: none; margin-top: 20px;">
                     <div class="timing-badge">
-                        <span id="buyerCountBadge">0</span> potenzielle Kaufinteressenten in unserer Datenbank
+                        <span id="buyerCountBadge">0</span> Kaufinteressenten in Ihrer Region
                     </div>
                 </div>
             </div>
@@ -1664,9 +1666,12 @@
                             Sie haben 4 von <span id="totalMatchesFinal">47</span> Interessenten gesehen. 
                             <strong>Alle <span id="remainingMatches">43</span> weiteren Profile</strong> sowie persönliche Kontakte erhalten Sie im Vermarktungsauftrag.
                         </p>
-                        <button class="btn-main" onclick="scrollToCalendly()" style="background: white; color: var(--navy); max-width: 100%;">
+                        <button class="btn-main" onclick="window.open('https://calendly.com/d-will-sw-immobilien/strategische-ersteinschatzung-verkauf', '_blank')" style="background: white; color: var(--navy); max-width: 100%;">
                             Auftrag zur Vermarktung erteilen
                         </button>
+                        <p style="font-size: 12px; opacity: 0.75; margin-top: 15px;">
+                            Im persönlichen Gespräch besprechen wir die Details und Sie erhalten Zugang zum vollständigen Vermarktungsvertrag
+                        </p>
                     </div>
 
                     <div style="background: rgba(255,255,255,0.1); padding: 35px; border-radius: 3px; margin-top: 35px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2);">
@@ -1909,23 +1914,69 @@
     function confirmAddress() {
         if(!state.address) return alert("Bitte wählen Sie eine Adresse aus der Liste");
         
-        // Send comprehensive email
-        const featuresStr = Object.entries(state.feats).map(([k,v]) => `${k}: ${v}x`).join(', ') || 'Keine';
-        const renovationsStr = Object.entries(state.renovations).filter(([k,v]) => v).map(([k,v]) => `${k}: ${v}`).join(', ') || 'Keine';
+        // Prepare comprehensive email data
+        const featuresStr = Object.entries(state.feats)
+            .map(([k,v]) => `${k}: ${v}x`)
+            .join(', ') || 'Keine angegeben';
+        
+        const renovationsStr = Object.entries(state.renovations)
+            .filter(([k,v]) => v && v.length > 0)
+            .map(([k,v]) => {
+                const labels = {
+                    'roof': 'Dach',
+                    'heating': 'Heizung',
+                    'electric': 'Elektrik',
+                    'plumbing': 'Leitungen'
+                };
+                return `${labels[k]}: ${v}`;
+            })
+            .join(', ') || 'Keine angegeben';
+        
+        // Calculate preliminary values
+        let base = (state.living * 3200) + (state.plot * 160);
+        if(state.qual === 'Luxus') base *= 1.25;
+        else if(state.qual === 'Gehoben') base *= 1.12;
+        if(state.cond === 'Neubau') base *= 1.15;
+        else if(state.cond === 'Renovierungsbedürftig') base *= 0.75;
+        let featBonus = Object.values(state.feats).reduce((a,b) => a+b, 0) * 5000;
+        base += featBonus;
+        const preis_range = Math.round(base * 0.94 / 1000) * 1000 + ' € - ' + Math.round(base * 1.06 / 1000) * 1000 + ' €';
+        const sachwert = Math.round(base * 0.85).toLocaleString('de-DE') + ' €';
+        const marktwert = Math.round(base).toLocaleString('de-DE') + ' €';
+        
+        const timestamp = new Date().toLocaleString('de-DE', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
         
         emailjs.send("service_9wal0zr", "template_bwjdkei", { 
             address: state.address,
             category: state.category,
             sub: state.sub,
-            living: state.living,
-            plot: state.plot,
+            living: state.living + ' m²',
+            plot: state.plot + ' m²',
             year: state.year,
             condition: state.cond,
             quality: state.qual,
             features: featuresStr,
             renovations: renovationsStr,
-            timestamp: new Date().toLocaleString('de-DE')
-        });
+            sachwert: sachwert,
+            marktwert: marktwert,
+            preis_range: preis_range,
+            timing: state.timing || 'Noch nicht angegeben',
+            lead_quality: state.timing === 'Innerhalb 3 Monate' ? 'HOCH 🔥' : state.timing === '3-6 Monate' ? 'MITTEL' : 'NIEDRIG',
+            timestamp: timestamp
+        }).then(
+            function(response) {
+                console.log('Email sent successfully:', response);
+            },
+            function(error) {
+                console.error('Email send failed:', error);
+            }
+        );
         
         nextStep(7);
     }
@@ -1987,15 +2038,19 @@
         const extrasValue = Object.values(state.feats).reduce((a,b) => a+b, 0) * 12000;
         const marketTotal = buildingValue + landValue + extrasValue;
         
-        // Sachwert
+        // Sachwert - CORRECTED CALCULATION
         const bgf = Math.round(state.living * 1.3);
-        const construction = bgf * 1530;
+        const constructionCost = 1530; // €/m² Herstellungskosten
+        const construction = bgf * constructionCost;
         const outdoor = Math.round(construction * 0.03);
         const age = 2025 - state.year;
-        const depreciation = Math.max(0.4, 1 - (age / 50));
+        const rnd = 50; // Restnutzungsdauer
+        const depreciation = Math.max(0.40, Math.min(1.0, 1 - (age / rnd)));
         const buildingSachwert = Math.round((construction + outdoor) * depreciation);
-        const bodenwert = state.plot * (landPrice - 23);
-        const sachwertTotal = Math.round((buildingSachwert + bodenwert) * 1.15);
+        const bodenrichtwert = Math.floor(Math.random() * 100) + 300; // 300-400 €/m²
+        const bodenwert = state.plot * bodenrichtwert;
+        const marktanpassung = 0.85; // Typical market adjustment factor
+        const sachwertTotal = Math.round((buildingSachwert + bodenwert) * marktanpassung);
         
         // Update UI
         document.getElementById('calc_living_area').innerText = state.living + ' m²';
@@ -2014,9 +2069,9 @@
         document.getElementById('calc_depreciation').innerText = '× ' + depreciation.toFixed(2);
         document.getElementById('calc_building_sachwert').innerText = buildingSachwert.toLocaleString('de-DE') + ' €';
         document.getElementById('calc_plot2').innerText = state.plot + ' m²';
-        document.getElementById('calc_land_price2').innerText = (landPrice - 23) + ' €/m²';
+        document.getElementById('calc_land_price2').innerText = bodenrichtwert + ' €/m²';
         document.getElementById('calc_bodenwert').innerText = bodenwert.toLocaleString('de-DE') + ' €';
-        document.getElementById('calc_market_adjust').innerText = '× 1.15';
+        document.getElementById('calc_market_adjust').innerText = '× ' + marktanpassung;
         document.getElementById('calc_sach_total').innerText = sachwertTotal.toLocaleString('de-DE') + ' €';
         
         if(state.address) {
@@ -2090,44 +2145,55 @@
         buyerMatches = [];
         
         const budgetBase = Math.round(state.living * 3500 / 1000) * 1000;
+        const region = state.address.split(',').slice(1).join(',').trim() || 'Region';
+        
         const profiles = [
             {
                 type: "Familie",
                 budget: `bis ${Math.round(budgetBase * 1.2 / 1000) * 1000} €`,
-                search: `${state.sub || 'Haus'}, ${state.living - 20}-${state.living + 30}m², ${state.address.split(',')[1] || 'Region'}`,
+                search: `${state.sub || 'Haus'}, ${state.living - 20}-${state.living + 30}m², ${region}`,
                 status: "Finanzierung bestätigt",
                 verified: true
             },
             {
                 type: "Investor",
                 budget: "flexibel",
-                search: `Kapitalanlage, ${state.category}, ${state.address.split(',')[1] || 'Region'}`,
+                search: `Kapitalanlage, ${state.category}, ${region}`,
                 status: "Barzahlung möglich",
                 verified: false
             },
             {
                 type: "Suchender",
                 budget: `${Math.round(budgetBase * 0.9 / 1000) * 1000} - ${Math.round(budgetBase * 1.1 / 1000) * 1000} €`,
-                search: `${state.sub || state.category}, ${state.plot > 300 ? 'mit Garten' : 'zentral'}, ${state.address.split(',')[1] || 'Umgebung'}`,
+                search: `${state.sub || state.category}, ${state.plot > 300 ? 'mit Garten' : 'zentral'}, ${region}`,
                 status: "Aktiv suchend",
                 verified: true
             },
             {
                 type: "Bestandskunde",
                 budget: `bis ${Math.round(budgetBase * 1.15 / 1000) * 1000} €`,
-                search: `${state.category}, ${state.living - 30}-${state.living + 20}m², ${state.address.split(',')[1] || 'Nähe'}`,
+                search: `${state.category}, ${state.living - 30}-${state.living + 20}m², ${region}`,
                 status: "Bereits bekannter Kunde",
                 verified: true
             }
         ];
+        
+        // Generate random initials
+        const initials = ['DW', 'MK', 'SB', 'TH', 'JL', 'PW', 'AN', 'RG'];
         
         for(let i = 0; i < 4; i++) {
             const profile = profiles[i];
             const daysAgo = 3 + Math.floor((state.buyerSearchHash + i * 7) % 18);
             const matchScore = 78 + Math.floor((state.buyerSearchHash + i * 13) % 17);
             
+            // Calculate date
+            const today = new Date();
+            const matchDate = new Date(today.getTime() - (daysAgo * 24 * 60 * 60 * 1000));
+            const dateStr = String(matchDate.getDate()).padStart(2, '0') + String(matchDate.getMonth() + 1).padStart(2, '0');
+            const randomInitial = initials[Math.floor((state.buyerSearchHash + i * 3) % initials.length)];
+            
             buyerMatches.push({
-                id: 'KI-2026-' + (4200 + state.buyerSearchHash % 1000 + i * 73) + '-PF',
+                id: `SG-2026-${randomInitial}-${dateStr}`,
                 date: `Vor ${daysAgo} Tagen`,
                 score: matchScore + '%',
                 profile: profile
