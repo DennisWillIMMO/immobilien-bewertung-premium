@@ -5,142 +5,993 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Strategische Immobilienbewertung | SW Immobilien</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <style>
         :root {
-            --primary: #0e3a67;
-            --accent: #c7a44c;
-            --cta: #d9534f;
-            --success: #4bbfad;
-            --warning: #ff9800;
+            --primary: #1a2332;
+            --secondary: #2c3e50;
+            --accent: #c9a961;
+            --gold: #d4af37;
+            --cta: #c7463f;
             --bg: #ffffff;
             --card-bg: #f8f9fa;
-            --border: #e2e8f0;
+            --border: #d1d5db;
+            --text-primary: #1a1a1a;
+            --text-secondary: #6b7280;
         }
 
         * { box-sizing: border-box; }
-        body { margin: 0; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); font-family: 'DM Sans', sans-serif; color: #1a1a1a; font-size: 14px; scroll-behavior: smooth; }
-        .app-wrapper { max-width: 850px; margin: 20px auto; padding: 25px; background: #fff; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.12); }
+        body { 
+            margin: 0; 
+            background: #f5f7fa; 
+            font-family: 'Inter', sans-serif; 
+            color: var(--text-primary); 
+            font-size: 15px; 
+            scroll-behavior: smooth;
+            line-height: 1.6;
+        }
+        .app-wrapper { 
+            max-width: 920px; 
+            margin: 30px auto; 
+            padding: 0; 
+            background: #fff; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        /* PREMIUM TYPOGRAPHY */
+        h1 { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 38px; 
+            color: var(--primary); 
+            margin: 0 0 15px 0; 
+            line-height: 1.2; 
+            font-weight: 800; 
+            letter-spacing: -0.5px;
+        }
+        h2 { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 28px; 
+            color: var(--primary); 
+            margin: 0 0 25px 0; 
+            font-weight: 700; 
+            letter-spacing: -0.3px;
+        }
+        h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 0 0 15px 0;
+        }
+
+        .manufaktur-label { 
+            color: var(--accent); 
+            font-weight: 600; 
+            font-size: 11px; 
+            text-transform: uppercase; 
+            letter-spacing: 1.5px; 
+            margin-bottom: 12px; 
+            display: inline-block;
+        }
 
         /* STICKY CTA BUTTON */
-        .sticky-cta { position: fixed; bottom: 30px; right: 30px; background: var(--cta); color: white; padding: 18px 28px; border-radius: 50px; font-weight: 700; font-size: 15px; box-shadow: 0 8px 25px rgba(217, 83, 79, 0.4); cursor: pointer; z-index: 9999; display: none; animation: bounce 2s infinite; border: none; }
+        .sticky-cta { 
+            position: fixed; 
+            bottom: 30px; 
+            right: 30px; 
+            background: var(--cta); 
+            color: white; 
+            padding: 18px 32px; 
+            border-radius: 6px; 
+            font-weight: 700; 
+            font-size: 15px; 
+            box-shadow: 0 8px 25px rgba(199, 70, 63, 0.35); 
+            cursor: pointer; 
+            z-index: 9999; 
+            display: none; 
+            animation: pulse 2s infinite; 
+            border: none;
+            transition: all 0.3s ease;
+        }
         .sticky-cta.visible { display: block; }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .sticky-cta:hover { 
+            background: #b33b35; 
+            transform: translateY(-2px); 
+            box-shadow: 0 12px 35px rgba(199, 70, 63, 0.4);
+        }
+        @keyframes pulse { 
+            0%, 100% { box-shadow: 0 8px 25px rgba(199, 70, 63, 0.35); } 
+            50% { box-shadow: 0 8px 35px rgba(199, 70, 63, 0.5); } 
+        }
 
         /* EXIT INTENT MODAL */
-        .exit-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10000; align-items: center; justify-content: center; }
+        .exit-modal { 
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0,0,0,0.85); 
+            z-index: 10000; 
+            align-items: center; 
+            justify-content: center; 
+        }
         .exit-modal.show { display: flex; }
-        .exit-content { background: white; padding: 50px; border-radius: 20px; max-width: 550px; text-align: center; position: relative; animation: slideDown 0.4s ease; }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-50px); } to { opacity: 1; transform: translateY(0); } }
-        .exit-close { position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; color: #999; }
+        .exit-content { 
+            background: white; 
+            padding: 50px; 
+            border-radius: 8px; 
+            max-width: 550px; 
+            text-align: center; 
+            position: relative; 
+            animation: slideDown 0.4s ease; 
+        }
+        @keyframes slideDown { 
+            from { opacity: 0; transform: translateY(-50px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        .exit-close { 
+            position: absolute; 
+            top: 15px; 
+            right: 20px; 
+            font-size: 32px; 
+            cursor: pointer; 
+            color: #999; 
+            font-weight: 300;
+            line-height: 1;
+        }
 
-        /* INTRO */
-        .intro-grid { display: flex; gap: 30px; align-items: center; }
-        .intro-text-side { flex: 1.2; }
-        .intro-image-side { flex: 0.8; height: 300px; background: url('https://sw-immobilien.de/wp-content/uploads/2026/01/dennis-will-immobilien.jpg') center/cover; border-radius: 15px; }
-        
-        h1 { font-size: 32px; color: var(--primary); margin: 0 0 10px 0; line-height: 1.1; font-weight: 800; }
-        h2 { font-size: 24px; color: var(--primary); margin: 0 0 20px 0; font-weight: 700; }
-        .manufaktur-label { color: var(--success); font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: inline-block; background: rgba(75, 191, 173, 0.1); padding: 5px 12px; border-radius: 20px; }
+        /* INTRO SECTION */
+        .intro-section {
+            position: relative;
+            padding: 50px;
+            background: linear-gradient(135deg, #1a2332 0%, #2c3e50 100%);
+        }
+        .intro-grid { 
+            display: flex; 
+            gap: 40px; 
+            align-items: center; 
+        }
+        .intro-text-side { 
+            flex: 1.3; 
+            color: white;
+        }
+        .intro-text-side h1 {
+            color: white;
+        }
+        .intro-text-side p {
+            color: rgba(255,255,255,0.9);
+            font-size: 16px;
+            line-height: 1.7;
+        }
+        .intro-image-side { 
+            flex: 0.7; 
+            position: relative;
+        }
+        .intro-image-wrapper {
+            position: relative;
+        }
+        .intro-image {
+            width: 100%;
+            height: 360px;
+            background: url('https://sw-immobilien.de/wp-content/uploads/2026/01/dennis-will-immobilien.jpg') center/cover;
+            border-radius: 6px;
+        }
+        .trust-badges-overlay {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 25px;
+            border-radius: 6px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .trust-badges-overlay img {
+            height: 50px;
+            object-fit: contain;
+        }
 
         /* BUTTONS */
-        .btn-main { background: var(--cta); color: white; border: none; padding: 16px 25px; border-radius: 8px; font-weight: 700; cursor: pointer; width: 100%; font-size: 15px; transition: 0.3s; }
-        .btn-main:hover { background: #c7463f; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(217, 83, 79, 0.3); }
-        .btn-outline { background: white; border: 2px solid var(--border); color: #666; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; width: 100%; margin-top: 10px; transition: 0.3s; }
-        .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+        .btn-main { 
+            background: var(--cta); 
+            color: white; 
+            border: none; 
+            padding: 18px 32px; 
+            border-radius: 6px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            width: 100%; 
+            font-size: 16px; 
+            transition: 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+        .btn-main:hover { 
+            background: #b33b35; 
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 20px rgba(199, 70, 63, 0.3); 
+        }
+        .btn-outline { 
+            background: transparent; 
+            border: 2px solid rgba(255,255,255,0.3); 
+            color: white; 
+            padding: 16px 32px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-weight: 600; 
+            width: 100%; 
+            margin-top: 12px; 
+            transition: 0.3s;
+            font-size: 15px;
+        }
+        .btn-outline:hover { 
+            border-color: white; 
+            background: rgba(255,255,255,0.1);
+        }
+        .btn-outline-dark {
+            background: white;
+            border: 2px solid var(--border);
+            color: var(--text-secondary);
+            padding: 14px 28px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 12px;
+            transition: 0.3s;
+        }
+        .btn-outline-dark:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* CONTENT PADDING */
+        .step-content {
+            padding: 50px;
+        }
 
         /* GRID & CARDS */
-        .grid-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin: 20px 0; }
-        .card-option { background: var(--card-bg); border: 2px solid var(--border); padding: 20px 15px; border-radius: 12px; text-align: center; cursor: pointer; transition: 0.2s; position: relative; }
-        .card-option:hover { border-color: var(--primary); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .card-option.selected { border: 2px solid var(--primary); background: #f0f5fb; box-shadow: 0 5px 15px rgba(14, 58, 103, 0.15); }
+        .grid-options { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
+            gap: 15px; 
+            margin: 25px 0; 
+        }
+        .card-option { 
+            background: white; 
+            border: 2px solid var(--border); 
+            padding: 28px 20px; 
+            border-radius: 6px; 
+            text-align: center; 
+            cursor: pointer; 
+            transition: 0.2s; 
+            position: relative;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .card-option:hover { 
+            border-color: var(--accent); 
+            transform: translateY(-3px); 
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08); 
+        }
+        .card-option.selected { 
+            border-color: var(--accent); 
+            background: #fefcf5; 
+            box-shadow: 0 6px 20px rgba(201, 169, 97, 0.15); 
+        }
+        .card-option-icon {
+            font-size: 36px;
+            margin-bottom: 12px;
+            line-height: 1;
+        }
         
-        /* BADGE MIT MINUS-FUNKTION */
-        .badge { position: absolute; top: -10px; right: -10px; background: var(--primary); color: white; width: 28px; height: 28px; border-radius: 50%; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 3px solid white; box-shadow: 0 3px 8px rgba(0,0,0,0.2); cursor: pointer; }
-        .badge:hover { background: var(--cta); }
+        /* BADGE WITH MINUS FUNCTION */
+        .badge { 
+            position: absolute; 
+            top: -12px; 
+            right: -12px; 
+            background: var(--accent); 
+            color: white; 
+            width: 32px; 
+            height: 32px; 
+            border-radius: 50%; 
+            font-size: 14px; 
+            font-weight: 700; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            border: 3px solid white; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15); 
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .badge:hover { 
+            background: var(--cta); 
+            transform: scale(1.1);
+        }
+        .badge-minus {
+            position: absolute;
+            top: -12px;
+            left: -12px;
+            background: var(--text-secondary);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            cursor: pointer;
+            transition: 0.2s;
+            line-height: 1;
+        }
+        .badge-minus:hover {
+            background: var(--cta);
+            transform: scale(1.1);
+        }
 
         /* INPUTS & SLIDERS */
-        .input-group { margin-bottom: 25px; }
-        .flex-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .num-box { width: 80px; padding: 8px; border: 2px solid var(--border); border-radius: 6px; text-align: center; font-weight: 800; color: var(--primary); font-size: 15px; }
-        input[type="range"] { width: 100%; height: 8px; accent-color: var(--primary); border-radius: 5px; }
+        .input-group { 
+            margin-bottom: 30px; 
+        }
+        .flex-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 12px; 
+        }
+        .flex-header label {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .num-box { 
+            width: 90px; 
+            padding: 10px 12px; 
+            border: 2px solid var(--border); 
+            border-radius: 6px; 
+            text-align: center; 
+            font-weight: 800; 
+            color: var(--primary); 
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+        }
+        input[type="range"] { 
+            width: 100%; 
+            height: 6px; 
+            accent-color: var(--accent); 
+            border-radius: 3px; 
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            transition: 0.2s;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
 
         /* SOCIAL PROOF */
-        .social-proof { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 15px; margin: 30px 0; text-align: center; }
-        .testimonial-slider { display: flex; gap: 20px; margin-top: 20px; overflow-x: auto; }
-        .testimonial { background: rgba(255,255,255,0.15); padding: 20px; border-radius: 10px; min-width: 250px; backdrop-filter: blur(10px); }
-        .testimonial-text { font-size: 13px; font-style: italic; margin-bottom: 10px; }
-        .testimonial-author { font-size: 12px; font-weight: 700; opacity: 0.9; }
+        .social-proof { 
+            background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%); 
+            color: var(--text-primary); 
+            padding: 35px; 
+            border-radius: 6px; 
+            margin: 35px 0; 
+            text-align: center; 
+        }
+        .social-proof-header {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--primary);
+        }
+        .social-proof-subtext {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+        .social-proof-date {
+            display: inline-block;
+            background: rgba(0,0,0,0.05);
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+        .testimonial-slider { 
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+        .testimonial { 
+            background: white; 
+            padding: 25px; 
+            border-radius: 6px;
+            text-align: left;
+            border-left: 4px solid var(--accent);
+        }
+        .testimonial-text { 
+            font-size: 14px; 
+            font-style: italic; 
+            margin-bottom: 12px;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        .testimonial-author { 
+            font-size: 13px; 
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
 
         /* RESULT CARDS */
-        .result-card { background: var(--primary); color: white; padding: 40px; border-radius: 20px; text-align: center; margin-bottom: 25px; position: relative; overflow: hidden; }
-        .result-card::before { content: ''; position: absolute; top: -50%; right: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%); }
+        .result-card { 
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); 
+            color: white; 
+            padding: 50px 40px; 
+            border-radius: 6px; 
+            text-align: center; 
+            margin-bottom: 30px; 
+            position: relative; 
+            overflow: hidden; 
+        }
+        .result-card-label {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            opacity: 0.8;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        .result-card-value {
+            font-family: 'Playfair Display', serif;
+            font-size: 52px;
+            font-weight: 800;
+            margin: 15px 0;
+            letter-spacing: -1px;
+        }
+        .result-card-subtext {
+            opacity: 0.85;
+            font-size: 15px;
+        }
         
-        .warning-box { background: #fff3cd; border-left: 5px solid var(--warning); padding: 25px; border-radius: 12px; margin: 25px 0; }
-        .warning-box h3 { color: var(--warning); margin: 0 0 15px 0; font-size: 18px; display: flex; align-items: center; gap: 10px; }
-        .warning-list { list-style: none; padding: 0; margin: 15px 0; }
-        .warning-list li { padding: 8px 0; padding-left: 30px; position: relative; color: #856404; font-size: 14px; line-height: 1.6; }
-        .warning-list li::before { content: '⚠️'; position: absolute; left: 0; }
+        /* WARNING BOX */
+        .warning-box { 
+            background: #fef9ed; 
+            border-left: 4px solid var(--gold); 
+            padding: 30px; 
+            border-radius: 6px; 
+            margin: 30px 0; 
+        }
+        .warning-box h3 { 
+            color: #92400e; 
+            margin: 0 0 20px 0; 
+            font-size: 18px;
+            font-weight: 700;
+        }
+        .warning-list { 
+            list-style: none; 
+            padding: 0; 
+            margin: 20px 0; 
+        }
+        .warning-list li { 
+            padding: 10px 0; 
+            padding-left: 30px; 
+            position: relative; 
+            color: #78350f; 
+            font-size: 15px; 
+            line-height: 1.6;
+            font-weight: 500;
+        }
+        .warning-list li::before { 
+            content: '▸'; 
+            position: absolute; 
+            left: 0;
+            color: var(--gold);
+            font-weight: bold;
+        }
+        .warning-cta-box {
+            background: white;
+            padding: 25px;
+            border-radius: 6px;
+            margin-top: 25px;
+            text-align: center;
+        }
+        .warning-cta-text {
+            color: var(--primary);
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .warning-cta-text:hover {
+            color: var(--accent);
+        }
 
         /* INSIGHT CARDS */
-        .insight-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin: 30px 0; }
-        .insight-card { background: white; border: 2px solid var(--border); border-radius: 15px; padding: 25px; transition: 0.3s; }
-        .insight-card:hover { border-color: var(--accent); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .insight-icon { font-size: 36px; margin-bottom: 15px; }
-        .insight-title { font-size: 16px; font-weight: 700; color: var(--primary); margin-bottom: 10px; }
-        .insight-text { font-size: 13px; line-height: 1.6; color: #666; }
+        .insight-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); 
+            gap: 20px; 
+            margin: 35px 0; 
+        }
+        .insight-card { 
+            background: white; 
+            border: 2px solid var(--border); 
+            border-radius: 6px; 
+            padding: 30px; 
+            transition: 0.3s; 
+        }
+        .insight-card:hover { 
+            border-color: var(--accent); 
+            transform: translateY(-5px); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+        }
+        .insight-title { 
+            font-size: 17px; 
+            font-weight: 700; 
+            color: var(--primary); 
+            margin-bottom: 12px; 
+        }
+        .insight-text { 
+            font-size: 14px; 
+            line-height: 1.7; 
+            color: var(--text-secondary); 
+        }
 
-        /* DETAILED ANALYSIS PAGE */
-        .analysis-header { background: linear-gradient(135deg, var(--primary) 0%, #1a5490 100%); color: white; padding: 50px 30px; border-radius: 20px; text-align: center; margin-bottom: 30px; }
-        .analysis-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin: 30px 0; }
-        .analysis-card { background: var(--card-bg); border: 2px solid var(--border); border-radius: 15px; padding: 30px; }
-        .analysis-label { font-size: 12px; text-transform: uppercase; color: #999; font-weight: 600; letter-spacing: 1px; margin-bottom: 8px; }
-        .analysis-value { font-size: 32px; font-weight: 800; color: var(--primary); margin-bottom: 5px; }
-        .analysis-sub { font-size: 13px; color: #666; }
+        /* DETAILED ANALYSIS */
+        .analysis-header { 
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); 
+            color: white; 
+            padding: 50px 40px; 
+            text-align: center; 
+        }
+        .analysis-header h1 {
+            color: white;
+            margin-bottom: 12px;
+        }
+        .analysis-header p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
 
-        /* BUYER DATABASE SIMULATION */
-        .database-search { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 40px; border-radius: 20px; text-align: center; color: white; margin: 30px 0; position: relative; overflow: hidden; }
-        .search-animation { display: none; margin: 30px 0; }
-        .search-animation.active { display: block; }
-        .search-spinner { border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid white; border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite; margin: 20px auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .analysis-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 25px; 
+            margin: 35px 0; 
+        }
+        .analysis-card { 
+            background: var(--card-bg); 
+            border: 2px solid var(--border); 
+            border-radius: 6px; 
+            padding: 30px; 
+        }
+        .analysis-label { 
+            font-size: 11px; 
+            text-transform: uppercase; 
+            color: var(--text-secondary); 
+            font-weight: 600; 
+            letter-spacing: 1.2px; 
+            margin-bottom: 10px; 
+        }
+        .analysis-value { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 36px; 
+            font-weight: 800; 
+            color: var(--primary); 
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+        .analysis-sub { 
+            font-size: 14px; 
+            color: var(--text-secondary); 
+        }
+
+        /* CALCULATION BREAKDOWN */
+        .calculation-breakdown {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            padding: 30px;
+            margin: 25px 0;
+        }
+        .breakdown-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border);
+        }
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 15px;
+        }
+        .breakdown-item:last-child {
+            border-bottom: none;
+            padding-top: 15px;
+            margin-top: 10px;
+            border-top: 2px solid var(--border);
+            font-weight: 700;
+        }
+        .breakdown-label {
+            color: var(--text-secondary);
+        }
+        .breakdown-value {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* BUYER DATABASE */
+        .database-search { 
+            background: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%); 
+            padding: 45px; 
+            border-radius: 6px; 
+            text-align: center; 
+            color: white; 
+            margin: 35px 0; 
+            position: relative; 
+        }
+        .database-search h2 {
+            color: white;
+            margin-bottom: 15px;
+        }
+        .database-timer {
+            display: none;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 6px;
+            margin: 25px 0;
+            font-size: 15px;
+        }
+        .database-timer.active {
+            display: block;
+        }
+        .timer-display {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            font-weight: 800;
+            margin: 15px 0;
+            letter-spacing: 2px;
+        }
+        .timer-warning {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-top: 10px;
+        }
         
-        .buyer-results { display: none; margin-top: 30px; }
-        .buyer-results.show { display: block; animation: fadeIn 0.6s ease; }
-        .buyer-match { background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border-radius: 12px; padding: 20px; margin: 15px 0; text-align: left; }
-        .buyer-match-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .buyer-id { font-size: 11px; opacity: 0.8; filter: blur(3px); }
-        .buyer-date { font-size: 12px; font-weight: 700; background: rgba(255,255,255,0.3); padding: 5px 10px; border-radius: 5px; }
-        .buyer-criteria { font-size: 13px; margin-top: 10px; opacity: 0.95; }
+        .search-animation { 
+            display: none; 
+            margin: 30px 0; 
+        }
+        .search-animation.active { 
+            display: block; 
+        }
+        .search-spinner { 
+            border: 4px solid rgba(255,255,255,0.3); 
+            border-top: 4px solid white; 
+            border-radius: 50%; 
+            width: 60px; 
+            height: 60px; 
+            animation: spin 1s linear infinite; 
+            margin: 20px auto; 
+        }
+        @keyframes spin { 
+            0% { transform: rotate(0deg); } 
+            100% { transform: rotate(360deg); } 
+        }
+        
+        .buyer-results { 
+            display: none; 
+            margin-top: 35px; 
+        }
+        .buyer-results.show { 
+            display: block; 
+            animation: fadeIn 0.6s ease; 
+        }
+        .buyer-results-header {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .buyer-results-subtext {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 25px;
+        }
+        .buyer-progress {
+            background: rgba(255,255,255,0.2);
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .progress-text {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .progress-bar-container {
+            flex: 1;
+            background: rgba(255,255,255,0.3);
+            height: 8px;
+            border-radius: 4px;
+            margin: 0 15px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            background: white;
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        .buyer-match { 
+            background: rgba(255,255,255,0.15); 
+            backdrop-filter: blur(10px); 
+            border-radius: 6px; 
+            padding: 25px; 
+            margin: 15px 0; 
+            text-align: left;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .buyer-match-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        .buyer-id { 
+            font-size: 11px; 
+            opacity: 0.7;
+            font-family: monospace;
+            letter-spacing: 0.5px;
+        }
+        .buyer-match-score {
+            background: rgba(255,255,255,0.25);
+            padding: 6px 14px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+        .buyer-date { 
+            font-size: 12px; 
+            font-weight: 600;
+            background: rgba(255,255,255,0.25); 
+            padding: 6px 12px; 
+            border-radius: 4px; 
+        }
+        .buyer-criteria { 
+            font-size: 14px; 
+            margin-top: 12px;
+            line-height: 1.8;
+        }
+        .buyer-criteria-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+        }
+        .buyer-criteria-label {
+            opacity: 0.85;
+        }
+        .buyer-criteria-value {
+            font-weight: 600;
+        }
+        .buyer-status {
+            display: inline-block;
+            background: rgba(74, 222, 128, 0.2);
+            color: #dcfce7;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .pagination-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 25px 0 20px 0;
+        }
+        .pagination-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .pagination-dot.active {
+            background: white;
+            width: 30px;
+            border-radius: 5px;
+        }
+        .pagination-dot:not(.active):hover {
+            background: rgba(255,255,255,0.5);
+        }
+
+        .premium-unlock {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 6px;
+            margin-top: 25px;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+        .unlock-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        /* MAP */
+        #map { 
+            height: 320px; 
+            border-radius: 6px; 
+            margin: 20px 0; 
+            border: 2px solid var(--border); 
+        }
+        #addr_res {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            max-height: 220px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+        .addr-result-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border);
+            transition: 0.2s;
+        }
+        .addr-result-item:last-child {
+            border-bottom: none;
+        }
+        .addr-result-item:hover {
+            background: #f9fafb;
+        }
 
         /* UTILS */
-        .step { display: none; }
-        .step.active { display: block; animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        #map { height: 300px; border-radius: 12px; margin: 15px 0; border: 2px solid var(--border); }
-        .hidden { display: none; }
-        .full-tooltip { background: #f0f4f8; border-left: 4px solid var(--accent); padding: 20px; border-radius: 8px; margin-top: 20px; font-size: 13px; line-height: 1.6; }
+        .step { 
+            display: none; 
+        }
+        .step.active { 
+            display: block; 
+            animation: fadeIn 0.4s ease; 
+        }
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(10px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        .hidden { 
+            display: none; 
+        }
+        .full-tooltip { 
+            background: #f0f4f8; 
+            border-left: 4px solid var(--accent); 
+            padding: 25px; 
+            border-radius: 6px; 
+            margin-top: 25px; 
+            font-size: 14px; 
+            line-height: 1.7; 
+        }
+        .tooltip-cta {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+        }
+        .tooltip-cta a {
+            color: var(--cta);
+            text-decoration: none;
+            font-weight: 700;
+        }
 
-        .logo-row { margin-top: 25px; text-align: center; opacity: 0.6; display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; }
-        .logo-row img { height: 40px; }
+        .cta-box {
+            margin-top: 35px;
+            padding: 30px;
+            background: var(--card-bg);
+            border-radius: 6px;
+            text-align: center;
+        }
+        .cta-box-text {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .cta-box-text strong {
+            color: var(--primary);
+            display: block;
+            margin-bottom: 5px;
+        }
 
         /* MOBILE RESPONSIVE */
         @media (max-width: 768px) {
-            .app-wrapper { margin: 10px; padding: 20px; }
-            .intro-grid { flex-direction: column; }
-            .intro-image-side { height: 200px; width: 100%; }
-            .grid-options { grid-template-columns: 1fr; }
-            h1 { font-size: 24px; }
-            .sticky-cta { bottom: 15px; right: 15px; padding: 14px 20px; font-size: 13px; }
-            .exit-content { padding: 30px; margin: 20px; }
-            .insight-grid { grid-template-columns: 1fr; }
-            .analysis-grid { grid-template-columns: 1fr; }
-            .testimonial-slider { flex-direction: column; }
-            .testimonial { min-width: 100%; }
+            .app-wrapper { 
+                margin: 10px; 
+                border-radius: 6px;
+            }
+            .intro-section {
+                padding: 30px 25px;
+            }
+            .intro-grid { 
+                flex-direction: column;
+                gap: 25px;
+            }
+            .intro-image {
+                height: 280px;
+            }
+            .trust-badges-overlay {
+                position: relative;
+                bottom: 0;
+                transform: none;
+                margin-top: 20px;
+            }
+            .step-content {
+                padding: 30px 25px;
+            }
+            .grid-options { 
+                grid-template-columns: 1fr; 
+            }
+            h1 { 
+                font-size: 28px; 
+            }
+            h2 {
+                font-size: 24px;
+            }
+            .result-card-value {
+                font-size: 38px;
+            }
+            .sticky-cta { 
+                bottom: 15px; 
+                right: 15px; 
+                padding: 14px 24px; 
+                font-size: 14px; 
+            }
+            .exit-content { 
+                padding: 30px 25px; 
+                margin: 20px; 
+            }
+            .insight-grid { 
+                grid-template-columns: 1fr; 
+            }
+            .analysis-grid { 
+                grid-template-columns: 1fr; 
+            }
+            .testimonial-slider { 
+                grid-template-columns: 1fr; 
+            }
+            .timer-display {
+                font-size: 36px;
+            }
         }
     </style>
 </head>
@@ -148,24 +999,24 @@
 
 <!-- STICKY CTA BUTTON -->
 <button class="sticky-cta" id="stickyCta" onclick="openCalendly()">
-    💬 Jetzt Termin sichern
+    Jetzt Termin sichern
 </button>
 
 <!-- EXIT INTENT MODAL -->
 <div class="exit-modal" id="exitModal">
     <div class="exit-content">
         <span class="exit-close" onclick="closeExitModal()">×</span>
-        <h2 style="color: var(--primary); margin-bottom: 15px;">⏱️ Moment!</h2>
-        <p style="font-size: 18px; margin-bottom: 25px; line-height: 1.6;">
-            Ihre Immobilie verdient eine <strong>individuelle Bewertung</strong> – nicht nur einen Algorithmus.
+        <h2 style="color: var(--primary); margin-bottom: 15px;">Moment!</h2>
+        <p style="font-size: 17px; margin-bottom: 25px; line-height: 1.6; color: var(--text-secondary);">
+            Ihre Immobilie verdient eine <strong style="color: var(--primary);">individuelle Bewertung</strong> – nicht nur einen Algorithmus.
         </p>
-        <p style="color: #666; margin-bottom: 30px;">
+        <p style="color: var(--text-secondary); margin-bottom: 30px; font-size: 15px;">
             Sichern Sie sich jetzt ein <strong>kostenloses 15-Minuten-Strategiegespräch</strong> mit unserem Experten.
         </p>
         <button class="btn-main" onclick="openCalendly(); closeExitModal();">
-            ✅ Ja, Termin vereinbaren
+            Ja, Termin vereinbaren
         </button>
-        <button class="btn-outline" onclick="closeExitModal()">
+        <button class="btn-outline-dark" onclick="closeExitModal()">
             Später entscheiden
         </button>
     </div>
@@ -175,395 +1026,459 @@
     
     <!-- STEP 0: INTRO -->
     <div class="step active" id="step0">
-        <div class="intro-grid">
-            <div class="intro-text-side">
-                <div class="manufaktur-label">Manufaktur statt Massenabfertigung</div>
-                <h1>Ihre Immobilie ist kein Algorithmus.</h1>
-                <p style="color: #666; font-size: 15px; margin-bottom: 25px; line-height: 1.6;">
-                    Wir bewerten persönlich & strategisch für die Pfalz – mit Marktkenntnis, die kein Portal bieten kann.
-                </p>
-                <button class="btn-main" onclick="openCalendly()">
-                    📞 Strategiegespräch vereinbaren
-                </button>
-                <button class="btn-outline" onclick="nextStep(1)">
-                    🔍 Diskrete Online-Analyse starten →
-                </button>
+        <div class="intro-section">
+            <div class="intro-grid">
+                <div class="intro-text-side">
+                    <div class="manufaktur-label">Manufaktur statt Massenabfertigung</div>
+                    <h1>Ihre Immobilie ist kein Algorithmus.</h1>
+                    <p>
+                        Wir bewerten persönlich & strategisch – mit Marktkenntnis, die kein Portal bieten kann.
+                    </p>
+                    <button class="btn-main" onclick="openCalendly()">
+                        Strategiegespräch vereinbaren
+                    </button>
+                    <button class="btn-outline" onclick="nextStep(1)">
+                        Diskrete Online-Analyse starten
+                    </button>
+                </div>
+                <div class="intro-image-side">
+                    <div class="intro-image-wrapper">
+                        <div class="intro-image"></div>
+                        <div class="trust-badges-overlay">
+                            <img src="https://sw-immobilien.de/wp-content/uploads/2025/10/1.jpg" alt="Zertifizierung">
+                            <img src="https://sw-immobilien.de/wp-content/uploads/2024/04/ImmoScout24-Siegel_Experte-200x200-1.png" alt="ImmoScout24 Experte">
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="intro-image-side"></div>
-        </div>
-        <div class="logo-row">
-            <img src="https://sw-immobilien.de/wp-content/uploads/2025/10/1.jpg" alt="Zertifizierung">
-            <img src="https://sw-immobilien.de/wp-content/uploads/2024/04/ImmoScout24-Siegel_Experte-200x200-1.png" alt="ImmoScout24 Experte">
         </div>
     </div>
 
     <!-- STEP 1: IMMOBILIENTYP -->
     <div class="step" id="step1">
-        <h2>🏘️ Welche Art Immobilie bewerten wir?</h2>
-        <div class="grid-options">
-            <div class="card-option" onclick="selectCat('haus')">
-                <div style="font-size: 32px; margin-bottom: 10px;">🏠</div>
-                <strong>Haus</strong>
+        <div class="step-content">
+            <h2>Welche Art Immobilie bewerten wir?</h2>
+            <div class="grid-options">
+                <div class="card-option" onclick="selectCat('haus')">
+                    <div class="card-option-icon">🏠</div>
+                    Haus
+                </div>
+                <div class="card-option" onclick="selectCat('wohnung')">
+                    <div class="card-option-icon">🏢</div>
+                    Wohnung
+                </div>
+                <div class="card-option" onclick="selectCat('gewerbe')">
+                    <div class="card-option-icon">🏭</div>
+                    Gewerbe
+                </div>
+                <div class="card-option" onclick="selectCat('grundstueck')">
+                    <div class="card-option-icon">🌳</div>
+                    Grundstück
+                </div>
             </div>
-            <div class="card-option" onclick="selectCat('wohnung')">
-                <div style="font-size: 32px; margin-bottom: 10px;">🏢</div>
-                <strong>Wohnung</strong>
+            <div id="subCatWrapper" class="hidden">
+                <h3 style="margin-top: 30px;">Detailauswahl:</h3>
+                <div id="subCatGrid" class="grid-options"></div>
             </div>
-            <div class="card-option" onclick="selectCat('gewerbe')">
-                <div style="font-size: 32px; margin-bottom: 10px;">🏭</div>
-                <strong>Gewerbe</strong>
-            </div>
-            <div class="card-option" onclick="selectCat('grundstueck')">
-                <div style="font-size: 32px; margin-bottom: 10px;">🌳</div>
-                <strong>Grundstück</strong>
-            </div>
+            <button class="btn-outline-dark" onclick="nextStep(0)">← Zurück</button>
         </div>
-        <div id="subCatWrapper" class="hidden">
-            <h3 style="font-size: 16px; margin-top: 25px; color: var(--primary);">Detailauswahl:</h3>
-            <div id="subCatGrid" class="grid-options"></div>
-        </div>
-        <button class="btn-outline" onclick="nextStep(0)">← Zurück</button>
     </div>
 
     <!-- STEP 2: ECKDATEN -->
     <div class="step" id="step2">
-        <h2>📐 Eckdaten Ihrer Immobilie</h2>
-        <div class="input-group">
-            <div class="flex-header">
-                <label><strong>Wohnfläche (m²)</strong></label>
-                <input type="number" id="num_living" class="num-box" oninput="sync('living', 'num')">
+        <div class="step-content">
+            <h2>Eckdaten Ihrer Immobilie</h2>
+            <div class="input-group">
+                <div class="flex-header">
+                    <label>Wohnfläche (m²)</label>
+                    <input type="number" id="num_living" class="num-box" oninput="sync('living', 'num')">
+                </div>
+                <input type="range" id="rng_living" min="20" max="500" value="120" oninput="sync('living', 'rng')">
             </div>
-            <input type="range" id="rng_living" min="20" max="500" value="120" oninput="sync('living', 'rng')">
-        </div>
-        <div class="input-group" id="plot_box">
-            <div class="flex-header">
-                <label><strong>Grundstücksgröße (m²)</strong></label>
-                <input type="number" id="num_plot" class="num-box" oninput="sync('plot', 'num')">
+            <div class="input-group" id="plot_box">
+                <div class="flex-header">
+                    <label>Grundstücksgröße (m²)</label>
+                    <input type="number" id="num_plot" class="num-box" oninput="sync('plot', 'num')">
+                </div>
+                <input type="range" id="rng_plot" min="0" max="2000" value="500" oninput="sync('plot', 'rng')">
             </div>
-            <input type="range" id="rng_plot" min="0" max="2000" value="500" oninput="sync('plot', 'rng')">
-        </div>
-        <div class="input-group">
-            <div class="flex-header">
-                <label><strong>Baujahr</strong></label>
-                <input type="number" id="num_year" class="num-box" oninput="sync('year', 'num')">
+            <div class="input-group">
+                <div class="flex-header">
+                    <label>Baujahr</label>
+                    <input type="number" id="num_year" class="num-box" oninput="sync('year', 'num')">
+                </div>
+                <input type="range" id="rng_year" min="1900" max="2025" value="1995" oninput="sync('year', 'rng')">
             </div>
-            <input type="range" id="rng_year" min="1900" max="2025" value="1995" oninput="sync('year', 'rng')">
-        </div>
 
-        <!-- SOCIAL PROOF -->
-        <div class="social-proof">
-            <div style="font-size: 18px; font-weight: 700; margin-bottom: 5px;">✨ Über 340 Eigentümer aus der Pfalz vertrauen uns bereits</div>
-            <p style="opacity: 0.9; font-size: 13px; margin-bottom: 0;">Diskrete Beratung · Faire Bewertung · Maximaler Verkaufspreis</p>
-            <div class="testimonial-slider">
-                <div class="testimonial">
-                    <div class="testimonial-text">"Die Bewertung war deutlich präziser als bei ImmoScout. Der Verkauf lief reibungslos!"</div>
-                    <div class="testimonial-author">— Familie M., Neustadt</div>
-                </div>
-                <div class="testimonial">
-                    <div class="testimonial-text">"Kompetent, diskret und 15% über dem erwarteten Preis verkauft. Vielen Dank!"</div>
-                    <div class="testimonial-author">— Herr K., Landau</div>
-                </div>
-                <div class="testimonial">
-                    <div class="testimonial-text">"Endlich jemand, der die Pfalz wirklich kennt. Keine Standard-Algorithmen."</div>
-                    <div class="testimonial-author">— Frau B., Speyer</div>
+            <!-- SOCIAL PROOF -->
+            <div class="social-proof">
+                <div class="social-proof-header">Über 340 Eigentümer vertrauen uns bereits</div>
+                <div class="social-proof-date">Stand: 14. Februar 2026</div>
+                <div class="social-proof-subtext">Diskrete Beratung · Faire Bewertung · Maximaler Verkaufspreis</div>
+                <div class="testimonial-slider">
+                    <div class="testimonial">
+                        <div class="testimonial-text">"Die Bewertung war deutlich präziser als bei ImmoScout. Der Verkauf lief reibungslos!"</div>
+                        <div class="testimonial-author">— Familie M., Neustadt</div>
+                    </div>
+                    <div class="testimonial">
+                        <div class="testimonial-text">"Kompetent, diskret und 15% über dem erwarteten Preis verkauft. Vielen Dank!"</div>
+                        <div class="testimonial-author">— Herr K., Landau</div>
+                    </div>
+                    <div class="testimonial">
+                        <div class="testimonial-text">"Endlich jemand, der die Region wirklich kennt. Keine Standard-Algorithmen."</div>
+                        <div class="testimonial-author">— Frau B., Speyer</div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <button class="btn-main" onclick="checkFlowStep2()">Weiter →</button>
-        <button class="btn-outline" onclick="nextStep(1)">← Zurück</button>
+            <button class="btn-main" onclick="checkFlowStep2()">Weiter</button>
+            <button class="btn-outline-dark" onclick="nextStep(1)">← Zurück</button>
+        </div>
     </div>
 
     <!-- STEP 3: ZUSTAND -->
     <div class="step" id="step3">
-        <h2>🔧 Zustand der Immobilie</h2>
-        <div class="grid-options">
-            <div class="card-option" onclick="setSelect('cond', 'Neubau', this)">
-                <div style="font-size: 28px; margin-bottom: 8px;">✨</div>
-                <strong>Neubau</strong>
+        <div class="step-content">
+            <h2>Zustand der Immobilie</h2>
+            <div class="grid-options">
+                <div class="card-option" onclick="setSelect('cond', 'Neubau', this)">
+                    <div class="card-option-icon">✨</div>
+                    Neubau
+                </div>
+                <div class="card-option" onclick="setSelect('cond', 'Modernisiert', this)">
+                    <div class="card-option-icon">🔄</div>
+                    Modernisiert
+                </div>
+                <div class="card-option" onclick="setSelect('cond', 'Gepflegt', this)">
+                    <div class="card-option-icon">✅</div>
+                    Gepflegt
+                </div>
+                <div class="card-option" onclick="setSelect('cond', 'Saniert', this)">
+                    <div class="card-option-icon">🛠️</div>
+                    Saniert
+                </div>
+                <div class="card-option" onclick="setSelect('cond', 'Renovierungsbedürftig', this)">
+                    <div class="card-option-icon">⚠️</div>
+                    Renovierungsbedürftig
+                </div>
             </div>
-            <div class="card-option" onclick="setSelect('cond', 'Modernisiert', this)">
-                <div style="font-size: 28px; margin-bottom: 8px;">🔄</div>
-                <strong>Modernisiert</strong>
-            </div>
-            <div class="card-option" onclick="setSelect('cond', 'Gepflegt', this)">
-                <div style="font-size: 28px; margin-bottom: 8px;">✅</div>
-                <strong>Gepflegt</strong>
-            </div>
-            <div class="card-option" onclick="setSelect('cond', 'Saniert', this)">
-                <div style="font-size: 28px; margin-bottom: 8px;">🛠️</div>
-                <strong>Saniert</strong>
-            </div>
-            <div class="card-option" onclick="setSelect('cond', 'Renovierungsbedürftig', this)">
-                <div style="font-size: 28px; margin-bottom: 8px;">⚠️</div>
-                <strong>Renovierungsbedürftig</strong>
-            </div>
+            <button class="btn-main" onclick="nextStep(4)">Weiter</button>
+            <button class="btn-outline-dark" onclick="nextStep(2)">← Zurück</button>
         </div>
-        <button class="btn-main" onclick="nextStep(4)">Weiter →</button>
-        <button class="btn-outline" onclick="nextStep(2)">← Zurück</button>
     </div>
 
     <!-- STEP 4: AUSSTATTUNG -->
     <div class="step" id="step4">
-        <h2>⭐ Qualität der Ausstattung</h2>
-        <div class="grid-options">
-            <div class="card-option" onclick="setSelect('qual', 'Einfach', this)">
-                <div style="font-size: 28px; margin-bottom: 8px;">🔹</div>
-                <strong>Einfach</strong>
+        <div class="step-content">
+            <h2>Qualität der Ausstattung</h2>
+            <div class="grid-options">
+                <div class="card-option" onclick="setSelect('qual', 'Einfach', this)">
+                    <div class="card-option-icon">🔹</div>
+                    Einfach
+                </div>
+                <div class="card-option" onclick="setSelect('qual', 'Standard', this)">
+                    <div class="card-option-icon">🔸</div>
+                    Standard
+                </div>
+                <div class="card-option" onclick="setSelect('qual', 'Gehoben', this)">
+                    <div class="card-option-icon">💎</div>
+                    Gehoben
+                </div>
+                <div class="card-option" onclick="setSelect('qual', 'Luxus', this)">
+                    <div class="card-option-icon">👑</div>
+                    Luxus
+                </div>
             </div>
-            <div class="card-option" onclick="setSelect('qual', 'Standard', this)">
-                <div style="font-size: 28px; margin-bottom: 8px;">🔸</div>
-                <strong>Standard</strong>
+            <div class="full-tooltip">
+                <strong>Der verborgene Schatz:</strong><br>
+                Wussten Sie, dass kleine Optimierungen an der Ausstattung (Home Staging, kleine Reparaturen) den Verkaufspreis oft um <strong>10-15%</strong> heben können? Das sieht kein Algorithmus.
+                <div class="tooltip-cta">
+                    <strong>Unsicher bei der Einstufung?</strong><br>
+                    <a href="#" onclick="openCalendly(); return false;">
+                        → Experten-Shortcall vereinbaren (5 Min.)
+                    </a>
+                </div>
             </div>
-            <div class="card-option" onclick="setSelect('qual', 'Gehoben', this)">
-                <div style="font-size: 28px; margin-bottom: 8px;">💎</div>
-                <strong>Gehoben</strong>
-            </div>
-            <div class="card-option" onclick="setSelect('qual', 'Luxus', this)">
-                <div style="font-size: 28px; margin-bottom: 8px;">👑</div>
-                <strong>Luxus</strong>
-            </div>
+            <button class="btn-main" style="margin-top:25px;" onclick="nextStep(5)">Weiter</button>
+            <button class="btn-outline-dark" onclick="nextStep(3)">← Zurück</button>
         </div>
-        <div class="full-tooltip">
-            <strong>💡 Der verborgene Schatz:</strong><br>
-            Wussten Sie, dass kleine Optimierungen an der Ausstattung (Home Staging, kleine Reparaturen) den Verkaufspreis oft um <strong>10-15%</strong> heben können? Das sieht kein Algorithmus.
-            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd;">
-                <strong>💬 Unsicher bei der Einstufung?</strong><br>
-                <a href="#" onclick="openCalendly(); return false;" style="color: var(--cta); text-decoration: none; font-weight: 700;">
-                    → Experten-Shortcall vereinbaren (5 Min.)
-                </a>
-            </div>
-        </div>
-        <button class="btn-main" style="margin-top:20px;" onclick="nextStep(5)">Weiter →</button>
-        <button class="btn-outline" onclick="nextStep(3)">← Zurück</button>
     </div>
 
     <!-- STEP 5: BESONDERHEITEN -->
     <div class="step" id="step5">
-        <h2>🎯 Besonderheiten</h2>
-        <p style="color: #666; margin-bottom: 20px;">Wählen Sie alle zutreffenden Merkmale (Mehrfachauswahl möglich):</p>
-        <div id="feat_grid" class="grid-options"></div>
-        <button class="btn-main" onclick="nextStep(6)">Weiter →</button>
-        <button class="btn-outline" onclick="nextStep(4)">← Zurück</button>
+        <div class="step-content">
+            <h2>Besonderheiten</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 25px;">Wählen Sie alle zutreffenden Merkmale (Mehrfachauswahl möglich):</p>
+            <div id="feat_grid" class="grid-options"></div>
+            <button class="btn-main" onclick="nextStep(6)">Weiter</button>
+            <button class="btn-outline-dark" onclick="nextStep(4)">← Zurück</button>
+        </div>
     </div>
 
     <!-- STEP 6: LAGE -->
     <div class="step" id="step6">
-        <h2>📍 Lage der Immobilie</h2>
-        <p style="color: #666; margin-bottom: 15px;">Geben Sie die Adresse oder den Ort ein:</p>
-        <input type="text" id="addr_input" placeholder="z.B. Hauptstraße 12, Neustadt" style="width: 100%; padding: 12px; border: 2px solid var(--border); border-radius: 8px; font-size: 14px; margin-bottom: 10px;">
-        <div id="addr_res" style="background: white; border: 1px solid var(--border); border-radius: 8px; max-height: 200px; overflow-y: auto;"></div>
-        <div id="map"></div>
-        
-        <div class="full-tooltip">
-            <strong>🎯 Ihre Lage ist besonders?</strong><br>
-            Mikrolage, Nachbarschaft und lokale Infrastruktur können den Wert um bis zu <strong>±15%</strong> beeinflussen. 
-            <div style="margin-top: 10px;">
-                <a href="#" onclick="openCalendly(); return false;" style="color: var(--cta); text-decoration: none; font-weight: 700;">
-                    → Jetzt persönliche Lageeinschätzung sichern
-                </a>
+        <div class="step-content">
+            <h2>Lage der Immobilie</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 20px;">Geben Sie die Adresse oder den Ort ein:</p>
+            <input type="text" id="addr_input" placeholder="z.B. Hauptstraße 12, Neustadt">
+            <div id="addr_res"></div>
+            <div id="map"></div>
+            
+            <div class="full-tooltip">
+                <strong>Ihre Lage ist besonders?</strong><br>
+                Mikrolage, Nachbarschaft und lokale Infrastruktur können den Wert um bis zu <strong>±15%</strong> beeinflussen.
+                <div class="tooltip-cta">
+                    <a href="#" onclick="openCalendly(); return false;">
+                        → Jetzt persönliche Lageeinschätzung sichern
+                    </a>
+                </div>
             </div>
-        </div>
 
-        <button class="btn-main" style="margin-top: 20px;" onclick="confirmAddress()">Bewertung berechnen →</button>
-        <button class="btn-outline" onclick="nextStep(5)">← Zurück</button>
+            <button class="btn-main" style="margin-top: 25px;" onclick="confirmAddress()">Jetzt erste Price Range erhalten</button>
+            <button class="btn-outline-dark" onclick="nextStep(5)">← Zurück</button>
+        </div>
     </div>
 
     <!-- STEP 7: ERGEBNIS (SCHNELLBEWERTUNG) -->
     <div class="step" id="step7">
-        <div class="result-card">
-            <h2 style="margin: 0 0 10px 0; font-size: 20px; opacity: 0.9;">Vorläufige Bewertung</h2>
-            <div style="font-size: 48px; font-weight: 800; margin: 20px 0;" id="res_range">
-                320.000 - 380.000 €
+        <div class="step-content">
+            <div class="result-card">
+                <div class="result-card-label">Vorläufige Bewertung</div>
+                <div class="result-card-value" id="res_range">320.000 - 380.000 €</div>
+                <div class="result-card-subtext">Basierend auf Ihren Angaben</div>
             </div>
-            <p style="opacity: 0.9; margin: 0;">Basierend auf Ihren Angaben</p>
-        </div>
 
-        <!-- WARNING BOX -->
-        <div class="warning-box">
-            <h3>⚠️ ACHTUNG: Diese Schätzung berücksichtigt NICHT:</h3>
-            <ul class="warning-list">
-                <li><strong>Mikrolage & Nachbarschaft</strong> (±15% Preiseinfluss)</li>
-                <li><strong>Verkaufspsychologie & Timing</strong> (±8% Preiseinfluss)</li>
-                <li><strong>Versteckte Werttreiber</strong> Ihrer Immobilie</li>
-                <li><strong>Steueroptimale Verkaufsstrategie</strong></li>
-            </ul>
-            <div style="background: white; padding: 20px; border-radius: 8px; margin-top: 20px; text-align: center;">
-                <strong style="color: var(--primary); font-size: 16px;">
-                    → Im Strategiegespräch identifizieren wir Ihr tatsächliches Potenzial
-                </strong>
-            </div>
-        </div>
-
-        <!-- INSIGHT CARDS -->
-        <div class="insight-grid">
-            <div class="insight-card">
-                <div class="insight-icon">🏡</div>
-                <div class="insight-title">Haftungsfalle GEG</div>
-                <div class="insight-text">
-                    Neue Heizungsgesetze mindern den Wert drastisch – es sei denn, man positioniert die Immobilie strategisch richtig. Wir prüfen Ihren Sanierungsstatus.
+            <!-- WARNING BOX -->
+            <div class="warning-box">
+                <h3>ACHTUNG: Diese Schätzung berücksichtigt NICHT:</h3>
+                <ul class="warning-list">
+                    <li><strong>Mikrolage & Nachbarschaft</strong> (±15% Preiseinfluss)</li>
+                    <li><strong>Verkaufspsychologie & Timing</strong> (±8% Preiseinfluss)</li>
+                    <li><strong>Versteckte Werttreiber</strong> Ihrer Immobilie</li>
+                    <li><strong>Steueroptimale Verkaufsstrategie</strong></li>
+                </ul>
+                <div class="warning-cta-box">
+                    <div class="warning-cta-text" onclick="scrollToCalendly()">
+                        → Im Strategiegespräch identifizieren wir Ihr tatsächliches Potenzial
+                    </div>
                 </div>
             </div>
-            <div class="insight-card">
-                <div class="insight-icon">👥</div>
-                <div class="insight-title">Zielgruppen-Analyse</div>
-                <div class="insight-text">
-                    Wer ist Ihr Käufer? Ein Investor zahlt anders als eine junge Familie. Wir wissen, wer in Ihrer Lage aktuell am meisten bietet.
-                </div>
-            </div>
-            <div class="insight-card">
-                <div class="insight-icon">⏱️</div>
-                <div class="insight-title">Zeitaufwand</div>
-                <div class="insight-text">
-                    Ein privater Verkauf kostet im Schnitt 80-120 Arbeitsstunden. Wir übernehmen die komplette Führung – diskret und rechtssicher.
-                </div>
-            </div>
-        </div>
 
-        <button class="btn-main" onclick="nextStep(8)" style="font-size: 16px; padding: 20px;">
-            🔍 Detaillierte Analyse anzeigen
-        </button>
-        
-        <div style="margin-top: 30px; padding: 25px; background: #f8f9fa; border-radius: 12px; text-align: center;">
-            <p style="color: #666; margin-bottom: 15px; font-size: 13px;">
-                <strong>Kostenloses Strategiegespräch – 100% unverbindlich</strong><br>
-                Danach entscheiden Sie in Ruhe, ob wir zusammenarbeiten.
-            </p>
-            <button class="btn-outline" onclick="scrollToCalendly()" style="background: white; border-color: var(--primary); color: var(--primary);">
-                📅 Termin vereinbaren
+            <!-- INSIGHT CARDS -->
+            <div class="insight-grid">
+                <div class="insight-card">
+                    <div class="insight-title">Haftungsfalle GEG</div>
+                    <div class="insight-text">
+                        Neue Heizungsgesetze mindern den Wert drastisch – es sei denn, man positioniert die Immobilie strategisch richtig. Wir prüfen Ihren Sanierungsstatus.
+                    </div>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-title">Zielgruppen-Analyse</div>
+                    <div class="insight-text">
+                        Wer ist Ihr Käufer? Ein Investor zahlt anders als eine junge Familie. Wir wissen, wer in Ihrer Lage aktuell am meisten bietet.
+                    </div>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-title">Zeitaufwand</div>
+                    <div class="insight-text">
+                        Ein privater Verkauf kostet im Schnitt 80-120 Arbeitsstunden. Wir übernehmen die komplette Führung – diskret und rechtssicher.
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-main" onclick="nextStep(8)" style="font-size: 17px; padding: 20px;">
+                Detaillierte Analyse anzeigen
             </button>
-        </div>
+            
+            <div class="cta-box">
+                <div class="cta-box-text">
+                    <strong>Kostenloses Strategiegespräch – 100% unverbindlich</strong>
+                    Danach entscheiden Sie in Ruhe, ob wir zusammenarbeiten.
+                </div>
+                <button class="btn-outline-dark" onclick="scrollToCalendly()">
+                    Termin vereinbaren
+                </button>
+            </div>
 
-        <div id="calendly-box" style="margin-top:50px; border-top:2px solid #eee; padding-top:30px;">
-            <div class="calendly-inline-widget" data-url="https://calendly.com/d-will-sw-immobilien/strategische-ersteinschatzung-verkauf" style="min-width:320px;height:700px;"></div>
+            <div id="calendly-box" style="margin-top:50px; border-top:2px solid var(--border); padding-top:40px;">
+                <div class="calendly-inline-widget" data-url="https://calendly.com/d-will-sw-immobilien/strategische-ersteinschatzung-verkauf" style="min-width:320px;height:700px;"></div>
+            </div>
         </div>
     </div>
 
     <!-- STEP 8: DETAILLIERTE ANALYSE -->
     <div class="step" id="step8">
         <div class="analysis-header">
-            <h1 style="color: white; margin: 0 0 15px 0; font-size: 28px;">📊 Detaillierte Immobilienanalyse</h1>
-            <p style="opacity: 0.95; font-size: 15px; margin: 0;">
-                Professionelle Bewertung nach Sachwert- und Marktwertverfahren
-            </p>
+            <h1>Detaillierte Immobilienanalyse</h1>
+            <p>Professionelle Bewertung nach Sachwert- und Marktwertverfahren</p>
         </div>
 
-        <!-- VERKAUFSZEITRAUM -->
-        <div style="margin-bottom: 35px;">
-            <h3 style="color: var(--primary); margin-bottom: 15px;">⏰ Wann planen Sie den Verkauf?</h3>
-            <div class="grid-options">
-                <div class="card-option" onclick="setSelect('timing', 'Innerhalb 3 Monate', this)">
-                    <div style="font-size: 28px; margin-bottom: 8px;">🔥</div>
-                    <strong>Innerhalb 3 Monate</strong>
-                </div>
-                <div class="card-option" onclick="setSelect('timing', '3-6 Monate', this)">
-                    <div style="font-size: 28px; margin-bottom: 8px;">📅</div>
-                    <strong>3-6 Monate</strong>
-                </div>
-                <div class="card-option" onclick="setSelect('timing', '6-12 Monate', this)">
-                    <div style="font-size: 28px; margin-bottom: 8px;">🗓️</div>
-                    <strong>6-12 Monate</strong>
-                </div>
-                <div class="card-option" onclick="setSelect('timing', 'Erstmal informieren', this)">
-                    <div style="font-size: 28px; margin-bottom: 8px;">💡</div>
-                    <strong>Erst informieren</strong>
-                </div>
-            </div>
-        </div>
-
-        <!-- ANALYSE GRID -->
-        <div class="analysis-grid">
-            <div class="analysis-card">
-                <div class="analysis-label">📐 Sachwertverfahren</div>
-                <div class="analysis-value" id="res_sach">285.000 €</div>
-                <div class="analysis-sub">Bausubstanz + Grundstück</div>
-            </div>
-            <div class="analysis-card">
-                <div class="analysis-label">📊 Marktwertverfahren</div>
-                <div class="analysis-value" id="res_market">350.000 €</div>
-                <div class="analysis-sub">Vergleichsobjekte + Lage</div>
-            </div>
-            <div class="analysis-card">
-                <div class="analysis-label">👥 Aktive Käufersuchen</div>
-                <div class="analysis-value" id="res_cust">127</div>
-                <div class="analysis-sub">In Ihrer Region</div>
-            </div>
-        </div>
-
-        <!-- BUYER DATABASE SIMULATION -->
-        <div class="database-search">
-            <h2 style="color: white; margin: 0 0 15px 0; font-size: 24px;">🎯 Interessentendatenbank durchsuchen</h2>
-            <p style="opacity: 0.95; margin-bottom: 25px; font-size: 15px;">
-                Prüfen wir, welche Käufer aktuell genau nach Ihrer Immobilie suchen...
-            </p>
-            <button class="btn-main" onclick="simulateDatabaseSearch()" id="searchBtn" style="background: white; color: var(--primary); max-width: 400px; margin: 0 auto; display: block;">
-                🔍 Marktpotenzial direkt prüfen
-            </button>
-
-            <!-- SEARCH ANIMATION -->
-            <div class="search-animation" id="searchAnimation">
-                <div class="search-spinner"></div>
-                <p style="font-size: 14px; opacity: 0.9;">Durchsuche 1.247 Interessenten in der Pfalz...</p>
-            </div>
-
-            <!-- BUYER RESULTS -->
-            <div class="buyer-results" id="buyerResults">
-                <h3 style="color: white; margin-bottom: 20px; font-size: 20px;">✅ <span id="matchCount">3</span> passende Interessenten gefunden!</h3>
-                
-                <div class="buyer-match">
-                    <div class="buyer-match-header">
-                        <span class="buyer-id">ID: KI-2026-4738-PF</span>
-                        <span class="buyer-date" id="date1">Vor 4 Tagen</span>
+        <div class="step-content">
+            <!-- VERKAUFSZEITRAUM -->
+            <div style="margin-bottom: 40px;">
+                <h3>Wann planen Sie den Verkauf?</h3>
+                <div class="grid-options">
+                    <div class="card-option" onclick="setSelect('timing', 'Innerhalb 3 Monate', this); updateBuyerCount();">
+                        <div class="card-option-icon">🔥</div>
+                        Innerhalb 3 Monate
                     </div>
-                    <div class="buyer-criteria">
-                        <strong>Suchprofil:</strong> Einfamilienhaus, 100-150m², Raum Neustadt, Budget bis 400.000 €<br>
-                        <strong>Status:</strong> Aktiv suchend, Finanzierung bestätigt ✅
+                    <div class="card-option" onclick="setSelect('timing', '3-6 Monate', this); updateBuyerCount();">
+                        <div class="card-option-icon">📅</div>
+                        3-6 Monate
+                    </div>
+                    <div class="card-option" onclick="setSelect('timing', '6-12 Monate', this); updateBuyerCount();">
+                        <div class="card-option-icon">🗓️</div>
+                        6-12 Monate
+                    </div>
+                    <div class="card-option" onclick="setSelect('timing', 'Erst informieren', this); updateBuyerCount();">
+                        <div class="card-option-icon">💡</div>
+                        Erst informieren
+                    </div>
+                </div>
+            </div>
+
+            <!-- ANALYSE GRID -->
+            <div class="analysis-grid">
+                <div class="analysis-card">
+                    <div class="analysis-label">Sachwertverfahren</div>
+                    <div class="analysis-value" id="res_sach">285.000 €</div>
+                    <div class="analysis-sub">Bausubstanz + Grundstück</div>
+                </div>
+                <div class="analysis-card">
+                    <div class="analysis-label">Marktwertverfahren</div>
+                    <div class="analysis-value" id="res_market">350.000 €</div>
+                    <div class="analysis-sub">Vergleichsobjekte + Lage</div>
+                </div>
+                <div class="analysis-card">
+                    <div class="analysis-label">Aktive Käufersuchen</div>
+                    <div class="analysis-value" id="res_cust">127</div>
+                    <div class="analysis-sub">In Ihrer Region</div>
+                </div>
+            </div>
+
+            <!-- CALCULATION BREAKDOWNS -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin: 35px 0;">
+                <div class="calculation-breakdown">
+                    <div class="breakdown-title">Sachwertverfahren</div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">Bodenwert (<span id="plot_area">500</span>m² × <span id="land_price">400</span> €/m²)</span>
+                        <span class="breakdown-value" id="land_value">200.000 €</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">Gebäudewert (Baujahr <span id="build_year">1995</span>, <span id="living_area">120</span>m²)</span>
+                        <span class="breakdown-value" id="building_value">385.000 €</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">Außenanlagen & Zubehör</span>
+                        <span class="breakdown-value" id="extras_value">45.000 €</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">Sachwert gesamt</span>
+                        <span class="breakdown-value" id="total_sach">630.000 €</span>
                     </div>
                 </div>
 
-                <div class="buyer-match">
-                    <div class="buyer-match-header">
-                        <span class="buyer-id">ID: KI-2026-4891-PF</span>
-                        <span class="buyer-date" id="date2">Vor 9 Tagen</span>
+                <div class="calculation-breakdown">
+                    <div class="breakdown-title">Marktwertverfahren</div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">Ø Verkaufspreis Region</span>
+                        <span class="breakdown-value" id="avg_price">3.850 €/m²</span>
                     </div>
-                    <div class="buyer-criteria">
-                        <strong>Suchprofil:</strong> Wohnung/Haus, ruhige Lage, Garten erwünscht, Budget flexibel<br>
-                        <strong>Status:</strong> Hochmotiviert, kurzfristige Besichtigung gewünscht ⚡
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">Lagefaktor</span>
+                        <span class="breakdown-value" id="location_factor">+12%</span>
                     </div>
-                </div>
-
-                <div class="buyer-match">
-                    <div class="buyer-match-header">
-                        <span class="buyer-id">ID: KI-2026-5012-PF</span>
-                        <span class="buyer-date" id="date3">Vor 14 Tagen</span>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">Ausstattungsbonus</span>
+                        <span class="breakdown-value" id="equipment_bonus">+8%</span>
                     </div>
-                    <div class="buyer-criteria">
-                        <strong>Suchprofil:</strong> Renovierungsobjekt für Kapitalanlage, Pfalz-Region<br>
-                        <strong>Status:</strong> Investor, Barzahlung möglich 💰
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">Marktwert geschätzt</span>
+                        <span class="breakdown-value" id="total_market">520.000 €</span>
                     </div>
-                </div>
-
-                <div style="background: rgba(255,255,255,0.3); padding: 25px; border-radius: 12px; margin-top: 25px; backdrop-filter: blur(10px);">
-                    <strong style="font-size: 18px; display: block; margin-bottom: 15px;">
-                        🚀 Diese Käufer warten auf Ihre Immobilie!
-                    </strong>
-                    <p style="font-size: 14px; margin-bottom: 20px; opacity: 0.95;">
-                        Im Strategiegespräch klären wir, welcher Käufertyp den <strong>höchsten Preis</strong> zahlt und wie wir Ihre Immobilie optimal positionieren.
-                    </p>
-                    <button class="btn-main" onclick="scrollToCalendly()" style="background: var(--cta); max-width: 100%;">
-                        📞 Jetzt Strategiegespräch vereinbaren
-                    </button>
                 </div>
             </div>
-        </div>
 
-        <!-- FINAL CTA -->
-        <div style="text-align: center; margin-top: 40px;">
-            <button class="btn-outline" onclick="nextStep(7)">← Zurück zur Übersicht</button>
-        </div>
+            <!-- BUYER DATABASE WITH 5-MIN TIMER -->
+            <div class="database-search">
+                <h2>Interessentendatenbank durchsuchen</h2>
+                <p style="opacity: 0.95; margin-bottom: 25px; font-size: 15px;">
+                    Exklusiver Einblick: Prüfen Sie, welche Käufer aktuell genau nach Ihrer Immobilie suchen
+                </p>
 
-        <div id="calendly-box-detailed" style="margin-top:50px; border-top:2px solid #eee; padding-top:30px;">
-            <div class="calendly-inline-widget" data-url="https://calendly.com/d-will-sw-immobilien/strategische-ersteinschatzung-verkauf" style="min-width:320px;height:700px;"></div>
+                <!-- TIMER (shown after button click) -->
+                <div class="database-timer" id="databaseTimer">
+                    <div style="font-size: 14px; font-weight: 600; margin-bottom: 10px;">Zugang läuft ab in:</div>
+                    <div class="timer-display" id="timerDisplay">5:00</div>
+                    <div class="timer-warning">Nach Ablauf ist eine Freischaltung nur im persönlichen Gespräch möglich</div>
+                </div>
+
+                <button class="btn-main" onclick="startDatabaseSearch()" id="searchBtn" style="background: white; color: #ec4899; max-width: 450px; margin: 0 auto; display: block; font-size: 16px;">
+                    Marktpotenzial jetzt prüfen (5 Min. Zugang)
+                </button>
+
+                <!-- SEARCH ANIMATION -->
+                <div class="search-animation" id="searchAnimation">
+                    <div class="search-spinner"></div>
+                    <p style="font-size: 14px; opacity: 0.9;">Durchsuche 1.247 Interessenten in der Region...</p>
+                </div>
+
+                <!-- BUYER RESULTS -->
+                <div class="buyer-results" id="buyerResults">
+                    <div class="buyer-results-header"><span id="matchCount">47</span> passende Käufersuchen gefunden</div>
+                    <div class="buyer-results-subtext">Sortiert nach Übereinstimmung mit Ihrer Immobilie</div>
+                    
+                    <div class="buyer-progress">
+                        <span class="progress-text">Anzeige:</span>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" id="progressBar" style="width: 8.5%;"></div>
+                        </div>
+                        <span class="progress-text"><span id="shownMatches">4</span> von <span id="totalMatches">47</span></span>
+                    </div>
+
+                    <div id="buyerMatchesContainer"></div>
+
+                    <div class="pagination-dots" id="paginationDots">
+                        <div class="pagination-dot active" onclick="showBuyerPage(0)"></div>
+                        <div class="pagination-dot" onclick="showBuyerPage(1)"></div>
+                        <div class="pagination-dot" onclick="showBuyerPage(2)"></div>
+                        <div class="pagination-dot" onclick="showBuyerPage(3)"></div>
+                    </div>
+
+                    <div class="premium-unlock" id="premiumUnlock" style="display: none;">
+                        <div class="unlock-icon">🔒</div>
+                        <h3 style="color: white; margin-bottom: 12px;">Premium-Zugang erforderlich</h3>
+                        <p style="font-size: 15px; opacity: 0.9; margin-bottom: 25px;">
+                            Sie haben 4 von <span id="totalMatchesFinal">47</span> Interessenten gesehen. 
+                            <strong>Alle <span id="remainingMatches">43</span> weiteren Profile</strong> werden im Strategiegespräch freigeschaltet.
+                        </p>
+                        <button class="btn-main" onclick="scrollToCalendly()" style="background: white; color: #ec4899; max-width: 100%;">
+                            Alle Interessenten freischalten
+                        </button>
+                    </div>
+
+                    <div style="background: rgba(255,255,255,0.2); padding: 30px; border-radius: 6px; margin-top: 30px; backdrop-filter: blur(10px);">
+                        <strong style="font-size: 19px; display: block; margin-bottom: 15px;">
+                            Diese Käufer warten auf Ihre Immobilie
+                        </strong>
+                        <p style="font-size: 14px; margin-bottom: 25px; opacity: 0.95;">
+                            Im Strategiegespräch klären wir, welcher Käufertyp den <strong>höchsten Preis</strong> zahlt und wie wir Ihre Immobilie optimal positionieren.
+                        </p>
+                        <button class="btn-main" onclick="scrollToCalendly()" style="background: var(--cta); max-width: 100%;">
+                            Jetzt Strategiegespräch vereinbaren
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FINAL CTA -->
+            <div style="text-align: center; margin-top: 40px;">
+                <button class="btn-outline-dark" onclick="nextStep(7)">← Zurück zur Übersicht</button>
+            </div>
+
+            <div id="calendly-box-detailed" style="margin-top:50px; border-top:2px solid var(--border); padding-top:40px;">
+                <div class="calendly-inline-widget" data-url="https://calendly.com/d-will-sw-immobilien/strategische-ersteinschatzung-verkauf" style="min-width:320px;height:700px;"></div>
+            </div>
         </div>
     </div>
 
@@ -574,28 +1489,36 @@
 
     let state = {
         category: '', sub: '', living: 120, plot: 500, year: 1995,
-        cond: '', qual: '', timing: '', feats: {}, address: ''
+        cond: '', qual: '', timing: '', feats: {}, address: '',
+        buyerSearchHash: '' // for consistent results
     };
 
     let mapInitialized = false;
     let map, marker;
+    let timerInterval = null;
+    let timeRemaining = 300; // 5 minutes in seconds
+    let currentPage = 0;
+    let buyerMatches = [];
 
     // ========== NAVIGATION ==========
     function nextStep(s) {
         document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
         document.getElementById('step' + s).classList.add('active');
         
-        // Show sticky CTA from step 3 onwards
         if(s >= 3) {
             document.getElementById('stickyCta').classList.add('visible');
         }
         
-        // Initialize map when step 6 is reached
         if(s === 6 && !mapInitialized) {
             initMap();
         }
         
         if(s === 7) runCalculation();
+        if(s === 8) {
+            runDetailedCalculation();
+            generateBuyerSearchHash();
+        }
+        
         window.scrollTo(0,0);
     }
 
@@ -603,7 +1526,7 @@
     window.addEventListener('scroll', function() {
         const scrolled = window.pageYOffset;
         const stickyBtn = document.getElementById('stickyCta');
-        if(scrolled > 300) {
+        if(scrolled > 400) {
             stickyBtn.classList.add('visible');
         }
     });
@@ -666,15 +1589,17 @@
     }
 
     // ========== BESONDERHEITEN ==========
-    const feats = ["Garage", "Stellplatz", "Pool", "Einliegerwohnung", "Sauna", "Keller", "Balkon"];
+    const feats = [
+        "Garage", "Stellplatz", "Carport", "Pool", "Einliegerwohnung", 
+        "Sauna", "Keller", "Balkon", "Terrasse", "Garten", 
+        "Kamin", "Fußbodenheizung", "Photovoltaik", "Alarmanlage"
+    ];
     const featIcons = {
-        "Garage": "🚗",
-        "Stellplatz": "🅿️",
-        "Pool": "🏊",
-        "Einliegerwohnung": "🏠",
-        "Sauna": "🧖",
-        "Keller": "📦",
-        "Balkon": "🌿"
+        "Garage": "🚗", "Stellplatz": "🅿️", "Carport": "🏠",
+        "Pool": "🏊", "Einliegerwohnung": "🏘️", "Sauna": "🧖",
+        "Keller": "📦", "Balkon": "🌿", "Terrasse": "☀️",
+        "Garten": "🌳", "Kamin": "🔥", "Fußbodenheizung": "♨️",
+        "Photovoltaik": "⚡", "Alarmanlage": "🔒"
     };
 
     function renderFeats() {
@@ -684,21 +1609,34 @@
             let d = document.createElement('div');
             d.className = 'card-option' + (state.feats[f] ? ' selected' : '');
             d.innerHTML = `
-                <div style="font-size: 28px; margin-bottom: 8px;">${featIcons[f]}</div>
-                <strong>${f}</strong>
+                <div class="card-option-icon">${featIcons[f]}</div>
+                ${f}
             `;
+            
             if(state.feats[f]) {
-                let b = document.createElement('div');
-                b.className = 'badge';
-                b.innerText = state.feats[f];
-                b.onclick = (e) => { e.stopPropagation(); removeFeat(f); };
-                d.appendChild(b);
+                let badge = document.createElement('div');
+                badge.className = 'badge';
+                badge.innerText = state.feats[f];
+                badge.onclick = (e) => { e.stopPropagation(); };
+                d.appendChild(badge);
+                
+                let minus = document.createElement('div');
+                minus.className = 'badge-minus';
+                minus.innerHTML = '−';
+                minus.onclick = (e) => { e.stopPropagation(); removeFeat(f); };
+                d.appendChild(minus);
             }
+            
             d.onclick = () => addFeat(f);
             grid.appendChild(d);
         });
     }
-    function addFeat(f) { state.feats[f] = (state.feats[f] || 0) + 1; renderFeats(); }
+    
+    function addFeat(f) { 
+        state.feats[f] = (state.feats[f] || 0) + 1; 
+        renderFeats(); 
+    }
+    
     function removeFeat(f) { 
         if(state.feats[f] > 0) state.feats[f]--;
         if(state.feats[f] === 0) delete state.feats[f];
@@ -706,9 +1644,9 @@
     }
     renderFeats();
 
-    // ========== MAP & ADDRESS (Lazy Load) ==========
+    // ========== MAP & ADDRESS ==========
     function initMap() {
-        map = L.map('map').setView([49.4701, 8.1342], 10); // Centered on Pfalz
+        map = L.map('map').setView([49.4701, 8.1342], 10);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
         marker = L.marker([49.4701, 8.1342]).addTo(map);
         mapInitialized = true;
@@ -723,9 +1661,7 @@
             container.innerHTML = '';
             res.forEach(p => {
                 let d = document.createElement('div');
-                d.style.padding = '10px';
-                d.style.cursor = 'pointer';
-                d.style.borderBottom = '1px solid #eee';
+                d.className = 'addr-result-item';
                 d.innerText = p.display_name;
                 d.onclick = () => {
                     state.address = p.display_name;
@@ -741,26 +1677,29 @@
 
     function confirmAddress() {
         if(!state.address) return alert("Bitte wählen Sie eine Adresse aus der Liste");
-        // Send early lead email
         emailjs.send("service_9wal0zr", "template_bwjdkei", { 
             address: state.address,
             category: state.category,
+            sub: state.sub,
             living: state.living,
+            plot: state.plot,
+            year: state.year,
             condition: state.cond,
             quality: state.qual
         });
         nextStep(7);
     }
 
-    // ========== CALCULATION ==========
+    // ========== BASIC CALCULATION ==========
     function runCalculation() {
         let base = (state.living * 3200) + (state.plot * 160);
-        if(state.qual === 'Luxus') base *= 1.25;
-        if(state.qual === 'Gehoben') base *= 1.12;
-        if(state.cond === 'Neubau') base *= 1.15;
-        if(state.cond === 'Renovierungsbedürftig') base *= 0.75;
         
-        // Add features value
+        if(state.qual === 'Luxus') base *= 1.25;
+        else if(state.qual === 'Gehoben') base *= 1.12;
+        
+        if(state.cond === 'Neubau') base *= 1.15;
+        else if(state.cond === 'Renovierungsbedürftig') base *= 0.75;
+        
         let featBonus = Object.values(state.feats).reduce((a,b) => a+b, 0) * 5000;
         base += featBonus;
         
@@ -768,46 +1707,227 @@
         let upper = Math.round(base * 1.06 / 1000) * 1000;
         
         document.getElementById('res_range').innerText = lower.toLocaleString('de-DE') + " € - " + upper.toLocaleString('de-DE') + " €";
-        document.getElementById('res_sach').innerText = Math.round(base * 0.85).toLocaleString('de-DE') + " €";
-        document.getElementById('res_market').innerText = Math.round(base).toLocaleString('de-DE') + " €";
-        document.getElementById('res_cust').innerText = Math.floor(Math.random() * 100) + 80;
     }
 
-    // ========== DATABASE SEARCH SIMULATION ==========
-    function simulateDatabaseSearch() {
+    // ========== DETAILED CALCULATION ==========
+    function runDetailedCalculation() {
+        // Sachwert
+        const landPrice = Math.floor(Math.random() * 200) + 350; // 350-550 €/m²
+        const landValue = state.plot * landPrice;
+        const buildingValue = state.living * 2800 * (1 - (2025 - state.year) * 0.008);
+        const extrasValue = Object.values(state.feats).reduce((a,b) => a+b, 0) * 8000;
+        const totalSach = Math.round((landValue + buildingValue + extrasValue) * 0.85);
+        
+        // Marktwert
+        const avgPrice = Math.floor(Math.random() * 800) + 3400; // 3400-4200 €/m²
+        const locationFactor = Math.floor(Math.random() * 8) + 8; // 8-15%
+        const equipmentBonus = state.qual === 'Luxus' ? 15 : state.qual === 'Gehoben' ? 10 : 5;
+        const totalMarket = Math.round(state.living * avgPrice * (1 + locationFactor/100) * (1 + equipmentBonus/100));
+        
+        // Update UI
+        document.getElementById('plot_area').innerText = state.plot;
+        document.getElementById('land_price').innerText = landPrice;
+        document.getElementById('land_value').innerText = landValue.toLocaleString('de-DE') + ' €';
+        document.getElementById('build_year').innerText = state.year;
+        document.getElementById('living_area').innerText = state.living;
+        document.getElementById('building_value').innerText = Math.round(buildingValue).toLocaleString('de-DE') + ' €';
+        document.getElementById('extras_value').innerText = extrasValue.toLocaleString('de-DE') + ' €';
+        document.getElementById('total_sach').innerText = totalSach.toLocaleString('de-DE') + ' €';
+        
+        document.getElementById('avg_price').innerText = avgPrice.toLocaleString('de-DE') + ' €/m²';
+        document.getElementById('location_factor').innerText = '+' + locationFactor + '%';
+        document.getElementById('equipment_bonus').innerText = '+' + equipmentBonus + '%';
+        document.getElementById('total_market').innerText = totalMarket.toLocaleString('de-DE') + ' €';
+        
+        document.getElementById('res_sach').innerText = totalSach.toLocaleString('de-DE') + ' €';
+        document.getElementById('res_market').innerText = totalMarket.toLocaleString('de-DE') + ' €';
+    }
+
+    // ========== BUYER COUNT BASED ON INPUT ==========
+    function generateBuyerSearchHash() {
+        const hashInput = state.address + state.category + state.living + state.plot;
+        let hash = 0;
+        for(let i = 0; i < hashInput.length; i++) {
+            hash = ((hash << 5) - hash) + hashInput.charCodeAt(i);
+            hash = hash & hash;
+        }
+        state.buyerSearchHash = Math.abs(hash);
+    }
+
+    function updateBuyerCount() {
+        if(!state.buyerSearchHash) generateBuyerSearchHash();
+        
+        // Generate consistent count based on hash
+        const baseCount = 27 + (state.buyerSearchHash % 26); // 27-52
+        const timingMultiplier = state.timing === 'Innerhalb 3 Monate' ? 1.2 : 
+                                 state.timing === '3-6 Monate' ? 1.1 : 1.0;
+        const finalCount = Math.floor(baseCount * timingMultiplier);
+        
+        document.getElementById('res_cust').innerText = finalCount;
+    }
+
+    // ========== 5-MINUTE TIMER DATABASE SEARCH ==========
+    function startDatabaseSearch() {
         const btn = document.getElementById('searchBtn');
+        const timer = document.getElementById('databaseTimer');
         const animation = document.getElementById('searchAnimation');
         const results = document.getElementById('buyerResults');
         
         btn.style.display = 'none';
         animation.classList.add('active');
         
-        // Simulate search for 2.5 seconds
+        // Generate buyer matches
+        generateBuyerMatches();
+        
+        // Simulate search
         setTimeout(() => {
             animation.classList.remove('active');
+            timer.classList.add('active');
             results.classList.add('show');
             
-            // Generate random recent dates
-            const daysAgo = [
-                Math.floor(Math.random() * 10) + 2,
-                Math.floor(Math.random() * 10) + 5,
-                Math.floor(Math.random() * 10) + 10
-            ];
+            // Start 5-minute countdown
+            startTimer();
             
-            document.getElementById('date1').innerText = `Vor ${daysAgo[0]} Tagen`;
-            document.getElementById('date2').innerText = `Vor ${daysAgo[1]} Tagen`;
-            document.getElementById('date3').innerText = `Vor ${daysAgo[2]} Tagen`;
-            
-            // Random match count
-            const matches = Math.floor(Math.random() * 3) + 3; // 3-5 matches
-            document.getElementById('matchCount').innerText = matches;
+            // Show first page
+            showBuyerPage(0);
         }, 2500);
+    }
+
+    function startTimer() {
+        updateTimerDisplay();
+        timerInterval = setInterval(() => {
+            timeRemaining--;
+            updateTimerDisplay();
+            
+            if(timeRemaining <= 0) {
+                clearInterval(timerInterval);
+                document.getElementById('databaseTimer').innerHTML = '<div style="color: #fecaca; font-weight: 700;">Zugang abgelaufen</div>';
+            }
+        }, 1000);
+    }
+
+    function updateTimerDisplay() {
+        const minutes = Math.floor(timeRemaining / 60);
+        const seconds = timeRemaining % 60;
+        document.getElementById('timerDisplay').innerText = 
+            minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+    }
+
+    function generateBuyerMatches() {
+        if(!state.buyerSearchHash) generateBuyerSearchHash();
+        
+        const totalMatches = 27 + (state.buyerSearchHash % 26);
+        document.getElementById('matchCount').innerText = totalMatches;
+        document.getElementById('totalMatches').innerText = totalMatches;
+        document.getElementById('totalMatchesFinal').innerText = totalMatches;
+        document.getElementById('remainingMatches').innerText = totalMatches - 4;
+        
+        buyerMatches = [];
+        
+        const profiles = [
+            {
+                type: "Familie",
+                budget: "bis 450.000 €",
+                search: `${state.sub || 'Haus'}, ${state.living - 20}-${state.living + 30}m², Raum ${state.address.split(',')[1] || 'Pfalz'}`,
+                status: "Finanzierung bestätigt",
+                special: "✅"
+            },
+            {
+                type: "Investor",
+                budget: "flexibel",
+                search: `Kapitalanlage, ${state.category === 'haus' ? 'Haus' : 'Wohnung'}, ${state.address.split(',')[1] || 'Region'}`,
+                status: "Barzahlung möglich",
+                special: "💰"
+            },
+            {
+                type: "Käufer",
+                budget: `${Math.round(state.living * 3000 / 1000) * 1000} - ${Math.round(state.living * 4000 / 1000) * 1000} €`,
+                search: `${state.sub || state.category}, ruhige Lage, ${state.plot > 300 ? 'Garten erwünscht' : 'zentral'}`,
+                status: "Aktiv suchend",
+                special: "⚡"
+            },
+            {
+                type: "Vorgemerkt",
+                budget: "bis " + Math.round(state.living * 3800 / 1000) * 1000 + " €",
+                search: `${state.category}, ${state.living - 30}-${state.living + 20}m², ${state.address.split(',')[1] || 'Umkreis'}`,
+                status: "Bereits bekannter Kunde",
+                special: "🏆"
+            }
+        ];
+        
+        for(let i = 0; i < 4; i++) {
+            const profile = profiles[i];
+            const daysAgo = 3 + Math.floor((state.buyerSearchHash + i * 7) % 18);
+            const matchScore = 75 + Math.floor((state.buyerSearchHash + i * 13) % 20);
+            
+            buyerMatches.push({
+                id: 'KI-2026-' + (4200 + state.buyerSearchHash % 1000 + i * 73) + '-PF',
+                date: `Vor ${daysAgo} Tagen`,
+                score: matchScore + '%',
+                profile: profile
+            });
+        }
+    }
+
+    function showBuyerPage(page) {
+        currentPage = page;
+        
+        // Update pagination
+        document.querySelectorAll('.pagination-dot').forEach((dot, i) => {
+            dot.classList.toggle('active', i === page);
+        });
+        
+        if(page >= 3) {
+            // Show premium unlock
+            document.getElementById('buyerMatchesContainer').style.display = 'none';
+            document.getElementById('paginationDots').style.display = 'none';
+            document.getElementById('premiumUnlock').style.display = 'block';
+            return;
+        }
+        
+        // Show buyer match
+        const match = buyerMatches[page];
+        const container = document.getElementById('buyerMatchesContainer');
+        container.innerHTML = `
+            <div class="buyer-match">
+                <div class="buyer-match-header">
+                    <span class="buyer-id">${match.id}</span>
+                    <div>
+                        <span class="buyer-match-score">${match.score} Match</span>
+                        <span class="buyer-date">${match.date}</span>
+                    </div>
+                </div>
+                <div class="buyer-criteria">
+                    <div class="buyer-criteria-item">
+                        <span class="buyer-criteria-label">Typ:</span>
+                        <span class="buyer-criteria-value">${match.profile.type}</span>
+                    </div>
+                    <div class="buyer-criteria-item">
+                        <span class="buyer-criteria-label">Budget:</span>
+                        <span class="buyer-criteria-value">${match.profile.budget}</span>
+                    </div>
+                    <div class="buyer-criteria-item">
+                        <span class="buyer-criteria-label">Suchprofil:</span>
+                        <span class="buyer-criteria-value">${match.profile.search}</span>
+                    </div>
+                    <div class="buyer-criteria-item">
+                        <span class="buyer-criteria-label">Status:</span>
+                        <span class="buyer-criteria-value">${match.profile.status} ${match.profile.special}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Update progress bar
+        const progress = ((page + 1) / buyerMatches.length) * 100;
+        document.getElementById('progressBar').style.width = progress + '%';
+        document.getElementById('shownMatches').innerText = page + 1;
     }
 
     // ========== HELPERS ==========
     function scrollToCalendly() { 
         const box = document.getElementById('calendly-box') || document.getElementById('calendly-box-detailed');
-        box.scrollIntoView({behavior:'smooth'}); 
+        if(box) box.scrollIntoView({behavior:'smooth'}); 
     }
     
     function openCalendly() { 
