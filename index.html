@@ -5,32 +5,259 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Immobilienbewertung Premium | SW Immobilien</title>
 
-<link rel="stylesheet" href="style.css">
-
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-:root { --primary:#003366; --accent:#b39a6a; --bg:#f8fafc; }
-body { margin:0; background:var(--bg); font-family:'DM Sans',sans-serif; }
-.app-wrapper { max-width:1000px; margin:0 auto; }
-.step { display:none; padding:60px; background:white; }
-.step.active { display:block; animation:fade .4s ease; }
-@keyframes fade { from{opacity:0;transform:translateY(15px);} to{opacity:1;} }
-.progress { height:4px; background:#eee; }
-.progress-fill { height:4px; background:var(--primary); width:0%; transition:width .4s ease; }
-.btn-main { padding:18px 26px; background:var(--primary); color:white; border:none; border-radius:16px; cursor:pointer; font-weight:700; }
-.btn-secondary { padding:14px 20px; background:transparent; border:1px solid var(--primary); border-radius:14px; cursor:pointer; }
-.grid { display:grid; gap:20px; }
-.grid-4 { grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); }
-.card-option { border:1px solid #e2e8f0; padding:30px; border-radius:20px; cursor:pointer; text-align:center; }
-.card-option:hover { border-color:var(--accent); transform:translateY(-4px); }
-.hidden { display:none; }
-input[type=range] { width:100%; }
-.badge { background:var(--primary); color:white; border-radius:50%; width:22px; height:22px; font-size:12px; display:flex; align-items:center; justify-content:center; position:absolute; top:8px; right:8px; }
-.feature { position:relative; border:1px solid #e2e8f0; padding:20px; border-radius:16px; cursor:pointer; text-align:center; }
-#map { height:350px; margin-top:20px; border-radius:12px; }
-.footer { background:#111; color:white; padding:40px; text-align:center; }
+
+/* =======================
+GLOBAL
+======================= */
+
+:root{
+--primary:#0e3a67;
+--accent:#c8a85c;
+--bg:#f3f6f9;
+--card:#ffffff;
+--border:#e4e8ee;
+}
+
+body{
+margin:0;
+background:var(--bg);
+font-family:'DM Sans',sans-serif;
+color:#1a1a1a;
+}
+
+.app-wrapper{
+max-width:1180px;
+margin:0 auto;
+background:white;
+box-shadow:0 20px 60px rgba(0,0,0,0.08);
+}
+
+/* =======================
+INTRO HERO
+======================= */
+
+.hero{
+display:flex;
+align-items:center;
+min-height:720px;
+}
+
+.hero-left{
+flex:1;
+padding:80px;
+}
+
+.hero-right{
+flex:1;
+height:720px;
+background:url('http://sw-immobilien.de/wp-content/uploads/2026/01/dennis-will-immobilien.jpg') center/cover no-repeat;
+}
+
+.hero h1{
+font-size:52px;
+line-height:1.15;
+margin-bottom:30px;
+font-weight:800;
+color:#1f2b37;
+}
+
+.hero p{
+font-size:18px;
+color:#555;
+max-width:520px;
+line-height:1.6;
+}
+
+.btn-main{
+background:#e4635d;
+color:white;
+border:none;
+padding:18px 28px;
+border-radius:12px;
+font-weight:700;
+cursor:pointer;
+margin-top:30px;
+font-size:16px;
+}
+
+.btn-link{
+display:block;
+margin-top:20px;
+color:var(--primary);
+font-weight:600;
+cursor:pointer;
+}
+
+/* =======================
+PROGRESS
+======================= */
+
+.progress{
+height:4px;
+background:#eee;
+}
+
+.progress-fill{
+height:4px;
+background:var(--primary);
+width:0%;
+transition:.4s;
+}
+
+/* =======================
+STEPS
+======================= */
+
+.step{
+display:none;
+padding:70px 90px;
+}
+
+.step.active{
+display:block;
+animation:fade .4s ease;
+}
+
+@keyframes fade{
+from{opacity:0;transform:translateY(10px);}
+to{opacity:1;}
+}
+
+h2{
+font-size:40px;
+color:var(--primary);
+margin-bottom:40px;
+}
+
+/* =======================
+CARD GRID
+======================= */
+
+.grid{
+display:grid;
+gap:30px;
+}
+
+.grid-4{
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+}
+
+.card-option{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:18px;
+padding:40px;
+text-align:center;
+cursor:pointer;
+transition:.2s;
+position:relative;
+}
+
+.card-option:hover{
+border-color:var(--primary);
+transform:translateY(-4px);
+}
+
+.card-option.selected{
+border:2px solid var(--primary);
+background:#f0f5fb;
+}
+
+.card-option i{
+font-size:36px;
+color:var(--primary);
+margin-bottom:15px;
+display:block;
+}
+
+/* =======================
+FEATURES
+======================= */
+
+.feature{
+position:relative;
+background:var(--card);
+border:1px solid var(--border);
+border-radius:18px;
+padding:35px;
+text-align:center;
+cursor:pointer;
+transition:.2s;
+}
+
+.feature:hover{
+border-color:var(--primary);
+}
+
+.feature.selected{
+border:2px solid var(--primary);
+background:#f0f5fb;
+}
+
+.badge{
+position:absolute;
+top:10px;
+right:10px;
+background:var(--primary);
+color:white;
+border-radius:50%;
+width:26px;
+height:26px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:13px;
+font-weight:700;
+}
+
+.minus-btn{
+position:absolute;
+top:10px;
+left:10px;
+background:#ccc;
+border-radius:50%;
+width:26px;
+height:26px;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+font-weight:700;
+}
+
+/* =======================
+MAP
+======================= */
+
+#map{
+height:400px;
+border-radius:16px;
+margin-top:20px;
+}
+
+/* =======================
+FOOTER
+======================= */
+
+.footer{
+background:#111;
+color:white;
+text-align:center;
+padding:40px;
+}
+
+.footer img{
+height:60px;
+margin:10px;
+}
+
 </style>
 </head>
 
@@ -40,248 +267,121 @@ input[type=range] { width:100%; }
 
 <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
 
-<!-- INTRO -->
-<div class="step active" id="stepIntro">
-<h2>Immobilienwert ist kein Algorithmus.</h2>
-<p>Eine Immobilie ist ein Vermögenswert – kein Taschenrechner-Ergebnis.</p>
+<!-- HERO -->
+<div class="hero step active" id="stepIntro">
+<div class="hero-left">
+<h1>Ihre Immobilie ist kein Algorithmus.<br>Sie ist ein Vermögenswert.</h1>
+<p>Verzichten Sie auf automatisierte Schätzwerte. Wir bewerten Ihre Immobilie persönlich, fundiert und mit strategischem Blick für die Pfalz.</p>
 
-<div style="margin:30px 0;">
-<button class="btn-main" onclick="openCalendly()">Strategiegespräch buchen</button>
-</div>
-
-<div style="margin:20px 0;">
-<button class="btn-secondary" onclick="nextStep(1)">Diskrete Online-Analyse starten</button>
-</div>
-
-<div id="introCalendly" style="margin-top:40px;">
-<div class="calendly-inline-widget"
-data-url="https://calendly.com/d-will-sw-immobilien/strategische-ersteinschatzung-verkauf?hide_event_type_details=1&hide_gdpr_banner=1"
-style="min-width:320px;height:600px;">
-</div>
-<script src="https://assets.calendly.com/assets/external/widget.js" async></script>
-</div>
-
-</div>
-
-<!-- STEP 1 Kategorie -->
-<div class="step" id="step1">
-<h3>Welche Art Immobilie?</h3>
-
-<div class="grid grid-4">
-<div class="card-option" onclick="selectCategory('haus')">Haus</div>
-<div class="card-option" onclick="selectCategory('wohnung')">Wohnung</div>
-<div class="card-option" onclick="selectCategory('gewerbe')">Gewerbe</div>
-<div class="card-option" onclick="selectCategory('grundstueck')">Grundstück</div>
-</div>
-
-<div id="detailOptions" class="grid grid-4 hidden" style="margin-top:30px;"></div>
+<button class="btn-main" onclick="scrollCalendly()">Strategiegespräch vereinbaren</button>
+<span class="btn-link" onclick="nextStep(1)">Direkte Online-Analyse starten</span>
 
 <div style="margin-top:40px;">
-<button class="btn-secondary" onclick="prevStep()">Zurück</button>
-<button class="btn-main hidden" id="step1Next" onclick="nextStep(2)">Weiter</button>
+<img src="http://sw-immobilien.de/wp-content/uploads/2025/10/1.jpg">
+<img src="http://sw-immobilien.de/wp-content/uploads/2025/10/4.jpg">
 </div>
 
+</div>
+<div class="hero-right"></div>
+</div>
+
+<!-- STEP 1 -->
+<div class="step" id="step1">
+<h2>Welcher Haustyp liegt vor?</h2>
+
+<div class="grid grid-4">
+<div class="card-option" onclick="selectCategory('haus',this)">
+<i>🏠</i>Einfamilienhaus
+</div>
+<div class="card-option" onclick="selectCategory('wohnung',this)">
+<i>🏢</i>Wohnung
+</div>
+<div class="card-option" onclick="selectCategory('gewerbe',this)">
+<i>🏬</i>Gewerbe
+</div>
+<div class="card-option" onclick="selectCategory('grundstueck',this)">
+<i>🌳</i>Grundstück
+</div>
+</div>
+
+<div style="margin-top:50px;">
+<button class="btn-main" onclick="nextStep(2)">Weiter</button>
+</div>
 </div>
 
 <script>
 
-let currentStep = 0;
-let formData = {
-category:null,
-subcategory:null,
-features:{},
-}
+/* =======================
+STATE
+======================= */
+
+let currentStep=0;
+let formData={features:{}};
+
+/* =======================
+NAVIGATION
+======================= */
 
 function nextStep(step){
 document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
 document.getElementById('step'+step).classList.add('active');
 currentStep=step;
-updateProgress();
+document.getElementById("progressFill").style.width=(step/7*100)+"%";
 }
 
-function prevStep(){
-let prev=currentStep-1;
-if(prev<0) prev=0;
-nextStep(prev);
+function scrollCalendly(){
+document.getElementById("stepIntro").scrollIntoView({behavior:'smooth'});
 }
 
-function updateProgress(){
-let percent = (currentStep/7)*100;
-document.getElementById('progressFill').style.width = percent+"%";
+/* =======================
+CATEGORY SELECT
+======================= */
+
+function selectCategory(cat,el){
+formData.category=cat;
+document.querySelectorAll(".card-option").forEach(c=>c.classList.remove("selected"));
+el.classList.add("selected");
 }
 
-function openCalendly(){
-document.getElementById("introCalendly").scrollIntoView({behavior:'smooth'});
-}
+/* =======================
+FEATURE ENGINE (mit Abwahl)
+======================= */
 
-const detailMap = {
-haus:["Einfamilienhaus","Doppelhaus","Reihenmittelhaus","Bungalow","Stadtvilla","Sonstiges"],
-wohnung:["Etagenwohnung","Erdgeschosswohnung","Dachgeschosswohnung","Penthouse","Sonstiges"],
-gewerbe:["Ladenlokal","Halle","Büroflächen","Sonstiges"],
-grundstueck:["Erschlossen","Mit Abrissimmobilie","Unerschlossen"]
-};
+const featuresList=["Garage","Tiefgarage","Stellplatz","Pool","Sauna","Gäste-WC","Einliegerwohnung"];
 
-function selectCategory(cat){
-formData.category = cat;
-let container = document.getElementById("detailOptions");
-container.innerHTML="";
-detailMap[cat].forEach(opt=>{
-let div=document.createElement("div");
-div.className="card-option";
-div.innerText=opt;
-div.onclick=()=>{ formData.subcategory=opt; document.getElementById('step1Next').classList.remove('hidden'); };
-container.appendChild(div);
-});
-container.classList.remove("hidden");
-}
+function renderFeatures(){
+let grid=document.createElement("div");
+grid.className="grid grid-4";
 
-</script>
-
-
-<!-- STEP 2 Eckdaten -->
-<div class="step" id="step2">
-<h3>Eckdaten Ihrer Immobilie</h3>
-
-<label>Wohnfläche (m²)</label>
-<input type="range" id="livingRange" min="30" max="500" value="120" oninput="syncSlider('living')">
-<input type="number" id="livingInput" value="120" oninput="syncInput('living')">
-
-<label style="margin-top:20px;">Grundstücksgröße (m²)</label>
-<input type="range" id="plotRange" min="100" max="2000" value="500" oninput="syncSlider('plot')">
-<input type="number" id="plotInput" value="500" oninput="syncInput('plot')">
-
-<label style="margin-top:20px;">Baujahr</label>
-<input type="range" id="yearRange" min="1900" max="2024" value="1995" oninput="syncSlider('year')">
-<input type="number" id="yearInput" value="1995" oninput="syncInput('year')">
-
-<div style="margin-top:40px;">
-<button class="btn-secondary" onclick="prevStep()">Zurück</button>
-<button class="btn-main" onclick="nextStep(3)">Weiter</button>
-</div>
-</div>
-
-
-<!-- STEP 3 Zustand -->
-<div class="step" id="step3">
-<h3>Zustand</h3>
-
-<div class="grid grid-4">
-<div class="card-option" onclick="selectCondition('Neubau')">Neubau</div>
-<div class="card-option" onclick="selectCondition('Modernisiert')">Modernisiert</div>
-<div class="card-option" onclick="selectCondition('Gepflegt')">Gepflegt</div>
-<div class="card-option" onclick="selectCondition('Renovierungsbedürftig')">Renovierungsbedürftig</div>
-<div class="card-option" onclick="selectCondition('Saniert')">Saniert</div>
-</div>
-
-<div id="renovationYearWrapper" class="hidden" style="margin-top:20px;">
-<label>Sanierungsjahr</label>
-<input type="number" id="renovationYear">
-</div>
-
-<div style="margin-top:40px;">
-<button class="btn-secondary" onclick="prevStep()">Zurück</button>
-<button class="btn-main" onclick="nextStep(4)">Weiter</button>
-</div>
-</div>
-
-
-<!-- STEP 4 Ausstattung -->
-<div class="step" id="step4">
-<h3>Ausstattungsqualität</h3>
-
-<div class="grid grid-4">
-<div class="card-option" onclick="selectQuality('Einfach')">Einfach</div>
-<div class="card-option" onclick="selectQuality('Standard')">Standard</div>
-<div class="card-option" onclick="selectQuality('Gehoben')">Gehoben</div>
-<div class="card-option" onclick="selectQuality('Luxus')">Luxus</div>
-</div>
-
-<div style="margin-top:40px;">
-<button class="btn-secondary" onclick="prevStep()">Zurück</button>
-<button class="btn-main" onclick="nextStep(5)">Weiter</button>
-</div>
-</div>
-
-
-<!-- STEP 5 Besonderheiten -->
-<div class="step" id="step5">
-<h3>Besonderheiten</h3>
-
-<div class="grid grid-4" id="featureGrid"></div>
-
-<div style="margin-top:40px;">
-<button class="btn-secondary" onclick="prevStep()">Zurück</button>
-<button class="btn-main" onclick="nextStep(6)">Weiter</button>
-</div>
-</div>
-
-
-<script>
-
-// ====================
-// Slider Synchronisation
-// ====================
-
-function syncSlider(type){
-document.getElementById(type+"Input").value = document.getElementById(type+"Range").value;
-updateFormData(type);
-}
-
-function syncInput(type){
-document.getElementById(type+"Range").value = document.getElementById(type+"Input").value;
-updateFormData(type);
-}
-
-function updateFormData(type){
-if(type==="living") formData.livingArea = parseInt(livingInput.value);
-if(type==="plot") formData.plotArea = parseInt(plotInput.value);
-if(type==="year") formData.year = parseInt(yearInput.value);
-}
-
-// ====================
-// Zustand
-// ====================
-
-function selectCondition(cond){
-formData.condition = cond;
-if(cond==="Saniert"){
-document.getElementById("renovationYearWrapper").classList.remove("hidden");
-}else{
-document.getElementById("renovationYearWrapper").classList.add("hidden");
-}
-}
-
-// ====================
-// Ausstattung
-// ====================
-
-function selectQuality(q){
-formData.quality = q;
-}
-
-// ====================
-// Besonderheiten Engine
-// ====================
-
-const features = [
-"Garage","Stellplatz","Pool","Einliegerwohnung",
-"Sauna","Gäste-WC","Keller","Balkon","Terrasse"
-];
-
-function initFeatures(){
-let grid=document.getElementById("featureGrid");
-features.forEach(f=>{
+featuresList.forEach(f=>{
 let div=document.createElement("div");
 div.className="feature";
-div.innerHTML=f;
+div.innerHTML="<strong>"+f+"</strong>";
 div.onclick=()=>toggleFeature(f,div);
 grid.appendChild(div);
 });
+
+document.body.appendChild(grid);
 }
 
 function toggleFeature(name,el){
+
 if(!formData.features[name]) formData.features[name]=0;
 formData.features[name]++;
+
+if(formData.features[name]===1){
+el.classList.add("selected");
+}
+
+if(formData.features[name]>3){
+formData.features[name]=0;
+el.classList.remove("selected");
+let badge=el.querySelector(".badge");
+if(badge) badge.remove();
+let minus=el.querySelector(".minus-btn");
+if(minus) minus.remove();
+return;
+}
 
 let badge=el.querySelector(".badge");
 if(!badge){
@@ -289,311 +389,42 @@ badge=document.createElement("div");
 badge.className="badge";
 el.appendChild(badge);
 }
+
+let minus=el.querySelector(".minus-btn");
+if(!minus){
+minus=document.createElement("div");
+minus.className="minus-btn";
+minus.innerHTML="−";
+minus.onclick=(e)=>{
+e.stopPropagation();
+decreaseFeature(name,el);
+};
+el.appendChild(minus);
+}
+
 badge.innerText=formData.features[name];
+}
 
-if(formData.features[name]>3){
+function decreaseFeature(name,el){
+if(!formData.features[name]) return;
+formData.features[name]--;
+if(formData.features[name]<=0){
 formData.features[name]=0;
-badge.remove();
+el.classList.remove("selected");
+el.querySelector(".badge")?.remove();
+el.querySelector(".minus-btn")?.remove();
+}else{
+el.querySelector(".badge").innerText=formData.features[name];
 }
-}
-
-initFeatures();
-
-</script>
-
-<!-- STEP 6 Adresse -->
-<div class="step" id="step6">
-<h3>Lage & Marktdaten</h3>
-
-<p>Der beste Preis lässt sich nur bestimmen, wenn die Lage eindeutig identifiziert wird. Ohne Lage können keine Bodenrichtwerte und Verkaufshistorien berücksichtigt werden.</p>
-
-<input type="text" id="addressInput" placeholder="PLZ, Ort, Straße eingeben..." autocomplete="off">
-<div id="addressResults" style="border:1px solid #e2e8f0;max-height:200px;overflow-y:auto;"></div>
-
-<div id="map"></div>
-
-<div style="margin-top:40px;">
-<button class="btn-secondary" onclick="prevStep()">Zurück</button>
-<button class="btn-main" onclick="confirmAddress()">Adresse bestätigen</button>
-</div>
-</div>
-
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-<script>
-
-// =========================
-// OSM + Karte
-// =========================
-
-let map = L.map('map').setView([51.1657, 10.4515], 6);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-attribution: '&copy; OpenStreetMap'
-}).addTo(map);
-
-let marker = L.marker([51.1657,10.4515]).addTo(map);
-
-let debounceTimer;
-
-document.getElementById("addressInput").addEventListener("input", function(){
-clearTimeout(debounceTimer);
-let query=this.value;
-if(query.length<3){ document.getElementById("addressResults").innerHTML=""; return; }
-
-debounceTimer=setTimeout(()=>{
-fetch(`https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=5&countrycodes=de&q=${encodeURIComponent(query)}`)
-.then(res=>res.json())
-.then(data=>{
-let container=document.getElementById("addressResults");
-container.innerHTML="";
-data.forEach(place=>{
-let div=document.createElement("div");
-div.style.padding="10px";
-div.style.cursor="pointer";
-div.innerText=place.display_name;
-div.onclick=()=>{
-selectAddress(place);
-container.innerHTML="";
-};
-container.appendChild(div);
-});
-});
-},400);
-});
-
-function selectAddress(place){
-formData.address = place.display_name;
-formData.postcode = place.address.postcode;
-formData.lat = parseFloat(place.lat);
-formData.lon = parseFloat(place.lon);
-
-document.getElementById("addressInput").value = place.display_name;
-
-marker.setLatLng([place.lat,place.lon]);
-map.setView([place.lat,place.lon],16);
-}
-
-// =========================
-// Regionalmodell (PLZ Präfix)
-// =========================
-
-const regionFactors = {
-"01":0.9,"02":0.9,"03":0.9,"04":0.9,
-"20":1.25,"21":1.15,"22":1.15,"23":1.1,
-"40":1.05,"50":1.0,"60":1.15,
-"67":1.0,"68":1.05,
-"70":1.1,"80":1.35,"81":1.35,"90":1.05
-};
-
-function getRegionFactor(plz){
-if(!plz) return 1.0;
-let prefix = plz.substring(0,2);
-return regionFactors[prefix] || 1.0;
-}
-
-// =========================
-// Bewertungsengine
-// =========================
-
-const BKI_2023 = 1.18;
-const NHK_2015 = 1450;
-
-function calculateValue(){
-
-let regionFactor = getRegionFactor(formData.postcode);
-
-let conditionFactor = {
-"Neubau":1.05,
-"Modernisiert":1.02,
-"Gepflegt":1.0,
-"Renovierungsbedürftig":0.9,
-"Saniert":1.03
-}[formData.condition] || 1;
-
-let qualityFactor = {
-"Einfach":0.9,
-"Standard":1.0,
-"Gehoben":1.1,
-"Luxus":1.2
-}[formData.quality] || 1;
-
-let marketFactor = regionFactor * conditionFactor * qualityFactor;
-
-// Vergleichswert
-let sqmPriceBase = 2800 * regionFactor;
-let vergleichswert = formData.livingArea * sqmPriceBase * conditionFactor * qualityFactor;
-
-// Sachwert
-let totalUsefulLife = (formData.subcategory==="Bungalow")?70:
-(formData.category==="gewerbe")?60:80;
-
-let age = 2024 - formData.year;
-let restLife = totalUsefulLife - age;
-if(restLife<0) restLife=5;
-
-let depreciation = restLife/totalUsefulLife;
-
-let buildingValue = formData.livingArea * NHK_2015 * BKI_2023 * depreciation;
-let landValue = formData.plotArea * (150 * regionFactor);
-
-let sachwert = (buildingValue + landValue) * marketFactor;
-
-// Bandbreite
-let avg = (vergleichswert + sachwert)/2;
-let lower = avg * 0.94;
-let upper = avg * 1.06;
-
-formData.result = {
-vergleich:vergleichswert,
-sachwert:sachwert,
-lower:lower,
-upper:upper
-};
-
-}
-
-// =========================
-// Teil-Lead Versand
-// =========================
-
-function confirmAddress(){
-
-calculateValue();
-
-emailjs.init("_xVMakll6CBznjSHE");
-
-emailjs.send("service_9wal0zr","template_bwjdkei",{
-address: formData.address,
-estimated_value: Math.round(formData.result.lower)+" - "+Math.round(formData.result.upper)
-});
-
-nextStep(7);
-
 }
 
 </script>
-
-
-<!-- STEP 7 Ergebnis -->
-<div class="step" id="step7">
-<h3>Erste Marktindikation</h3>
-
-<div style="text-align:center; margin:40px 0;">
-<div style="font-size:18px; color:#666;">Marktwert-Korridor</div>
-<div id="resultRange" style="font-size:42px; font-weight:800; color:#003366;"></div>
-</div>
-
-<div style="margin-top:30px;">
-<h4>Vergleichswertverfahren</h4>
-<p id="vergleichDetail"></p>
-
-<h4>Sachwertverfahren</h4>
-<p id="sachwertDetail"></p>
-</div>
-
-<div style="margin-top:30px; padding:20px; background:#f1f5f9; border-radius:16px;">
-<p><strong>Hinweis:</strong> Diese Berechnung stellt eine algorithmische Annäherung dar und ersetzt keine individuelle Expertenprüfung oder strategische Marktpositionierung.</p>
-</div>
-
-<div style="margin-top:40px;">
-<h3>Ihr Vermögenswert verdient mehr als eine Schätzung.</h3>
-<p>Die strategische Positionierung entscheidet über den tatsächlichen Verkaufserlös.</p>
-</div>
-
-<div style="margin-top:20px;">
-<div class="calendly-inline-widget"
-data-url="https://calendly.com/d-will-sw-immobilien/strategische-ersteinschatzung-verkauf?hide_event_type_details=1&hide_gdpr_banner=1"
-style="min-width:320px;height:600px;">
-</div>
-</div>
-
-<div style="margin-top:40px;">
-<button class="btn-secondary" onclick="nextStep(8)">Weiter zur Detailanalyse</button>
-</div>
-</div>
-
-
-<!-- STEP 8 Eigentümerdaten -->
-<div class="step" id="step8">
-<h3>Detailanalyse erhalten</h3>
-
-<label>Anrede</label>
-<select id="salutation">
-<option>Herr</option>
-<option>Frau</option>
-<option>Divers</option>
-</select>
-
-<label>Name</label>
-<input type="text" id="name">
-
-<label>E-Mail</label>
-<input type="email" id="email">
-
-<label>Telefon (optional bei Rückrufwunsch)</label>
-<input type="text" id="phone">
-
-<div style="margin-top:40px;">
-<button class="btn-secondary" onclick="prevStep()">Zurück</button>
-<button class="btn-main" onclick="sendFinal()">Analyse erhalten</button>
-</div>
-</div>
-
 
 <div class="footer">
 <p>© SW Immobilien</p>
-<p><a href="https://sw-immobilien.de/datenschutz" style="color:#b39a6a;">Datenschutz</a></p>
+<a href="https://sw-immobilien.de/datenschutz" style="color:var(--accent)">Datenschutz</a>
 </div>
 
-</div> <!-- wrapper -->
-
-<script>
-
-// ===========================
-// Ergebnisanzeige
-// ===========================
-
-function renderResults(){
-document.getElementById("resultRange").innerText =
-Math.round(formData.result.lower).toLocaleString("de-DE")+" € – "+
-Math.round(formData.result.upper).toLocaleString("de-DE")+" €";
-
-document.getElementById("vergleichDetail").innerText =
-"Basierend auf regionalen Vergleichspreisen und Objektmerkmalen ergibt sich ein Wert von ca. "+
-Math.round(formData.result.vergleich).toLocaleString("de-DE")+" €.";
-
-document.getElementById("sachwertDetail").innerText =
-"Unter Berücksichtigung von Baujahr, Restnutzungsdauer und Marktanpassung ergibt sich ein rechnerischer Sachwert von ca. "+
-Math.round(formData.result.sachwert).toLocaleString("de-DE")+" €.";
-}
-
-function nextStep(step){
-document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
-document.getElementById('step'+step).classList.add('active');
-currentStep=step;
-updateProgress();
-if(step===7) renderResults();
-}
-
-// ===========================
-// Voll-Lead Versand
-// ===========================
-
-function sendFinal(){
-
-emailjs.send("service_9wal0zr","template_bwjdkei",{
-from_name: document.getElementById("name").value,
-address: formData.address,
-estimated_value: Math.round(formData.result.lower)+" - "+Math.round(formData.result.upper),
-email: document.getElementById("email").value,
-phone: document.getElementById("phone").value
-});
-
-alert("Vielen Dank. Ihre Analyse wurde versendet.");
-
-}
-
-</script>
-
+</div>
 </body>
 </html>
